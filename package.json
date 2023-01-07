@@ -1,0 +1,24 @@
+{
+  "name": "wordlike",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "prettier": "latest",
+    "turbo": "latest"
+  },
+  "dependencies": {},
+  "packageManager": "pnpm@7.17.0",
+  "volta": {
+    "node": "18.13.0"
+  }
+}
