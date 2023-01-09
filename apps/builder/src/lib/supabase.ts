@@ -3,5 +3,11 @@ import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/publi
 
 export const supabaseClient = createClient(
     PUBLIC_SUPABASE_URL,
-    PUBLIC_SUPABASE_ANON_KEY
+    PUBLIC_SUPABASE_ANON_KEY, {
+    realtime: {
+        params: {
+            eventsPerSecond: 1000,
+        }
+    }
+}
 );

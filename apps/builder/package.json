@@ -31,6 +31,11 @@
 	"type": "module",
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "^0.8.6",
-		"@supabase/supabase-js": "^2.2.3"
+		"@supabase/supabase-js": "^2.2.3",
+		"@syncedstore/core": "^0.4.2",
+		"@syncedstore/svelte": "^0.4.2",
+		"y-indexeddb": "^9.0.9",
+		"y-webrtc": "^10.2.3",
+		"yjs": "^13.5.44"
 	}
 }
