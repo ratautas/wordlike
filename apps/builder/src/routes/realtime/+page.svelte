@@ -1,9 +1,17 @@
 <script lang="ts">
     import { browser, building, dev, version } from "$app/environment";
     import { isLoaded, doc } from "$lib/stores/diff";
+    import { subscribe, broadcast, listen } from "$lib/realtime";
 
     import type { PageData } from "../$types";
     export let data: PageData;
+
+    if (browser) {
+        subscribe();
+        listen("click", (data) => {
+            console.log("some", data);
+        });
+    }
 
     doc.set(data.doc);
 
@@ -14,6 +22,10 @@
 <a href="/">Home</a>
 
 <div>{JSON.stringify($doc)}</div>
+
+<button on:click={() => broadcast("click", { payload: "payy" })}>
+    klik klik</button
+>
 
 {#if data.session}
     <p>Welcome, {data.session.user.email}</p>
