@@ -1,22 +1,22 @@
 <script lang="ts">
-    import { browser, building, dev, version } from "$app/environment";
-    import { isLoaded, doc } from "$lib/stores/diff";
-    import { subscribe, broadcast, listen } from "$lib/realtime";
+  import { browser, building, dev } from "$app/environment";
+  import { isLoaded, doc } from "$lib/stores/diff";
+  import { subscribe, broadcast, listen } from "$lib/realtime";
 
-    import type { PageData } from "../$types";
-    export let data: PageData;
+  import type { PageData } from "../$types";
+  export let data: PageData;
 
-    if (browser) {
-        subscribe();
-        listen("click", (data) => {
-            console.log("some", data);
-        });
-    }
+  if (browser) {
+    subscribe();
+    listen("click", (data) => {
+      console.log("some", data);
+    });
+  }
 
-    doc.set(data.doc);
+  doc.set(data.doc);
 
-    console.log($doc);
-    console.log(data.doc);
+  console.log($doc);
+  console.log(data.doc);
 </script>
 
 <a href="/">Home</a>
@@ -24,12 +24,12 @@
 <div>{JSON.stringify($doc)}</div>
 
 <button on:click={() => broadcast("click", { payload: "payy" })}>
-    klik klik</button
->
+  klik klik
+</button>
 
 {#if data.session}
-    <p>Welcome, {data.session.user.email}</p>
+  <p>Welcome, {data.session.user.email}</p>
 {:else}
-    <a href="/login">Log in</a>
-    <a href="/register">Register</a>
+  <a href="/login">Log in</a>
+  <a href="/register">Register</a>
 {/if}
