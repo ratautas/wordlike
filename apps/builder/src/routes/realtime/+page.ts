@@ -8,9 +8,9 @@ export const load: PageLoad = async () => {
         .select('doc')
         .eq('id', '678cb0af-0c25-4ee4-8e41-6c3c75f86308')
         .limit(1);
-    const [{ doc }] = data;
+    const [site] = data;
 
     return {
-        doc
+        doc: site?.doc,
     }
 };
