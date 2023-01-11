@@ -1,13 +1,15 @@
 import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
+import { getServerSession, getSupabase } from "@supabase/auth-helpers-sveltekit";
+import { supabaseClient } from "$lib/supabase";
+import doc from "$lib/mock/doc.json";
+
+import type { PageServerLoad } from "./$types";
 // import { getServerSession } from "@supabase/auth-helpers-sveltekit";
-import type { LayoutServerLoad } from "./$types";
 
 // Pass user session to the client
-export const load: LayoutServerLoad = async (event) => {
-  console.log('user', event.locals.session?.user?.id)
-  const { id } = event.locals.session?.user ?? {};
-  console.log('id', id)
+export const load: PageServerLoad = async (event) => {
+  const { id } = event.locals?.session?.user ?? {};
 
   return {
     hi: 'hi'
@@ -17,13 +19,19 @@ export const load: LayoutServerLoad = async (event) => {
 
 
 export const actions: Actions = {
-  register: async ({ request, locals }) => {
-    const { email, password } = Object.fromEntries(await request.formData());
+  create: async ({ locals }) => {
+    const { data, error: err } = await supabaseClient
+      .from('sites')
+      .insert({
+        doc,
+        user_id: locals.session?.user.id
+      })
+      .select()
 
-    const { data, error: err } = await locals.sb.auth.signUp({
-      email: email as string,
-      password: password as string,
-    });
+    console.log(locals.session?.user);
+
+    console.log({ data })
+    console.log({ err })
 
     if (err) {
       if (err instanceof AuthApiError && err.status === 400) {
@@ -37,6 +45,5 @@ export const actions: Actions = {
       });
     }
 
-    throw redirect(303, "/")
   }
 };

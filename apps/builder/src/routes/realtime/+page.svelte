@@ -14,9 +14,6 @@
   }
 
   doc.set(data.doc);
-
-  console.log($doc);
-  console.log(data.doc);
 </script>
 
 <a href="/">Home</a>
