@@ -19,7 +19,6 @@
       .select();
 
     if (error) {
-      console.log(error);
       cancel();
     }
 

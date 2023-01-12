@@ -1,18 +1,20 @@
 import { error } from '@sveltejs/kit';
+import type { PageLoad } from './$types';
+import { supabaseClient } from "$lib/supabase";
 
-/** @type {import('./$types').PageLoad} */
-export function load({ params }) {
-    // console.log(params);
-    // if (params.siteId === 'hello-world') {
-    //     return {
-    //         title: 'Hello world!',
-    //         content: 'Welcome to our blog. Lorem ipsum dolor sit amet...'
-    //     };
-    // }
+export const load: PageLoad = async (event) => {
+  const userId = event?.locals?.session?.user.id;
+  const { siteId } = event.params;
+  const { data, error } = await supabaseClient
+    .from('sites')
+    .select()
+    .eq('id', siteId);
 
-    return {
+  const [{ doc }] = data;
 
-    }
 
-    // throw error(404, 'Not found');
-}
+  return {
+    hi: 'hi',
+    doc,
+  }
+};
