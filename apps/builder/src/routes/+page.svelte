@@ -29,3 +29,5 @@
     </div>
   {/if}
 </main>
+
+<a href="/sites" class="btn btn-primary"><b>Sites</b></a>
