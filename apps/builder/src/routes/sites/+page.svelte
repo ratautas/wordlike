@@ -2,7 +2,7 @@
   import { enhance, type SubmitFunction } from "$app/forms";
   import { supabaseClient } from "$lib/supabase";
 
-  import type { PageData } from "../$types";
+  import type { PageData } from "./$types";
   import initialDoc from "$lib/mock/doc.json";
 
   export let data: PageData;

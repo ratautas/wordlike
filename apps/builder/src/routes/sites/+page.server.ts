@@ -2,9 +2,9 @@ import { AuthApiError } from "@supabase/supabase-js";
 import { fail, type Actions } from "@sveltejs/kit";
 import { supabaseClient } from "$lib/supabase";
 import doc from "$lib/mock/doc.json";
-import type { PageServerLoad } from "./$types";
+import type { PageData, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad = async (event): PageData => {
   const userId = event?.locals?.session?.user.id;
   const { data, error } = await supabaseClient
     .from('sites')
