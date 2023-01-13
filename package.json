@@ -14,9 +14,8 @@
   },
   "devDependencies": {
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "^1.7.0"
   },
-  "dependencies": {},
   "packageManager": "pnpm@7.17.0",
   "volta": {
     "node": "18.13.0"

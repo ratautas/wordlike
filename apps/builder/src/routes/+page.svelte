@@ -14,7 +14,7 @@
   };
 </script>
 
-<main>
+<main class="min-h-screen">
   <h1>SvelteKit & Supabase Auth</h1>
   {#if data.session}
     <p>Welcome, {data.session.user.email}</p>
