@@ -11,31 +11,14 @@ interface MousePosition {
   y: number | null;
 };
 
-type ElementRef = HTMLElement | null;
-type ElementPath = ElementRef[];
-
 export const currentElementId = writable();
 export const draggedElementId = writable();
 export const focusedElementId = writable();
 export const selectedElementIds = writable([] as string[]);
 
-export const updateCurrentElementData = (data: any) => {
-
-};
-
 export const findById = (array, id) => {
   return array?.find((i) => i.id === id || i.children && findById(i.children, id));
 };
-
-export const currentElementData = derived([doc, currentElementId], ([$doc, $currentElementId]) => {
-  if (!$doc || !$currentElementId) return null;
-  console.log($doc, $currentElementId)
-  const el = findById($doc.pages, $currentElementId);
-  console.log(el)
-  // $doc?.pages.find()
-
-});
-
 
 export async function updateDraggedElementsData() {
   const mapChildren = (children) => {

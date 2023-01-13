@@ -123,9 +123,9 @@
       selectedElementIds.set([element.id, ...previousElementIds]);
     }
 
-    const control = Object.entries(controlRefs).find(([key, ref]) => {
-      return event.path.includes(ref);
-    });
+    const control = Object.entries(controlRefs).find(([key, ref]) =>
+      event.composedPath().includes(ref)
+    );
 
     if (control) {
       draggedControl.set(control[0]);
@@ -154,7 +154,6 @@
 
 <svelte:window on:keydown={handleWindowKeyDown} on:keyup={handleWindowKeyUp} />
 
-{$isShiftPressed}
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="element relative"
