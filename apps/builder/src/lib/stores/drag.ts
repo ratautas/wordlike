@@ -1,7 +1,6 @@
 import { writable, derived, get } from 'svelte/store';
 
 import { updateDraggedElementsData } from '$lib/stores/element';
-
 interface MousePosition {
   x: number | null;
   y: number | null;
@@ -12,6 +11,7 @@ type ElementPath = ElementRef[];
 
 export const elementPath = writable([] as ElementPath);
 export const isDragging = writable(false);
+export const draggedControl = writable();
 export const initialMousePosition = writable({
   x: null,
   y: null,
@@ -38,11 +38,14 @@ export const dragDiffY = derived(
 );
 
 
-
 export function dragEndHandler(event: MouseEvent) {
+  // add if statement to check if the element is being dragged at all
   updateDraggedElementsData();
+
   draggingMousePosition.set({ x: null, y: null });
   initialMousePosition.set({ x: null, y: null });
   elementPath.set([]);
   isDragging.set(false);
+
+  draggedControl.set(null);
 }

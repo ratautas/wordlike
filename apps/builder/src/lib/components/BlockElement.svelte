@@ -1,6 +1,6 @@
 <script lang="ts">
   import TextElement from "$lib/components/TextElement.svelte";
-  import { elementPath, dragDiffX, dragDiffY } from "$lib/stores/drag";
+  import { dragDiffX, dragDiffY, draggedControl } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
 
   let elementRef: HTMLElement | null;
@@ -16,37 +16,124 @@
     bottomLeft: null as HTMLElement | null,
   };
 
-  $: draggedControl = Object.entries(controlRefs).find(
-    ([key, ref]) => ref === $elementPath[0]
-  )?.[0];
+  $: isElementDragged = $selectedElementIds.includes(element.id);
 
-  $: isElementResized = !!draggedControl;
-  $: isElementDragged = !isElementResized && $elementPath.includes(elementRef);
-
-  $: transform = isElementDragged
-    ? `translate3d(${$dragDiffX}px,${$dragDiffY}px,0)`
-    : null;
-
-  $: layoutStyle = Object.entries(element.layout.default).reduce(
-    (acc, [key, value]) => {
-      let prop = key;
-      if (key === "x") prop = "left";
-      if (key === "y") prop = "top";
-
-      acc += `${prop}:${value}px;`;
-      return acc;
-    },
-    ""
+  $: layoutStyle = getLayoutStyle(
+    element,
+    $dragDiffX,
+    $dragDiffY,
+    $draggedControl,
+    isElementDragged
   );
+
+  function getLayoutStyle(
+    element,
+    dragDiffX,
+    dragDiffY,
+    draggedControl,
+    isElementDragged
+  ) {
+    const position = isElementDragged
+      ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
+      : element.layout.default;
+    const style = {
+      top: `${position.y}px`,
+      left: `${position.x}px`,
+      width: `${position.width}px`,
+      height: `${position.height}px`,
+    };
+    return Object.entries(style)
+      .map(([key, value]) => `${key}:${value}`)
+      .join(";");
+  }
+
+  function getPosition(elementData, diffX, diffY, control) {
+    const { layout } = elementData;
+    switch (control) {
+      case "top":
+        return {
+          x: layout.default.x,
+          y: layout.default.y + diffY,
+          width: layout.default.width,
+          height: layout.default.height - diffY,
+        };
+      case "right":
+        return {
+          x: layout.default.x,
+          y: layout.default.y,
+          width: layout.default.width + diffX,
+          height: layout.default.height,
+        };
+      case "bottom":
+        return {
+          x: layout.default.x,
+          y: layout.default.y,
+          width: layout.default.width,
+          height: layout.default.height + diffY,
+        };
+      case "left":
+        return {
+          x: layout.default.x + diffX,
+          y: layout.default.y,
+          width: layout.default.width - diffX,
+          height: layout.default.height,
+        };
+      case "topRight":
+        return {
+          x: layout.default.x,
+          y: layout.default.y + diffY,
+          width: layout.default.width + diffX,
+          height: layout.default.height - diffY,
+        };
+      case "topLeft":
+        return {
+          x: layout.default.x + diffX,
+          y: layout.default.y + diffY,
+          width: layout.default.width - diffX,
+          height: layout.default.height - diffY,
+        };
+      case "bottomRight":
+        return {
+          x: layout.default.x,
+          y: layout.default.y,
+          width: layout.default.width + diffX,
+          height: layout.default.height + diffY,
+        };
+      case "bottomLeft":
+        return {
+          x: layout.default.x + diffX,
+          y: layout.default.y,
+          width: layout.default.width - diffX,
+          height: layout.default.height + diffY,
+        };
+      default:
+        return {
+          x: layout.default.x + diffX,
+          y: layout.default.y + diffY,
+          width: layout.default.width,
+          height: layout.default.height,
+        };
+    }
+  }
 
   function handleElementClick(event: MouseEvent) {
     console.log("click");
   }
+
   function handleElementMouseDown(event: MouseEvent) {
     selectedElementIds.set([element.id]);
+
+    const control = Object.entries(controlRefs).find(([key, ref]) =>
+      event.path.includes(ref)
+    );
+
+    if (control) {
+      draggedControl.set(control[0]);
+    }
   }
+
   function handleElementMouseUp(event: MouseEvent) {
-    console.log("mouseup");
+    // draggedControl.set(null);
   }
   // props
   export let element;
@@ -60,7 +147,6 @@
   on:mousedown={handleElementMouseDown}
   on:mouseup={handleElementMouseUp}
   bind:this={elementRef}
-  style:transform
   style={layoutStyle}
 >
   <div class="side side--top" bind:this={controlRefs.top} />
@@ -74,6 +160,7 @@
     class="handle handle--bottom-right"
     bind:this={controlRefs.bottomRight}
   />
+  {$draggedControl}
   {isElementDragged}
   {#if element.type === "TEXT"}
     <TextElement {element} />
@@ -91,8 +178,10 @@
 
   .element {
     position: absolute;
+    z-index: 2;
     &.is-selected {
       outline: solid 1px red;
+      z-index: 3;
     }
   }
 

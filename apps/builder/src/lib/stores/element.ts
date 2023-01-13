@@ -1,8 +1,10 @@
 import { writable, derived, get } from 'svelte/store';
-import { doc } from '$lib/stores/doc';
-import { dragDiffX, dragDiffY } from './drag';
-import { supabaseClient } from "$lib/supabase";
+
 import { page } from "$app/stores";
+import { doc } from '$lib/stores/doc';
+import { dragDiffX, dragDiffY, draggedControl } from '$lib/stores/drag';
+import { getPosition } from "$lib/utils/position";
+import { supabaseClient } from "$lib/supabase";
 
 interface MousePosition {
   x: number | null;
@@ -42,12 +44,7 @@ export async function updateDraggedElementsData() {
         return {
           ...element,
           layout: {
-            ...element.layout,
-            default: {
-              ...element.layout.default,
-              x: element.layout.default.x + get(dragDiffX),
-              y: element.layout.default.y + get(dragDiffY),
-            }
+            default: getPosition(element, get(dragDiffX), get(dragDiffY), get(draggedControl))
           },
         };
       }
@@ -62,8 +59,6 @@ export async function updateDraggedElementsData() {
   const $doc = get(doc);
 
   const { siteId } = get(page).params;
-
-  console.log(get(page).params.siteId);
 
   $doc.pages = $doc?.pages.map((page) => {
     return {
@@ -82,9 +77,9 @@ export async function updateDraggedElementsData() {
     .eq('id', siteId)
     .select();
 
-  await supabaseClient
-    .from('sites')
-    .update({ doc: $doc })
-    .eq('id', siteId)
-    .select();
+  // await supabaseClient
+  //   .from('sites')
+  //   .update({ doc: $doc })
+  //   .eq('id', siteId)
+  //   .select();
 }
