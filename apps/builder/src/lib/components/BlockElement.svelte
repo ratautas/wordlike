@@ -2,6 +2,7 @@
   import TextElement from "$lib/components/TextElement.svelte";
   import { dragDiffX, dragDiffY, draggedControl } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
+  import { isShiftPressed } from "$lib/stores/keys";
 
   let elementRef: HTMLElement | null;
 
@@ -116,16 +117,15 @@
     }
   }
 
-  function handleElementClick(event: MouseEvent) {
-    console.log("click");
-  }
-
   function handleElementMouseDown(event: MouseEvent) {
-    selectedElementIds.set([element.id]);
+    if (!$selectedElementIds.includes(element.id)) {
+      const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
+      selectedElementIds.set([element.id, ...previousElementIds]);
+    }
 
-    const control = Object.entries(controlRefs).find(([key, ref]) =>
-      event.path.includes(ref)
-    );
+    const control = Object.entries(controlRefs).find(([key, ref]) => {
+      return event.path.includes(ref);
+    });
 
     if (control) {
       draggedControl.set(control[0]);
@@ -135,15 +135,30 @@
   function handleElementMouseUp(event: MouseEvent) {
     // draggedControl.set(null);
   }
-  // props
+
+  function handleWindowKeyDown(event: KeyboardEvent) {
+    console.log(event);
+    if (event.key === "Shift") {
+      isShiftPressed.set(true);
+    }
+  }
+
+  function handleWindowKeyUp(event: KeyboardEvent) {
+    if (event.key === "Shift") {
+      isShiftPressed.set(false);
+    }
+  }
+
   export let element;
 </script>
 
+<svelte:window on:keydown={handleWindowKeyDown} on:keyup={handleWindowKeyUp} />
+
+{$isShiftPressed}
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="element relative"
   class:is-selected={$selectedElementIds.includes(element.id)}
-  on:click={handleElementClick}
   on:mousedown={handleElementMouseDown}
   on:mouseup={handleElementMouseUp}
   bind:this={elementRef}

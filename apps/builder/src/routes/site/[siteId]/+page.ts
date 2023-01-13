@@ -10,7 +10,6 @@ export const load: PageLoad = async (event): PageData => {
   const [{ doc }] = data ?? [{}];
 
   return {
-    hi: 'hi',
     doc,
   }
 };
