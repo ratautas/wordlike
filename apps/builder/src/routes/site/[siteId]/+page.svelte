@@ -10,9 +10,6 @@
     dragEndHandler,
   } from "$lib/stores/drag";
   import { doc } from "$lib/stores/doc";
-  import { isShiftPressed } from "$lib/stores/keys";
-
-  const DEFAULT_BLOCK_WIDTH = 1024;
 
   function handleMouseDown(event: any) {
     elementPath.set(event.path);

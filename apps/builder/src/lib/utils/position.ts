@@ -8,13 +8,15 @@ export function getLayoutStyle(
   const position = isElementDragged
     ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
     : element.layout.default;
-  const style = {
+
+  const absoluteStyle = Object.entries({
     top: `${position.y}px`,
     left: `${position.x}px`,
     width: `${position.width}px`,
     height: `${position.height}px`,
-  };
-  return Object.entries(style).map(([key, value]) => `${key}:${value}`).join(";");
+  }).map(([key, value]) => `${key}:${value}`).join(";");
+
+  return absoluteStyle;
 }
 
 export function getPosition(elementData, diffX, diffY, control) {

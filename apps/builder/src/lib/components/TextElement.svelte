@@ -29,3 +29,12 @@
   <pre style="font-size: xx-small;">{JSON.stringify(layout, null, 2)}</pre>
   <!-- </details> -->
 </div>
+
+<style lang="scss">
+  .text[contenteditable="true"] {
+    outline: none;
+    &:focus {
+      outline: none;
+    }
+  }
+</style>

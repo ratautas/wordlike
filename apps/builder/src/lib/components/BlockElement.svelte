@@ -3,6 +3,7 @@
   import { dragDiffX, dragDiffY, draggedControl } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
+  import { getLayoutStyle } from "$lib/utils/position";
 
   let elementRef: HTMLElement | null;
 
@@ -27,96 +28,6 @@
     isElementDragged
   );
 
-  function getLayoutStyle(
-    element,
-    dragDiffX,
-    dragDiffY,
-    draggedControl,
-    isElementDragged
-  ) {
-    const position = isElementDragged
-      ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
-      : element.layout.default;
-    const style = {
-      top: `${position.y}px`,
-      left: `${position.x}px`,
-      width: `${position.width}px`,
-      height: `${position.height}px`,
-    };
-    return Object.entries(style)
-      .map(([key, value]) => `${key}:${value}`)
-      .join(";");
-  }
-
-  function getPosition(elementData, diffX, diffY, control) {
-    const { layout } = elementData;
-    switch (control) {
-      case "top":
-        return {
-          x: layout.default.x,
-          y: layout.default.y + diffY,
-          width: layout.default.width,
-          height: layout.default.height - diffY,
-        };
-      case "right":
-        return {
-          x: layout.default.x,
-          y: layout.default.y,
-          width: layout.default.width + diffX,
-          height: layout.default.height,
-        };
-      case "bottom":
-        return {
-          x: layout.default.x,
-          y: layout.default.y,
-          width: layout.default.width,
-          height: layout.default.height + diffY,
-        };
-      case "left":
-        return {
-          x: layout.default.x + diffX,
-          y: layout.default.y,
-          width: layout.default.width - diffX,
-          height: layout.default.height,
-        };
-      case "topRight":
-        return {
-          x: layout.default.x,
-          y: layout.default.y + diffY,
-          width: layout.default.width + diffX,
-          height: layout.default.height - diffY,
-        };
-      case "topLeft":
-        return {
-          x: layout.default.x + diffX,
-          y: layout.default.y + diffY,
-          width: layout.default.width - diffX,
-          height: layout.default.height - diffY,
-        };
-      case "bottomRight":
-        return {
-          x: layout.default.x,
-          y: layout.default.y,
-          width: layout.default.width + diffX,
-          height: layout.default.height + diffY,
-        };
-      case "bottomLeft":
-        return {
-          x: layout.default.x + diffX,
-          y: layout.default.y,
-          width: layout.default.width - diffX,
-          height: layout.default.height + diffY,
-        };
-      default:
-        return {
-          x: layout.default.x + diffX,
-          y: layout.default.y + diffY,
-          width: layout.default.width,
-          height: layout.default.height,
-        };
-    }
-  }
-
   function handleElementMouseDown(event: MouseEvent) {
     if (!$selectedElementIds.includes(element.id)) {
       const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
@@ -132,12 +43,7 @@
     }
   }
 
-  function handleElementMouseUp(event: MouseEvent) {
-    // draggedControl.set(null);
-  }
-
   function handleWindowKeyDown(event: KeyboardEvent) {
-    console.log(event);
     if (event.key === "Shift") {
       isShiftPressed.set(true);
     }
@@ -159,7 +65,6 @@
   class="element relative"
   class:is-selected={$selectedElementIds.includes(element.id)}
   on:mousedown={handleElementMouseDown}
-  on:mouseup={handleElementMouseUp}
   bind:this={elementRef}
   style={layoutStyle}
 >
@@ -174,8 +79,6 @@
     class="handle handle--bottom-right"
     bind:this={controlRefs.bottomRight}
   />
-  {$draggedControl}
-  {isElementDragged}
   {#if element.type === "TEXT"}
     <TextElement {element} />
     <!-- content here -->
@@ -193,70 +96,97 @@
   .element {
     position: absolute;
     z-index: 2;
+    &:hover {
+      .side {
+        opacity: 0.5;
+      }
+    }
     &.is-selected {
-      outline: solid 1px red;
       z-index: 3;
+
+      .side,
+      .handle {
+        opacity: 1;
+        &::before,
+        &::after {
+          opacity: 0.5;
+        }
+      }
     }
   }
 
   .side {
     background-color: cadetblue;
     position: absolute;
-    &:before {
+    opacity: 0;
+    &:before,
+    &:after {
       content: "";
       display: block;
       position: absolute;
+      // background-color: cadetblue;
     }
     &--top {
       left: math.div($size, 2);
-      top: 0;
       right: math.div($size, 2);
+      left: 0;
+      right: 0;
+      top: 0;
       height: 1px;
       cursor: row-resize;
-      &:before {
+      &::before {
         height: $size;
         top: math.div($size, -2);
-        width: 100%;
+        left: 0;
+        right: 0;
       }
     }
     &--right {
-      right: 0;
       top: math.div($size, 2);
       bottom: math.div($size, 2);
+      top: 0;
+      bottom: 0;
+      right: 0;
       width: 1px;
       cursor: col-resize;
-      &:before {
+      &::before {
         width: $size;
         right: math.div($size, -2);
-        height: 100%;
+        top: 0;
+        bottom: 0;
       }
     }
     &--bottom {
-      left: math.div($size, 2);
+      left: 0;
+      right: 0;
       bottom: 0;
-      right: math.div($size, 2);
       height: 1px;
       cursor: row-resize;
-      &:before {
+      &::before {
         height: $size;
         bottom: math.div($size, -2);
-        width: 100%;
+        left: 0;
+        right: 0;
       }
     }
     &--left {
-      left: 0;
       top: math.div($size, 2);
       bottom: math.div($size, 2);
+      top: 0;
+      bottom: 0;
+      left: 0;
       width: 1px;
       cursor: col-resize;
-      &:before {
+      &::before {
         width: $size;
         left: math.div($size, -2);
-        height: 100%;
+        top: 0;
+        bottom: 0;
       }
     }
   }
   .handle {
+    opacity: 0;
     position: absolute;
     width: $size;
     height: $size;

@@ -1,29 +1,22 @@
 <script lang="ts">
   import BlockBackground from "$lib/components/BlockBackground.svelte";
   import BlockElement from "$lib/components/BlockElement.svelte";
-  import TextElement from "$lib/components/TextElement.svelte";
-  import type { SvelteComponent } from "svelte";
+  import { DEFAULT_GRID_WIDTH } from "$lib/constants";
 
-  let elementRef: SvelteComponent | null;
-
-  $: {
-    if (elementRef) {
-      console.log(elementRef);
-    }
-  }
+  $: width = `${block?.width ?? DEFAULT_GRID_WIDTH}px`;
 
   export let block;
 </script>
 
-<div class="block relative max-w-5xl">
+<div class="block relative mx-auto" style:--max-width={width}>
   <BlockBackground {block} />
   {#each block.children as element}
-    <BlockElement bind:this={elementRef} {element} />
+    <BlockElement {element} />
   {/each}
 </div>
 
-<style>
+<style lang="scss">
   .block {
-    padding: 24px;
+    width: var(--max-width);
   }
 </style>
