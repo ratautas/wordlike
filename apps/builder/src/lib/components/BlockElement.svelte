@@ -103,12 +103,7 @@
 
   .element {
     z-index: 2;
-
-    &.is-grid {
-      position: relative;
-      z-index: 1;
-      background-color: #ccc;
-    }
+    position: relative;
     &:hover {
       .side {
         opacity: 0.5;

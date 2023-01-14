@@ -19,23 +19,11 @@
           ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
           : element.layout.default;
 
-        const columnStart = x;
-        const columnEnd = x + width;
-        const rowStart = y;
-        const rowEnd = y + height;
-
-        acc.columns.add(columnStart);
-        acc.columns.add(columnEnd);
-        acc.rows.add(rowStart);
-        acc.rows.add(rowEnd);
-
-        acc.positions.push({
-          id: element.id,
-          rowStart,
-          rowEnd,
-          columnStart,
-          columnEnd,
-        });
+        acc.columns.add(x);
+        acc.columns.add(x + width);
+        acc.rows.add(y);
+        acc.rows.add(y + height);
+        acc.positions.push({ x, y, width, height });
 
         return acc;
       },
@@ -50,11 +38,12 @@
     const gridColumns = [...columns].sort((a, b) => a - b);
 
     const gridPositions = positions.map((position) => {
-      const { rowStart, rowEnd, columnStart, columnEnd } = position;
-      const rowStartIndex = gridRows.indexOf(rowStart) + 1;
-      const rowEndIndex = gridRows.indexOf(rowEnd) + 1;
-      const columnStartIndex = gridColumns.indexOf(columnStart) + 1;
-      const columnEndIndex = gridColumns.indexOf(columnEnd) + 1;
+      const { x, y, width, height } = position;
+
+      const rowStartIndex = gridRows.indexOf(y) + 1;
+      const rowEndIndex = gridRows.indexOf(y + height) + 1;
+      const columnStartIndex = gridColumns.indexOf(x) + 1;
+      const columnEndIndex = gridColumns.indexOf(x + width) + 1;
 
       return {
         rowStartIndex,
@@ -67,44 +56,32 @@
     const { gridTemplateRows } = gridRows
       .filter((i) => i > 0)
       .reduce(
-        (acc, row, index) => {
-          if (index === 0) {
-            return {
-              gridTemplateRows: [...acc.gridTemplateRows, row],
-              lastRow: row,
-            };
-          }
-          const newRow = row - acc.lastRow;
+        (acc, row) => {
+          const currentRow = row - acc.previousRow;
           return {
-            gridTemplateRows: [...acc.gridTemplateRows, newRow],
-            lastRow: acc.lastRow + newRow,
+            gridTemplateRows: [...acc.gridTemplateRows, currentRow],
+            previousRow: acc.previousRow + currentRow,
           };
         },
         {
           gridTemplateRows: [],
-          lastRow: 0,
+          previousRow: 0,
         }
       );
 
     const { gridTemplateColumns } = gridColumns
       .filter((i) => i > 0)
       .reduce(
-        (acc, column, index) => {
-          if (index === 0) {
-            return {
-              gridTemplateColumns: [...acc.gridTemplateColumns, column],
-              lastColumn: column,
-            };
-          }
-          const newColumn = column - acc.lastColumn;
+        (acc, column) => {
+          const currentColumn = column - acc.previousColumn;
           return {
-            gridTemplateColumns: [...acc.gridTemplateColumns, newColumn],
-            lastColumn: acc.lastColumn + newColumn,
+            gridTemplateColumns: [...acc.gridTemplateColumns, currentColumn],
+            previousColumn: acc.previousColumn + currentColumn,
           };
         },
         {
           gridTemplateColumns: [],
-          lastColumn: 0,
+          previousColumn: 0,
         }
       );
 
