@@ -1,6 +1,11 @@
 <script lang="ts">
   import TextElement from "$lib/components/TextElement.svelte";
-  import { dragDiffX, dragDiffY, draggedControl } from "$lib/stores/drag";
+  import {
+    dragDiffX,
+    dragDiffY,
+    draggedControl,
+    isDragging,
+  } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { getLayoutStyle } from "$lib/utils/position";
@@ -20,13 +25,11 @@
 
   $: isElementDragged = $selectedElementIds.includes(element.id);
 
-  $: layoutStyle = getLayoutStyle(
-    element,
-    $dragDiffX,
-    $dragDiffY,
-    $draggedControl,
-    isElementDragged
-  );
+  $: layoutStyle =
+    $isDragging &&
+    isElementDragged &&
+    getLayoutStyle(element, $dragDiffX, $dragDiffY, $draggedControl) +
+      ";position: absolute;";
 
   function handleElementMouseDown(event: MouseEvent) {
     if (!$selectedElementIds.includes(element.id)) {
@@ -55,7 +58,10 @@
     }
   }
 
+  $: area = `${gridArea.rowStartIndex}/${gridArea.columnStartIndex}/${gridArea.rowEndIndex}/${gridArea.columnEndIndex}`;
+
   export let element;
+  export let gridArea;
 </script>
 
 <svelte:window on:keydown={handleWindowKeyDown} on:keyup={handleWindowKeyUp} />
@@ -64,10 +70,12 @@
 <div
   class="element relative"
   class:is-selected={$selectedElementIds.includes(element.id)}
+  class:is-grid={!!area}
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
-  style={layoutStyle}
+  style:grid-area={area}
 >
+  <pre style="font-size: 10px;">{JSON.stringify(gridArea, null, 1)}</pre>
   <div class="side side--top" bind:this={controlRefs.top} />
   <div class="side side--right" bind:this={controlRefs.right} />
   <div class="side side--bottom" bind:this={controlRefs.bottom} />
@@ -94,8 +102,13 @@
   $size: 8px;
 
   .element {
-    position: absolute;
     z-index: 2;
+
+    &.is-grid {
+      position: relative;
+      z-index: 1;
+      background-color: #ccc;
+    }
     &:hover {
       .side {
         opacity: 0.5;
