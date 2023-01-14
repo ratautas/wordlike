@@ -26,9 +26,7 @@ export async function updateDraggedElementsData() {
       if (elementIds.includes(element.id)) {
         return {
           ...element,
-          layout: {
-            default: getPosition(element, get(dragDiffX), get(dragDiffY), get(draggedControl))
-          },
+          desktop: getPosition(element, get(dragDiffX), get(dragDiffY), get(draggedControl))
         };
       }
       return {

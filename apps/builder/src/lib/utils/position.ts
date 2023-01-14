@@ -1,70 +1,70 @@
 import { DEFAULT_GRID_WIDTH } from "$lib/constants";
 
 export function getPosition(elementData, diffX, diffY, control) {
-  const { layout } = elementData;
+  const { desktop } = elementData;
   switch (control) {
     case "top":
       return {
-        x: layout.default.x,
-        y: layout.default.y + diffY,
-        width: layout.default.width,
-        height: layout.default.height - diffY,
+        x: desktop.x,
+        y: desktop.y + diffY,
+        width: desktop.width,
+        height: desktop.height - diffY,
       };
     case "right":
       return {
-        x: layout.default.x,
-        y: layout.default.y,
-        width: layout.default.width + diffX,
-        height: layout.default.height,
+        x: desktop.x,
+        y: desktop.y,
+        width: desktop.width + diffX,
+        height: desktop.height,
       };
     case "bottom":
       return {
-        x: layout.default.x,
-        y: layout.default.y,
-        width: layout.default.width,
-        height: layout.default.height + diffY,
+        x: desktop.x,
+        y: desktop.y,
+        width: desktop.width,
+        height: desktop.height + diffY,
       };
     case "left":
       return {
-        x: layout.default.x + diffX,
-        y: layout.default.y,
-        width: layout.default.width - diffX,
-        height: layout.default.height,
+        x: desktop.x + diffX,
+        y: desktop.y,
+        width: desktop.width - diffX,
+        height: desktop.height,
       };
     case "topRight":
       return {
-        x: layout.default.x,
-        y: layout.default.y + diffY,
-        width: layout.default.width + diffX,
-        height: layout.default.height - diffY,
+        x: desktop.x,
+        y: desktop.y + diffY,
+        width: desktop.width + diffX,
+        height: desktop.height - diffY,
       };
     case "topLeft":
       return {
-        x: layout.default.x + diffX,
-        y: layout.default.y + diffY,
-        width: layout.default.width - diffX,
-        height: layout.default.height - diffY,
+        x: desktop.x + diffX,
+        y: desktop.y + diffY,
+        width: desktop.width - diffX,
+        height: desktop.height - diffY,
       };
     case "bottomRight":
       return {
-        x: layout.default.x,
-        y: layout.default.y,
-        width: layout.default.width + diffX,
-        height: layout.default.height + diffY,
+        x: desktop.x,
+        y: desktop.y,
+        width: desktop.width + diffX,
+        height: desktop.height + diffY,
       };
     case "bottomLeft":
       return {
-        x: layout.default.x + diffX,
-        y: layout.default.y,
-        width: layout.default.width - diffX,
-        height: layout.default.height + diffY,
+        x: desktop.x + diffX,
+        y: desktop.y,
+        width: desktop.width - diffX,
+        height: desktop.height + diffY,
       };
     default:
       return {
-        x: layout.default.x + diffX,
-        y: layout.default.y + diffY,
-        width: layout.default.width,
-        height: layout.default.height,
+        x: desktop.x + diffX,
+        y: desktop.y + diffY,
+        width: desktop.width,
+        height: desktop.height,
       };
   }
 };
@@ -81,7 +81,7 @@ export function calculateGrid(
       const isElementDragged = selectedElementIds.includes(element.id);
       const { x, y, width, height } = isElementDragged
         ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
-        : element.layout.default;
+        : element.desktop;
 
       acc.columns.add(x);
       acc.columns.add(x + width);
