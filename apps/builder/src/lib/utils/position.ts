@@ -1,20 +1,28 @@
 import { DEFAULT_GRID_WIDTH } from "$lib/constants";
 
+export const MIN_WIDTH = 100;
+export const MIN_HEIGHT = 100;
+
 export function getPosition(elementData, diffX, diffY, control) {
   const { desktop } = elementData;
   const blockWidth = DEFAULT_GRID_WIDTH;
 
   switch (control) {
     case "top":
+      const height = Math.max(desktop.height - diffY, MIN_HEIGHT);
+      const y = Math.max(desktop.y + diffY, 0);
+      const maxHeight = desktop.y + desktop.height;
+      const maxY = desktop.y + desktop.height - MIN_HEIGHT;
+
       return {
         x: desktop.x,
-        y: Math.max(desktop.y + diffY, 0),
         width: desktop.width,
-        height: Math.min(desktop.height - diffY, desktop.y + desktop.height)
+        height: Math.min(height, maxHeight),
+        y: Math.min(y, maxY),
       };
     case "right":
       return {
-        x: desktop.x,
+        x: Math.min(desktop.x, blockWidth - desktop.width),
         y: desktop.y,
         width: desktop.width + diffX,
         height: desktop.height,

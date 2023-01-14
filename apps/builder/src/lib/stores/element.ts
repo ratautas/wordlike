@@ -52,11 +52,11 @@ export async function updateDraggedElementsData() {
   // we can do this, but on failure we need to revert the doc to the initial state
   doc.set($doc);
 
-  const { data, error } = await supabaseClient
-    .from('sites')
-    .update({ doc: $doc })
-    .eq('id', siteId)
-    .select();
+  // const { data, error } = await supabaseClient
+  //   .from('sites')
+  //   .update({ doc: $doc })
+  //   .eq('id', siteId)
+  //   .select();
 
   // await supabaseClient
   //   .from('sites')
