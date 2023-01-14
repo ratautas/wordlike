@@ -1,4 +1,4 @@
-import { writable, derived, get } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 
 import { updateDraggedElementsData } from '$lib/stores/element';
 interface MousePosition {

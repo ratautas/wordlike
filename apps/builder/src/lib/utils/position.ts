@@ -2,13 +2,15 @@ import { DEFAULT_GRID_WIDTH } from "$lib/constants";
 
 export function getPosition(elementData, diffX, diffY, control) {
   const { desktop } = elementData;
+  const blockWidth = DEFAULT_GRID_WIDTH;
+
   switch (control) {
     case "top":
       return {
         x: desktop.x,
-        y: desktop.y + diffY,
+        y: Math.max(desktop.y + diffY, 0),
         width: desktop.width,
-        height: desktop.height - diffY,
+        height: Math.min(desktop.height - diffY, desktop.y + desktop.height)
       };
     case "right":
       return {
@@ -61,13 +63,28 @@ export function getPosition(elementData, diffX, diffY, control) {
       };
     default:
       return {
-        x: desktop.x + diffX,
-        y: desktop.y + diffY,
+        x: Math.min(Math.max(desktop.x + diffX, 0), blockWidth - desktop.width),
+        y: Math.max(desktop.y + diffY, 0),
         width: desktop.width,
         height: desktop.height,
       };
   }
 };
+
+// export function limitPosition(position, block) {
+//   const blockWidth = block.width ?? DEFAULT_GRID_WIDTH;
+//   const x = Math.min(Math.max(position.x, 0), blockWidth - position.width);
+//   const y = Math.max(position.y, 0);
+//   // const width = x === 0 ? position.width + position.x : Math.min(position.width, blockWidth - x);
+//   const width = x === 0 ? position.width : Math.min(position.width, blockWidth - x);
+//   const height = y === 0 ? position.height + position.y : position.height;
+//   return {
+//     y,
+//     x,
+//     width,
+//     height,
+//   };
+// }
 
 export function calculateGrid(
   block,
@@ -81,6 +98,7 @@ export function calculateGrid(
       const isElementDragged = selectedElementIds.includes(element.id);
       const { x, y, width, height } = isElementDragged
         ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
+        // ? limitPosition(getPosition(element, dragDiffX, dragDiffY, draggedControl), block)
         : element.desktop;
 
       acc.columns.add(x);
