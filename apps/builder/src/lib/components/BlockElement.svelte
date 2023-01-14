@@ -1,14 +1,8 @@
 <script lang="ts">
   import TextElement from "$lib/components/TextElement.svelte";
-  import {
-    dragDiffX,
-    dragDiffY,
-    draggedControl,
-    isDragging,
-  } from "$lib/stores/drag";
+  import { draggedControl } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
-  import { getLayoutStyle } from "$lib/utils/position";
 
   let elementRef: HTMLElement | null;
 
@@ -22,14 +16,6 @@
     bottomRight: null as HTMLElement | null,
     bottomLeft: null as HTMLElement | null,
   };
-
-  $: isElementDragged = $selectedElementIds.includes(element.id);
-
-  $: layoutStyle =
-    $isDragging &&
-    isElementDragged &&
-    getLayoutStyle(element, $dragDiffX, $dragDiffY, $draggedControl) +
-      ";position: absolute;";
 
   function handleElementMouseDown(event: MouseEvent) {
     if (!$selectedElementIds.includes(element.id)) {
@@ -75,7 +61,7 @@
   bind:this={elementRef}
   style:grid-area={area}
 >
-  <pre style="font-size: 10px;">{JSON.stringify(gridArea, null, 1)}</pre>
+  <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre>
   <div class="side side--top" bind:this={controlRefs.top} />
   <div class="side side--right" bind:this={controlRefs.right} />
   <div class="side side--bottom" bind:this={controlRefs.bottom} />
