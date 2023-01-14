@@ -13,52 +13,44 @@
               "id": "id123",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id456",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id789",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id012",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             }
           ]
@@ -71,52 +63,44 @@
               "id": "id1231",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id4561",
               "type": "TEXT",
               "html": "<p>This is a bit larger text block</p><p>Try interacting with it!</p>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id7891",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id0121",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             }
           ]
@@ -135,52 +119,44 @@
               "id": "id123",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id456",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id789",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id012",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             }
           ]
@@ -193,59 +169,49 @@
               "id": "id1231",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id4561",
               "type": "TEXT",
               "html": "<p>This is a bit larger text block</p><p>Try interacting with it!</p>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id7891",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             },
             {
               "id": "id0121",
               "type": "TEXT",
               "html": "<h1>hi gang</h1>",
-              "layout": {
-                "default": {
-                  "width": 300,
-                  "height": 100,
-                  "x": 0,
-                  "y": 0
-                }
+              "default": {
+                "width": 300,
+                "height": 100,
+                "x": 0,
+                "y": 0
               }
             }
           ]
         }
       ]
     }
-  ],
-  "some": "val",
-  "num": "1"
+  ]
 }
