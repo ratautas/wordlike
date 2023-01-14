@@ -2,7 +2,7 @@
   import BlockBackground from "$lib/components/BlockBackground.svelte";
   import BlockElement from "$lib/components/BlockElement.svelte";
   import { DEFAULT_GRID_WIDTH } from "$lib/constants";
-  import { dragDiffX, dragDiffY, draggedControl } from "$lib/stores/drag";
+  import { dragDiffX, dragDiffY, resizeDirection } from "$lib/stores/drag";
   import { getPosition } from "$lib/utils/position";
   import { selectedElementIds } from "$lib/stores/element";
   import { calculateGrid } from "$lib/utils/position";
@@ -13,7 +13,7 @@
     block,
     $dragDiffX,
     $dragDiffY,
-    $draggedControl,
+    $resizeDirection,
     $selectedElementIds
   ));
 

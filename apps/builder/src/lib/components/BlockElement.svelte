@@ -1,12 +1,12 @@
 <script lang="ts">
   import TextElement from "$lib/components/TextElement.svelte";
-  import { draggedControl } from "$lib/stores/drag";
+  import { resizeDirection } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
 
   let elementRef: HTMLElement | null;
 
-  let controlRefs = {
+  let resizeDirectionRefs = {
     N: null as HTMLElement | null,
     E: null as HTMLElement | null,
     S: null as HTMLElement | null,
@@ -23,12 +23,12 @@
       selectedElementIds.set([element.id, ...previousElementIds]);
     }
 
-    const control = Object.entries(controlRefs).find(([key, ref]) =>
-      event.composedPath().includes(ref)
+    const directionEntry = Object.entries(resizeDirectionRefs).find(
+      ([key, ref]) => event.composedPath().includes(ref)
     );
 
-    if (control) {
-      draggedControl.set(control[0]);
+    if (directionEntry) {
+      resizeDirection.set(directionEntry[0]);
     }
   }
 
@@ -62,14 +62,14 @@
   style:grid-area={area}
 >
   <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre>
-  <div class="side side--n" bind:this={controlRefs.N} />
-  <div class="side side--e" bind:this={controlRefs.E} />
-  <div class="side side--s" bind:this={controlRefs.S} />
-  <div class="side side--w" bind:this={controlRefs.W} />
-  <div class="handle handle--ne" bind:this={controlRefs.NE} />
-  <div class="handle handle--nw" bind:this={controlRefs.NW} />
-  <div class="handle handle--se" bind:this={controlRefs.SE} />
-  <div class="handle handle--sw" bind:this={controlRefs.SW} />
+  <div class="side side--n" bind:this={resizeDirectionRefs.N} />
+  <div class="side side--e" bind:this={resizeDirectionRefs.E} />
+  <div class="side side--s" bind:this={resizeDirectionRefs.S} />
+  <div class="side side--w" bind:this={resizeDirectionRefs.W} />
+  <div class="handle handle--ne" bind:this={resizeDirectionRefs.NE} />
+  <div class="handle handle--nw" bind:this={resizeDirectionRefs.NW} />
+  <div class="handle handle--se" bind:this={resizeDirectionRefs.SE} />
+  <div class="handle handle--sw" bind:this={resizeDirectionRefs.SW} />
   {#if element.type === "TEXT"}
     <TextElement {element} />
     <!-- content here -->

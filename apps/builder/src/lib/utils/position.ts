@@ -4,14 +4,14 @@ export const MIN_WIDTH = 100;
 export const MIN_HEIGHT = 100;
 
 // This function is used to limit position bounds to the grid
-export function getPosition(elementData, diffX, diffY, control) {
+export function getPosition(elementData, diffX, diffY, resizeDirection) {
   const { desktop } = elementData;
   const blockWidth = DEFAULT_GRID_WIDTH;
 
   const positon = { ...desktop };
 
-  // Default drag behavior
-  if (!control) {
+  // Default drag behavior (without resizing)
+  if (!resizeDirection) {
     const minX = Math.max(desktop.x + diffX, 0);
     const maxX = blockWidth - desktop.width;
     const minY = Math.max(desktop.y + diffY, 0);
@@ -23,7 +23,7 @@ export function getPosition(elementData, diffX, diffY, control) {
     return positon;
   }
 
-  if (control.includes("N")) {
+  if (resizeDirection.includes("N")) {
     const minY = Math.max(desktop.y + diffY, 0);
     const maxY = desktop.y + desktop.height - MIN_HEIGHT;
     const minHeight = Math.max(desktop.height - diffY, MIN_HEIGHT);
@@ -31,25 +31,25 @@ export function getPosition(elementData, diffX, diffY, control) {
 
     positon.y = Math.min(minY, maxY);
     positon.height = Math.min(minHeight, maxHeight);
-    if (control === "N") return positon;
+    if (resizeDirection === "N") return positon;
   }
 
-  if (control.includes("E")) {
+  if (resizeDirection.includes("E")) {
     const minWidth = Math.max(desktop.width + diffX, MIN_WIDTH);
     const maxWidth = blockWidth - desktop.x;
 
     positon.width = Math.min(minWidth, maxWidth);
-    if (control === "E") return positon;
+    if (resizeDirection === "E") return positon;
   }
 
-  if (control.includes("S")) {
+  if (resizeDirection.includes("S")) {
     const minHeight = Math.max(desktop.height + diffY, MIN_HEIGHT);
 
     positon.height = Math.min(minHeight, blockWidth - desktop.y);
-    if (control === "S") return positon;
+    if (resizeDirection === "S") return positon;
   }
 
-  if (control.includes("W")) {
+  if (resizeDirection.includes("W")) {
     const minX = Math.max(desktop.x + diffX, 0);
     const maxX = desktop.x + desktop.width - MIN_WIDTH;
     const minWidth = Math.max(desktop.width - diffX, MIN_WIDTH);
@@ -57,7 +57,7 @@ export function getPosition(elementData, diffX, diffY, control) {
 
     positon.x = Math.min(minX, maxX);
     positon.width = Math.min(minWidth, maxWidth);
-    if (control === "W") return positon;
+    if (resizeDirection === "W") return positon;
   }
 
   return positon;
@@ -67,14 +67,14 @@ export function calculateGrid(
   block,
   dragDiffX,
   dragDiffY,
-  draggedControl,
+  resizeDirection,
   selectedElementIds
 ) {
   const { rows, columns, positions } = block?.children?.reduce(
     (acc, element) => {
       const isElementDragged = selectedElementIds.includes(element.id);
       const { x, y, width, height } = isElementDragged
-        ? getPosition(element, dragDiffX, dragDiffY, draggedControl)
+        ? getPosition(element, dragDiffX, dragDiffY, resizeDirection)
         : element.desktop;
 
       acc.columns.add(x);

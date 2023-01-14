@@ -2,7 +2,7 @@ import { writable, derived, get } from 'svelte/store';
 
 import { page } from "$app/stores";
 import { doc } from '$lib/stores/doc';
-import { dragDiffX, dragDiffY, draggedControl } from '$lib/stores/drag';
+import { dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
 import { getPosition } from "$lib/utils/position";
 import { supabaseClient } from "$lib/supabase";
 
@@ -26,7 +26,7 @@ export async function updateDraggedElementsData() {
       if (elementIds.includes(element.id)) {
         return {
           ...element,
-          desktop: getPosition(element, get(dragDiffX), get(dragDiffY), get(draggedControl))
+          desktop: getPosition(element, get(dragDiffX), get(dragDiffY), get(resizeDirection))
         };
       }
       return {

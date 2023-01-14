@@ -11,7 +11,7 @@ type ElementPath = ElementRef[];
 
 export const elementPath = writable([] as ElementPath);
 export const isDragging = writable(false);
-export const draggedControl = writable();
+export const resizeDirection = writable();
 export const initialMousePosition = writable({
   x: null,
   y: null,
@@ -47,5 +47,5 @@ export function dragEndHandler(event: MouseEvent) {
   elementPath.set([]);
   isDragging.set(false);
 
-  draggedControl.set(null);
+  resizeDirection.set(null);
 }
