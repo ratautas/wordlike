@@ -7,14 +7,14 @@
   let elementRef: HTMLElement | null;
 
   let controlRefs = {
-    top: null as HTMLElement | null,
-    right: null as HTMLElement | null,
-    bottom: null as HTMLElement | null,
-    left: null as HTMLElement | null,
-    topRight: null as HTMLElement | null,
-    topLeft: null as HTMLElement | null,
-    bottomRight: null as HTMLElement | null,
-    bottomLeft: null as HTMLElement | null,
+    N: null as HTMLElement | null,
+    E: null as HTMLElement | null,
+    S: null as HTMLElement | null,
+    W: null as HTMLElement | null,
+    NE: null as HTMLElement | null,
+    NW: null as HTMLElement | null,
+    SE: null as HTMLElement | null,
+    SW: null as HTMLElement | null,
   };
 
   function handleElementMouseDown(event: MouseEvent) {
@@ -62,17 +62,14 @@
   style:grid-area={area}
 >
   <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre>
-  <div class="side side--top" bind:this={controlRefs.top} />
-  <div class="side side--right" bind:this={controlRefs.right} />
-  <div class="side side--bottom" bind:this={controlRefs.bottom} />
-  <div class="side side--left" bind:this={controlRefs.left} />
-  <div class="handle handle--top-left" bind:this={controlRefs.topLeft} />
-  <div class="handle handle--top-right" bind:this={controlRefs.topRight} />
-  <div class="handle handle--bottom-left" bind:this={controlRefs.bottomLeft} />
-  <div
-    class="handle handle--bottom-right"
-    bind:this={controlRefs.bottomRight}
-  />
+  <div class="side side--n" bind:this={controlRefs.N} />
+  <div class="side side--e" bind:this={controlRefs.E} />
+  <div class="side side--s" bind:this={controlRefs.S} />
+  <div class="side side--w" bind:this={controlRefs.W} />
+  <div class="handle handle--ne" bind:this={controlRefs.NE} />
+  <div class="handle handle--nw" bind:this={controlRefs.NW} />
+  <div class="handle handle--se" bind:this={controlRefs.SE} />
+  <div class="handle handle--sw" bind:this={controlRefs.SW} />
   {#if element.type === "TEXT"}
     <TextElement {element} />
     <!-- content here -->
@@ -120,7 +117,7 @@
       position: absolute;
       // background-color: cadetblue;
     }
-    &--top {
+    &--n {
       left: math.div($size, 2);
       right: math.div($size, 2);
       left: 0;
@@ -135,7 +132,7 @@
         right: 0;
       }
     }
-    &--right {
+    &--e {
       top: math.div($size, 2);
       bottom: math.div($size, 2);
       top: 0;
@@ -150,7 +147,7 @@
         bottom: 0;
       }
     }
-    &--bottom {
+    &--s {
       left: 0;
       right: 0;
       bottom: 0;
@@ -163,7 +160,7 @@
         right: 0;
       }
     }
-    &--left {
+    &--w {
       top: math.div($size, 2);
       bottom: math.div($size, 2);
       top: 0;
@@ -186,22 +183,22 @@
     height: $size;
     border: solid 1px cadetblue;
     background-color: #fff;
-    &--top-right {
+    &--ne {
       right: math.div($size, -2);
       top: math.div($size, -2);
       cursor: nesw-resize;
     }
-    &--top-left {
+    &--nw {
       left: math.div($size, -2);
       top: math.div($size, -2);
       cursor: nwse-resize;
     }
-    &--bottom-right {
+    &--se {
       right: math.div($size, -2);
       bottom: math.div($size, -2);
       cursor: nwse-resize;
     }
-    &--bottom-left {
+    &--sw {
       left: math.div($size, -2);
       bottom: math.div($size, -2);
       cursor: nesw-resize;
