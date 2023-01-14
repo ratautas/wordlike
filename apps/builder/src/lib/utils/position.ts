@@ -21,13 +21,18 @@ export function getPosition(elementData, diffX, diffY, control) {
         height: Math.min(height, maxHeight),
       };
     };
-    case "E":
+
+    case "E": {
+      const width = Math.max(desktop.width + diffX, MIN_WIDTH);
+
       return {
-        x: Math.min(desktop.x, blockWidth - desktop.width),
+        x: desktop.x,
         y: desktop.y,
-        width: desktop.width + diffX,
         height: desktop.height,
+        width: Math.min(width, blockWidth - desktop.x),
       };
+    };
+
     case "S": {
       const height = desktop.height + diffY;
 
@@ -38,41 +43,81 @@ export function getPosition(elementData, diffX, diffY, control) {
         height: Math.max(height, MIN_HEIGHT),
       };
     };
-    case "W":
+
+    case "W": {
+      const x = Math.max(desktop.x + diffX, 0);
+      const maxX = desktop.x + desktop.width - MIN_WIDTH;
+      const width = Math.max(desktop.width - diffX, MIN_WIDTH);
+      const maxWidth = desktop.x + desktop.width;
+
       return {
-        x: desktop.x + diffX,
+        x: Math.min(x, maxX),
         y: desktop.y,
-        width: desktop.width - diffX,
         height: desktop.height,
+        width: Math.min(width, maxWidth),
       };
-    case "NE":
+    };
+
+    case "NE": {
+      const y = Math.max(desktop.y + diffY, 0);
+      const maxY = desktop.y + desktop.height - MIN_HEIGHT;
+      const height = Math.max(desktop.height - diffY, MIN_HEIGHT);
+      const maxHeight = desktop.y + desktop.height;
+      const width = Math.max(desktop.width + diffX, MIN_WIDTH);
+
       return {
         x: desktop.x,
-        y: desktop.y + diffY,
-        width: desktop.width + diffX,
-        height: desktop.height - diffY,
-      };
-    case "NW":
+        y: Math.min(y, maxY),
+        width: Math.min(width, blockWidth - desktop.x),
+        height: Math.min(height, maxHeight),
+      }
+    };
+
+    case "NW": {
+      const x = Math.max(desktop.x + diffX, 0);
+      const maxX = desktop.x + desktop.width - MIN_WIDTH;
+      const width = Math.max(desktop.width - diffX, MIN_WIDTH);
+      const maxWidth = desktop.x + desktop.width;
+      const y = Math.max(desktop.y + diffY, 0);
+      const maxY = desktop.y + desktop.height - MIN_HEIGHT;
+      const height = Math.max(desktop.height - diffY, MIN_HEIGHT);
+      const maxHeight = desktop.y + desktop.height;
+
       return {
-        x: desktop.x + diffX,
-        y: desktop.y + diffY,
-        width: desktop.width - diffX,
-        height: desktop.height - diffY,
-      };
-    case "SE":
+        x: Math.min(x, maxX),
+        y: Math.min(y, maxY),
+        width: Math.min(width, maxWidth),
+        height: Math.min(height, maxHeight),
+      }
+    };
+
+    case "SE": {
+      const width = Math.max(desktop.width + diffX, MIN_WIDTH);
+      const height = desktop.height + diffY;
+
       return {
         x: desktop.x,
         y: desktop.y,
-        width: desktop.width + diffX,
-        height: desktop.height + diffY,
-      };
-    case "SW":
+        width: Math.min(width, blockWidth - desktop.x),
+        height: Math.max(height, MIN_HEIGHT),
+      }
+    };
+
+    case "SW": {
+      const x = Math.max(desktop.x + diffX, 0);
+      const maxX = desktop.x + desktop.width - MIN_WIDTH;
+      const width = Math.max(desktop.width - diffX, MIN_WIDTH);
+      const maxWidth = desktop.x + desktop.width;
+      const height = desktop.height + diffY;
+
       return {
-        x: desktop.x + diffX,
+        x: Math.min(x, maxX),
         y: desktop.y,
-        width: desktop.width - diffX,
-        height: desktop.height + diffY,
-      };
+        width: Math.min(width, maxWidth),
+        height: Math.max(height, MIN_HEIGHT),
+      }
+    };
+
     default:
       return {
         x: Math.min(Math.max(desktop.x + diffX, 0), blockWidth - desktop.width),
