@@ -21,6 +21,7 @@
     if (error) {
       cancel();
     }
+    console.log(sites);
 
     if (data) {
       sites = [data[0], ...sites];

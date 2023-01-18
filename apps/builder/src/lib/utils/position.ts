@@ -4,9 +4,8 @@ export const MIN_WIDTH = 100;
 export const MIN_HEIGHT = 100;
 
 // This function is used to limit position bounds to the grid
-export function getPosition(elementData, diffX, diffY, resizeDirection) {
+export function getPosition(elementData, diffX, diffY, resizeDirection, blockWidth = DEFAULT_GRID_WIDTH) {
   const { desktop } = elementData;
-  const blockWidth = DEFAULT_GRID_WIDTH;
 
   const positon = { ...desktop };
 
@@ -64,17 +63,20 @@ export function getPosition(elementData, diffX, diffY, resizeDirection) {
 };
 
 export function calculateGrid(
-  block,
+  blockData,
   dragDiffX,
   dragDiffY,
   resizeDirection,
   selectedElementIds
 ) {
-  const { rows, columns, positions } = block?.children?.reduce(
+  const { rows, columns, positions } = blockData?.children?.reduce(
     (acc, element) => {
       const isElementDragged = selectedElementIds.includes(element.id);
+      // const dragDiffX = isElementDragged ? dragDiffX : 0;
+      // const dragDiffY = isElementDragged ? dragDiffY : 0;
+
       const { x, y, width, height } = isElementDragged
-        ? getPosition(element, dragDiffX, dragDiffY, resizeDirection)
+        ? getPosition(element, dragDiffX, dragDiffY, resizeDirection, blockData.width)
         : element.desktop;
 
       acc.columns.add(x);
@@ -87,7 +89,7 @@ export function calculateGrid(
     },
     {
       rows: new Set([0]),
-      columns: new Set([0, block.width ?? DEFAULT_GRID_WIDTH]),
+      columns: new Set([0, blockData.width ?? DEFAULT_GRID_WIDTH]),
       positions: [],
     }
   );

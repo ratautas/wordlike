@@ -44,7 +44,10 @@
     }
   }
 
-  $: area = `${gridArea.rowStartIndex}/${gridArea.columnStartIndex}/${gridArea.rowEndIndex}/${gridArea.columnEndIndex}`;
+  $: ({ rowStartIndex, columnStartIndex, rowEndIndex, columnEndIndex } =
+    gridArea);
+
+  $: area = `${rowStartIndex}/${columnStartIndex}/${rowEndIndex}/${columnEndIndex}`;
 
   export let element;
   export let gridArea;
@@ -60,6 +63,7 @@
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
   style:grid-area={area}
+  id={element.id}
 >
   <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre>
   <div class="side side--n" bind:this={resizeDirectionRefs.N} />

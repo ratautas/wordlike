@@ -6,14 +6,6 @@ import { dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
 import { getPosition } from "$lib/utils/position";
 import { supabaseClient } from "$lib/supabase";
 
-interface MousePosition {
-  x: number | null;
-  y: number | null;
-};
-
-export const currentElementId = writable();
-export const draggedElementId = writable();
-export const focusedElementId = writable();
 export const selectedElementIds = writable([] as string[]);
 
 export const findById = (array, id) => {
@@ -21,7 +13,8 @@ export const findById = (array, id) => {
 };
 
 export async function updateDraggedElementsData() {
-  const mapChildren = (children) => {
+  function mapChildren(children) {
+    console.log('mapChildren', children);
     return children?.map((element) => {
       if (elementIds.includes(element.id)) {
         return {
@@ -39,8 +32,6 @@ export async function updateDraggedElementsData() {
   const elementIds = get(selectedElementIds);
   const $doc = get(doc);
 
-  const { siteId } = get(page).params;
-
   $doc.pages = $doc?.pages.map((page) => {
     return {
       ...page,
@@ -52,6 +43,7 @@ export async function updateDraggedElementsData() {
   // we can do this, but on failure we need to revert the doc to the initial state
   doc.set($doc);
 
+  const { siteId } = get(page).params;
   // const { data, error } = await supabaseClient
   //   .from('sites')
   //   .update({ doc: $doc })

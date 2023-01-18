@@ -41,7 +41,7 @@
     <a href="/">Home</a>
     <a href="/sites">Sites</a>
   </div>
-  {#each pageData.children as block}
-    <Block {block} />
+  {#each pageData.children as blockData}
+    <Block {blockData} pageId={pageData.id} />
   {/each}
 </main>
