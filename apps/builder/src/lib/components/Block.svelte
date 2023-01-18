@@ -18,7 +18,11 @@
   ));
 
   $: templateRows = gridTemplateRows.map((row) => `${row}px`).join(" ");
-  $: templateColumns = gridTemplateColumns.map((col) => `${col}px`).join(" ");
+  $: templateColumns = gridTemplateColumns
+    .map((col) =>
+      isUpdatingWidth ? `${(col / initialWidth) * 100}%` : `${col}px`
+    )
+    .join(" ");
 
   export let blockData;
   export let pageId;
@@ -28,6 +32,8 @@
   let blockRef: HTMLElement | undefined;
   let blockRect: DOMRect | undefined;
   let elementRefs = {};
+
+  let initialWidth = width;
 
   onMount(() => {
     blockRect = blockRef?.getBoundingClientRect();
@@ -42,11 +48,13 @@
 
   function enableWidthUpdate() {
     isUpdatingWidth = true;
+    initialWidth = width;
   }
 
   function disableWidthUpdate() {
     isUpdatingWidth = false;
-    return;
+    initialWidth = null;
+
     doc.set({
       ...$doc,
       pages: $doc.pages.map((docPage) => {
@@ -61,10 +69,8 @@
               ...docBlock,
               width,
               children: docBlock.children.map((docElement) => {
-                console.log({ elementRefs });
                 const elementRect =
                   elementRefs[docElement.id].getBoundingClientRect();
-                console.log({ elementRect });
 
                 return {
                   ...docElement,
@@ -81,10 +87,6 @@
         };
       }),
     });
-
-    // console.log($doc);
-
-    // initialWidth = width;
   }
 </script>
 
@@ -95,16 +97,18 @@
   style:--grid-template-columns={templateColumns}
   bind:this={blockRef}
 >
+  {initialWidth}
   <BlockBackground {blockData} />
   {#each blockData.children as element, i}
     <BlockElement {element} gridArea={gridAreas[i]} />
   {/each}
   <div
     class="absolute bg-white top-2 left-1/2 p-2 w-56 -translate-x-28"
-    on:mouseenter={enableWidthUpdate}
-    on:mousedown={enableWidthUpdate}
-    on:mouseleave={disableWidthUpdate}
-    on:mouseup={disableWidthUpdate}
+    on:mouseenter|stopPropagation={enableWidthUpdate}
+    on:mousedown|stopPropagation={enableWidthUpdate}
+    on:mouseleave|stopPropagation={disableWidthUpdate}
+    on:mouseup|stopPropagation={disableWidthUpdate}
+    on:mousemove|stopPropagation
   >
     <input type="range" bind:value={width} min="672" max="1240" />
     <input type="number" bind:value={width} min="672" max="1240" />

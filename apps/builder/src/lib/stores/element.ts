@@ -14,7 +14,6 @@ export const findById = (array, id) => {
 
 export async function updateDraggedElementsData() {
   function mapChildren(children) {
-    console.log('mapChildren', children);
     return children?.map((element) => {
       if (elementIds.includes(element.id)) {
         return {
