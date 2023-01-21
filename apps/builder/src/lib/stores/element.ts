@@ -18,7 +18,13 @@ export async function updateDraggedElementsData() {
       if (elementIds.includes(element.id)) {
         return {
           ...element,
-          desktop: getPosition(element, get(dragDiffX), get(dragDiffY), get(resizeDirection))
+          desktop: getPosition({
+            elementData: element,
+            diffX: get(dragDiffX),
+            diffY: get(dragDiffY),
+            resizeDirection: get(resizeDirection),
+            blockWidth: element.width,
+          })
         };
       }
       return {
