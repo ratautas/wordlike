@@ -21,7 +21,7 @@ export const load: PageServerLoad = async (event): PageData => {
 
 export const actions: Actions = {
   create: async ({ locals }) => {
-    // FOR SOM FKN REASON, THIS IS FIRING TWICE, disabling for now
+    // FOR SOME FKN REASON, THIS IS FIRING TWICE, disabling for now
     return;
     const { data, error: err } = await supabaseClient
       .from('sites')

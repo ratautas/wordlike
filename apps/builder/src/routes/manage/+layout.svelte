@@ -11,7 +11,7 @@
   };
 </script>
 
-<header class="flex border-b-gray-200 border-solid border-[1px]">
+<header class="flex border-b-gray-200 border-[1px]">
   <ul>
     <li class="flex">
       <a href="/" class="p-2">home</a>
