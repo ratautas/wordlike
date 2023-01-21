@@ -16,8 +16,8 @@
 
 <main class="min-h-screen">
   <header>
-    <a href="/sites"><b>Sites</b></a>
     {#if data.session}
+      <a href="/manage/sites"><b>Sites</b></a>
       <p>user: {data.session.user.email}</p>
       <form action="/logout" method="POST" use:enhance={submitLogout}>
         <button type="submit">Logout</button>
