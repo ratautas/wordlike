@@ -72,9 +72,6 @@ export function calculateGrid(
   const { rows, columns, positions } = blockData?.children?.reduce(
     (acc, element) => {
       const isElementDragged = selectedElementIds.includes(element.id);
-      // const dragDiffX = isElementDragged ? dragDiffX : 0;
-      // const dragDiffY = isElementDragged ? dragDiffY : 0;
-
       const { x, y, width, height } = isElementDragged
         ? getPosition(element, dragDiffX, dragDiffY, resizeDirection, blockData.width)
         : element.desktop;

@@ -30,14 +30,11 @@
   let width = blockData?.width ?? DEFAULT_GRID_WIDTH;
   let isUpdatingWidth = false;
   let blockRef: HTMLElement | undefined;
-  let blockRect: DOMRect | undefined;
   let elementRefs = {};
 
   let initialWidth = width;
 
   onMount(() => {
-    blockRect = blockRef?.getBoundingClientRect();
-
     elementRefs = blockData?.children.reduce((acc, element) => {
       return {
         ...acc,
@@ -52,9 +49,6 @@
   }
 
   function disableWidthUpdate() {
-    isUpdatingWidth = false;
-    initialWidth = null;
-
     doc.set({
       ...$doc,
       pages: $doc.pages.map((docPage) => {
@@ -69,16 +63,14 @@
               ...docBlock,
               width,
               children: docBlock.children.map((docElement) => {
-                const elementRect =
-                  elementRefs[docElement.id].getBoundingClientRect();
+                const { clientWidth, offsetLeft } = elementRefs[docElement.id];
 
                 return {
                   ...docElement,
                   desktop: {
                     ...docElement.desktop,
-                    x: elementRefs[docElement.id].offsetLeft,
-                    // x: elementRect.x - blockRect.x,
-                    width: elementRect.width,
+                    x: offsetLeft,
+                    width: clientWidth,
                   },
                 };
               }),
@@ -87,6 +79,8 @@
         };
       }),
     });
+    isUpdatingWidth = false;
+    initialWidth = null;
   }
 </script>
 
