@@ -1,0 +1,107 @@
+{
+  "id": "page1",
+  "slug": "slug1",
+  "isHome": true,
+  "children": [
+    {
+      "id": "grid123",
+      "type": "GRID",
+      "children": [
+        {
+          "id": "id123",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "id456",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "id789",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "id012",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "grid456",
+      "type": "GRID",
+      "children": [
+        {
+          "id": "id1231",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "id4561",
+          "type": "TEXT",
+          "html": "<p>This is a bit larger text block</p><p>Try interacting with it!</p>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "id7891",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "id0121",
+          "type": "TEXT",
+          "html": "<h1>hi gang</h1>",
+          "desktop": {
+            "width": 300,
+            "height": 100,
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }
+  ]
+}
