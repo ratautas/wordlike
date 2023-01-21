@@ -15,19 +15,19 @@
 </script>
 
 <main class="min-h-screen">
-  <h1>SvelteKit & Supabase Auth</h1>
-  {#if data.session}
-    <p>Welcome, {data.session.user.email}</p>
-    <form action="/logout" method="POST" use:enhance={submitLogout}>
-      <button type="submit" class="btn btn-primary">Logout</button>
-    </form>
-  {:else}
-    <p>Let's learn how to register and login users!</p>
-    <div class="auth-buttons">
-      <a href="/login" class="btn btn-primary">Login</a>
-      <a href="/register" class="btn btn-secondary">Register</a>
-    </div>
-  {/if}
+  <header>
+    <a href="/sites"><b>Sites</b></a>
+    {#if data.session}
+      <p>user: {data.session.user.email}</p>
+      <form action="/logout" method="POST" use:enhance={submitLogout}>
+        <button type="submit">Logout</button>
+      </form>
+    {:else}
+      <div>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </div>
+    {/if}
+  </header>
+  <h1 class="text-5xl font-extrabold text-center p-16">Home</h1>
 </main>
-
-<a href="/sites" class="btn btn-primary"><b>Sites</b></a>

@@ -8,7 +8,6 @@
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      console.log("auth state changed", event, session);
       invalidateAll();
     });
     return () => {
