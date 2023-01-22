@@ -1,1 +1,1 @@
-export const DEFAULT_GRID_WIDTH = 672;
+export const DEFAULT_GRID_MAX_WIDTH = 672;

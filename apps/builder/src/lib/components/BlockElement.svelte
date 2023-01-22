@@ -49,6 +49,8 @@
 
   $: area = `${rowStartIndex}/${columnStartIndex}/${rowEndIndex}/${columnEndIndex}`;
 
+  let clientWidth;
+
   export let element;
   export let gridArea;
 </script>
@@ -62,18 +64,12 @@
   class:is-grid={!!area}
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
+  bind:clientWidth
   style:grid-area={area}
   id={element.id}
 >
-  <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre>
-  <div class="side side--n" bind:this={resizeDirectionRefs.N} />
-  <div class="side side--e" bind:this={resizeDirectionRefs.E} />
-  <div class="side side--s" bind:this={resizeDirectionRefs.S} />
-  <div class="side side--w" bind:this={resizeDirectionRefs.W} />
-  <div class="handle handle--ne" bind:this={resizeDirectionRefs.NE} />
-  <div class="handle handle--nw" bind:this={resizeDirectionRefs.NW} />
-  <div class="handle handle--se" bind:this={resizeDirectionRefs.SE} />
-  <div class="handle handle--sw" bind:this={resizeDirectionRefs.SW} />
+  {clientWidth}
+  <!-- <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre> -->
   {#if element.type === "TEXT"}
     <TextElement {element} />
     <!-- content here -->
@@ -82,6 +78,14 @@
   {:else}
     <!-- else content here -->
   {/if}
+  <div class="side side--n" bind:this={resizeDirectionRefs.N} />
+  <div class="side side--e" bind:this={resizeDirectionRefs.E} />
+  <div class="side side--s" bind:this={resizeDirectionRefs.S} />
+  <div class="side side--w" bind:this={resizeDirectionRefs.W} />
+  <div class="handle handle--ne" bind:this={resizeDirectionRefs.NE} />
+  <div class="handle handle--nw" bind:this={resizeDirectionRefs.NW} />
+  <div class="handle handle--se" bind:this={resizeDirectionRefs.SE} />
+  <div class="handle handle--sw" bind:this={resizeDirectionRefs.SW} />
 </div>
 
 <style lang="scss">

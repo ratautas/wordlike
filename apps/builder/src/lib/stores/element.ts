@@ -16,15 +16,17 @@ export async function updateDraggedElementsData() {
   function mapChildren(children) {
     return children?.map((element) => {
       if (elementIds.includes(element.id)) {
+        const position = getPosition({
+          elementData: element,
+          diffX: get(dragDiffX),
+          diffY: get(dragDiffY),
+          resizeDirection: get(resizeDirection),
+          blockWidth: element.width,
+        });
+
         return {
           ...element,
-          desktop: getPosition({
-            elementData: element,
-            diffX: get(dragDiffX),
-            diffY: get(dragDiffY),
-            resizeDirection: get(resizeDirection),
-            blockWidth: element.width,
-          })
+          desktop: position,
         };
       }
       return {

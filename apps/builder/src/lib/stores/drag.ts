@@ -37,7 +37,6 @@ export const dragDiffY = derived(
   }
 );
 
-
 export function dragEndHandler(event: MouseEvent) {
   // add if statement to check if the element is being dragged at all
   updateDraggedElementsData();

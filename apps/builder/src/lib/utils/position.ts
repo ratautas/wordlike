@@ -1,4 +1,4 @@
-import { DEFAULT_GRID_WIDTH } from "$lib/constants";
+import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
 
 export const MIN_WIDTH = 100;
 export const MIN_HEIGHT = 100;
@@ -9,7 +9,7 @@ export function getPosition({
   diffX,
   diffY,
   resizeDirection,
-  blockWidth = DEFAULT_GRID_WIDTH
+  blockWidth = DEFAULT_GRID_MAX_WIDTH
 }) {
   const { desktop } = elementData;
 
@@ -95,7 +95,7 @@ export function calculateGrid(
     return acc;
   }, {
     rows: new Set([0]),
-    columns: new Set([0, blockData.width ?? DEFAULT_GRID_WIDTH]),
+    columns: new Set([0, blockData.width ?? DEFAULT_GRID_MAX_WIDTH]),
     positions: [],
   }
   );

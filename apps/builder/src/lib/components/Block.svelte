@@ -3,7 +3,7 @@
 
   import BlockBackground from "$lib/components/BlockBackground.svelte";
   import BlockElement from "$lib/components/BlockElement.svelte";
-  import { DEFAULT_GRID_WIDTH } from "$lib/constants";
+  import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
   import { dragDiffX, dragDiffY, resizeDirection } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { calculateGrid } from "$lib/utils/position";
@@ -27,7 +27,7 @@
   export let blockData;
   export let pageId;
 
-  let width = blockData?.width ?? DEFAULT_GRID_WIDTH;
+  let width = blockData?.width ?? DEFAULT_GRID_MAX_WIDTH;
   let isUpdatingWidth = false;
   let blockRef: HTMLElement | undefined;
   let elementRefs = {};

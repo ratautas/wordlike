@@ -23,6 +23,14 @@
     draggingMousePosition.set({ x: event.clientX, y: event.clientY });
   }
 
+  function handleClick(event: MouseEvent) {
+    console.log("click", $isDragging);
+    if ($isDragging) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
   $: pageData = $doc?.pages?.find(({ slug, isHome }) => {
     return $page.params.slug ? slug === $page.params.slug : isHome;
   });
@@ -36,6 +44,7 @@
   on:mousedown={handleMouseDown}
   on:mouseup={dragEndHandler}
   on:mousemove={handleMouseMove}
+  on:click={handleClick}
   class="min-h-screen bg-gray-100"
 >
   <Floating />
