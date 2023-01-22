@@ -48,4 +48,4 @@ export function dragEndHandler(event: MouseEvent) {
   isDragging.set(false);
 
   resizeDirection.set(null);
-}
+};

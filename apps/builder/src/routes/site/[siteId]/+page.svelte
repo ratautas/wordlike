@@ -2,6 +2,7 @@
   import type { PageData } from "./$types";
   import { page } from "$app/stores";
   import Block from "$lib/components/Block.svelte";
+  import Floating from "$lib/components/Floating.svelte";
   import {
     elementPath,
     isDragging,
@@ -37,10 +38,8 @@
   on:mousemove={handleMouseMove}
   class="min-h-screen bg-gray-100"
 >
-  <div class="absolute right-0">
-    <a href="/">Home</a>
-    <a href="/sites">Sites</a>
-  </div>
+  <Floating />
+
   {#each pageData.children as blockData}
     <Block {blockData} pageId={pageData.id} />
   {/each}
