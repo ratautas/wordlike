@@ -32,18 +32,6 @@
     }
   }
 
-  function handleWindowKeyDown(event: KeyboardEvent) {
-    if (event.key === "Shift") {
-      isShiftPressed.set(true);
-    }
-  }
-
-  function handleWindowKeyUp(event: KeyboardEvent) {
-    if (event.key === "Shift") {
-      isShiftPressed.set(false);
-    }
-  }
-
   $: ({ rowStartIndex, columnStartIndex, rowEndIndex, columnEndIndex } =
     gridArea);
 
@@ -54,8 +42,6 @@
   export let element;
   export let gridArea;
 </script>
-
-<svelte:window on:keydown={handleWindowKeyDown} on:keyup={handleWindowKeyUp} />
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
@@ -191,6 +177,7 @@
     height: $size;
     border: solid 1px cadetblue;
     background-color: #fff;
+    border-radius: math.div($size, 2);
     &--ne {
       right: math.div($size, -2);
       top: math.div($size, -2);

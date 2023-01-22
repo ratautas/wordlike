@@ -3,6 +3,7 @@
   import { page } from "$app/stores";
   import Block from "$lib/components/Block.svelte";
   import Floating from "$lib/components/Floating.svelte";
+  import Header from "../components/Header.svelte";
   import {
     elementPath,
     isDragging,
@@ -11,6 +12,14 @@
     dragEndHandler,
   } from "$lib/stores/drag";
   import { doc } from "$lib/stores/doc";
+  import BiTextareaT from "~icons/bi/textarea-t";
+  import BiImage from "~icons/bi/image";
+  import BiSuitDiamond from "~icons/bi/suit-diamond";
+  import MdiFormatTextbox from "~icons/mdi/format-textbox";
+  import CarbonTextCreation from "~icons/carbon/text-creation";
+  import FluentTextField20Regular from "~icons/fluent/text-field-20-regular";
+  import IconParkOutlineText from "~icons/icon-park-outline/text";
+  import { isShiftPressed } from "$lib/stores/keys";
 
   function handleMouseDown(event: any) {
     elementPath.set(event.path);
@@ -31,6 +40,15 @@
     }
   }
 
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Shift") isShiftPressed.set(true);
+    console.log("keydown", event.key);
+  }
+
+  function handleKeyUp(event: KeyboardEvent) {
+    if (event.key === "Shift") isShiftPressed.set(false);
+  }
+
   $: pageData = $doc?.pages?.find(({ slug, isHome }) => {
     return $page.params.slug ? slug === $page.params.slug : isHome;
   });
@@ -40,14 +58,18 @@
   doc.set(data?.doc);
 </script>
 
-<main
+<svelte:window
+  on:keydown={handleKeyDown}
+  on:keyup={handleKeyUp}
   on:mousedown={handleMouseDown}
   on:mouseup={dragEndHandler}
   on:mousemove={handleMouseMove}
   on:click={handleClick}
-  class="min-h-screen bg-gray-100"
->
-  <Floating />
+/>
+
+<main class="min-h-screen bg-gray-100">
+  <Header />
+  <!-- <Floating /> -->
 
   {#each pageData.children as blockData}
     <Block {blockData} pageId={pageData.id} />
