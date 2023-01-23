@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
   import BlockBackground from "$lib/components/BlockBackground.svelte";
   import BlockElement from "$lib/components/BlockElement.svelte";
   import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
@@ -15,6 +13,8 @@
   import { selectedElementIds, insertedElement } from "$lib/stores/element";
   import { calculateGrid } from "$lib/utils/position";
   import { doc } from "$lib/stores/doc";
+  import { elementRefs } from "$lib/stores/refs";
+  import { ref } from "$lib/actions/ref";
 
   // derived data:
   $: ({ gridAreas, gridTemplateRows, gridTemplateColumns } = calculateGrid(
@@ -44,18 +44,8 @@
   let width = blockData?.width ?? DEFAULT_GRID_MAX_WIDTH;
   let isUpdatingWidth = false;
   let blockRef: HTMLElement | undefined;
-  let elementRefs = {};
   let initialWidth = width;
   let isHovered = false;
-
-  onMount(() => {
-    elementRefs = blockData?.children.reduce((acc, element) => {
-      return {
-        ...acc,
-        [element.id]: blockRef.querySelector(`[data-el-id="${element.id}"]`),
-      };
-    }, []);
-  });
 
   function enableWidthUpdate() {
     isUpdatingWidth = true;
@@ -77,7 +67,7 @@
               ...docBlock,
               width,
               children: docBlock.children.map((docElement) => {
-                const { clientWidth, offsetLeft } = elementRefs[docElement.id];
+                const { clientWidth, offsetLeft } = $elementRefs[docElement.id];
 
                 return {
                   ...docElement,
@@ -131,10 +121,10 @@
   style:--max-width={`${width}px`}
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
-  data-block-id={blockData.id}
   bind:this={blockRef}
   on:mouseenter|stopPropagation={handleMouseEnter}
   on:mouseleave|stopPropagation={() => (isHovered = false)}
+  use:ref={blockData.id}
 >
   <BlockBackground {blockData} />
   {#each extendedBlockData.children as element, i}

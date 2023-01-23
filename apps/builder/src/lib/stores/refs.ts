@@ -22,28 +22,9 @@ export const elementRefs = writable<Record<string, Refs>>({});
 export function setElementRef(
   id: string,
   elementRef: ElementRef,
-  width: number,
-  height: number
 ) {
   elementRefs.update((refs) => {
-    refs[id] = {
-      elementRef,
-      width,
-      height,
-    };
-    console.log(refs);
-    return refs;
-  });
-};
-
-export function updateElementDimensions(
-  id: string,
-  width: number,
-  height: number,
-) {
-  elementRefs.update((refs) => {
-    refs[id].width = width;
-    refs[id].height = height;
+    refs[id] = elementRef;
 
     return refs;
   });

@@ -37,11 +37,6 @@
     gridArea);
 
   $: area = `${rowStartIndex}/${columnStartIndex}/${rowEndIndex}/${columnEndIndex}`;
-  $: refParams = {
-    id: element.id,
-    width: clientWidth,
-    height: clientHeight,
-  };
 
   let clientWidth: number;
   let clientHeight: number;
@@ -57,11 +52,8 @@
   class:is-grid={!!area}
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
-  bind:clientWidth
-  bind:clientHeight
-  use:ref={refParams}
+  use:ref={element.id}
   style:grid-area={area}
-  data-el-id={element.id}
 >
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre> -->
   {#if element.type === "TEXT"}
