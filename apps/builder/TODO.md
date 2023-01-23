@@ -14,6 +14,7 @@ Element types:
 - select all elements within selected grid element
 - multiple gird variations - grid.studio, figma dots, vertical lines;
 - draggable popups;
+- zoom level;
 
 All elements can be links;
 All elements can have a background color;

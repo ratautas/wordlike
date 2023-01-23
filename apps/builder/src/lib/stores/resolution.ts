@@ -50,58 +50,6 @@ export function startInserting(type) {
   createInsertedElement(type);
 };
 
-export async function insertElement() {
-  function mapChildren(children) {
-    return children?.map((element) => {
-      if (elementIds.includes(element.id)) {
-        const position = getPosition({
-          elementData: element,
-          diffX: get(dragDiffX),
-          diffY: get(dragDiffY),
-          resizeDirection: get(resizeDirection),
-          blockWidth: element.width,
-        });
-
-        return {
-          ...element,
-          desktop: position,
-        };
-      }
-      return {
-        ...element,
-        children: mapChildren(element.children),
-      };
-    });
-  };
-
-  const elementIds = get(selectedElementIds);
-  const $doc = get(doc);
-
-  $doc.pages = $doc?.pages.map((page) => {
-    return {
-      ...page,
-      children: mapChildren(page.children),
-    }
-  });
-
-  // TODO: this is kinda optimistic, we should wait for the response from the server
-  // we can do this, but on failure we need to revert the doc to the initial state
-  doc.set($doc);
-
-  const { siteId } = get(page).params;
-  // const { data, error } = await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
-
-  // await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
-};
-
 export async function updateDraggedElementsData() {
   function mapChildren(children) {
     return children?.map((element) => {
@@ -152,4 +100,4 @@ export async function updateDraggedElementsData() {
   //   .update({ doc: $doc })
   //   .eq('id', siteId)
   //   .select();
-};
+}

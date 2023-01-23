@@ -8,7 +8,7 @@
     elementPath,
     isDragging,
     initialMousePosition,
-    draggingMousePosition,
+    mousePosition,
     dragEndHandler,
   } from "$lib/stores/drag";
   import { doc } from "$lib/stores/doc";
@@ -29,16 +29,10 @@
 
   function handleMouseMove(event: MouseEvent) {
     if (!$isDragging) return;
-    draggingMousePosition.set({ x: event.clientX, y: event.clientY });
+    mousePosition.set({ x: event.clientX, y: event.clientY });
   }
 
-  function handleClick(event: MouseEvent) {
-    console.log("click", $isDragging);
-    if ($isDragging) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }
+  function handleClick(event: MouseEvent) {}
 
   function handleKeyDown(event: KeyboardEvent) {
     if (event.key === "Shift") isShiftPressed.set(true);
@@ -71,7 +65,7 @@
   <Header />
   <!-- <Floating /> -->
 
-  {#each pageData.children as blockData}
-    <Block {blockData} pageId={pageData.id} />
+  {#each pageData.children as blockData, index}
+    <Block {blockData} pageId={pageData.id} {index} />
   {/each}
 </main>

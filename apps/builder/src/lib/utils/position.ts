@@ -15,7 +15,7 @@ export function getPosition({
 
   const positon = { ...desktop };
 
-  // Default drag behavior (without resizing)
+  // Default drag behaviour (without resizing)
   if (!resizeDirection) {
     const minX = Math.max(desktop.x + diffX, 0);
     const maxX = blockWidth - desktop.width;

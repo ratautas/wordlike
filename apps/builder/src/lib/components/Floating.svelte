@@ -3,7 +3,7 @@
     elementPath,
     isDragging,
     initialMousePosition,
-    draggingMousePosition,
+    mousePosition,
     dragDiffX,
     dragDiffY,
   } from "$lib/stores/drag";
@@ -19,13 +19,12 @@
 
   function handleMouseMove(event: MouseEvent) {
     if (!$isDragging) return;
-    draggingMousePosition.set({ x: event.clientX, y: event.clientY });
+    mousePosition.set({ x: event.clientX, y: event.clientY });
   }
 
   function handleMouseUp(event: MouseEvent) {
     console.log("mouseup");
 
-    draggingMousePosition.set({ x: null, y: null });
     initialMousePosition.set({ x: null, y: null });
     elementPath.set([]);
     isDragging.set(false);

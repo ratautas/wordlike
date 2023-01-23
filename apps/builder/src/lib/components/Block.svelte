@@ -4,35 +4,49 @@
   import BlockBackground from "$lib/components/BlockBackground.svelte";
   import BlockElement from "$lib/components/BlockElement.svelte";
   import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
-  import { dragDiffX, dragDiffY, resizeDirection } from "$lib/stores/drag";
-  import { selectedElementIds } from "$lib/stores/element";
+  import {
+    dragDiffX,
+    dragDiffY,
+    resizeDirection,
+    isDragging,
+    isInserting,
+    initialMousePosition,
+  } from "$lib/stores/drag";
+  import { selectedElementIds, insertedElement } from "$lib/stores/element";
   import { calculateGrid } from "$lib/utils/position";
   import { doc } from "$lib/stores/doc";
 
+  // derived data:
   $: ({ gridAreas, gridTemplateRows, gridTemplateColumns } = calculateGrid(
-    blockData,
+    extendedBlockData,
     $dragDiffX,
     $dragDiffY,
     $resizeDirection,
     $selectedElementIds
   ));
-
   $: templateRows = gridTemplateRows.map((row) => `${row}px`).join(" ");
   $: templateColumns = gridTemplateColumns
     .map((col) =>
       isUpdatingWidth ? `${(col / initialWidth) * 100}%` : `${col}px`
     )
     .join(" ");
+  $: extendedBlockData =
+    $isInserting && isHovered
+      ? { ...blockData, children: [...blockData.children, $insertedElement] }
+      : blockData;
 
+  // props:
   export let blockData;
   export let pageId;
+  export let index;
 
+  // state:
   let width = blockData?.width ?? DEFAULT_GRID_MAX_WIDTH;
   let isUpdatingWidth = false;
   let blockRef: HTMLElement | undefined;
   let elementRefs = {};
-
   let initialWidth = width;
+  let isHovered = false;
 
   onMount(() => {
     elementRefs = blockData?.children.reduce((acc, element) => {
@@ -82,6 +96,34 @@
     isUpdatingWidth = false;
     initialWidth = null;
   }
+
+  function handleMouseEnter(e: MouseEvent) {
+    isHovered = true;
+    if (!$isInserting) return;
+
+    const { clientX, clientY } = e;
+    const { left, top } = blockRef.getBoundingClientRect();
+
+    initialMousePosition.set({
+      x: clientX,
+      y: clientY,
+    });
+
+    const x = clientX - left;
+    const y = clientY - top;
+    insertedElement.update((elementData) => {
+      return {
+        ...elementData,
+        desktop: {
+          ...elementData.desktop,
+          x,
+          y,
+        },
+      };
+    });
+    selectedElementIds.set([$insertedElement?.id]);
+    isDragging.set(true);
+  }
 </script>
 
 <div
@@ -90,10 +132,11 @@
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
   bind:this={blockRef}
+  on:mouseenter|stopPropagation={handleMouseEnter}
+  on:mouseleave|stopPropagation={() => (isHovered = false)}
 >
-  {initialWidth}
   <BlockBackground {blockData} />
-  {#each blockData.children as element, i}
+  {#each extendedBlockData.children as element, i}
     <BlockElement {element} gridArea={gridAreas[i]} />
   {/each}
   <div

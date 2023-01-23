@@ -17,6 +17,7 @@
 		"@iconify/tailwind": "^0.1.0",
 		"@sveltejs/adapter-auto": "^1.0.2",
 		"@sveltejs/kit": "^1.2.2",
+		"@types/uuid": "^9.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.48.2",
 		"@typescript-eslint/parser": "^5.48.2",
 		"autoprefixer": "^10.4.13",
@@ -37,6 +38,7 @@
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "^0.8.7",
 		"@supabase/supabase-js": "^2.4.1",
-		"svelte-octicons": "^17.12.0"
+		"svelte-octicons": "^17.12.0",
+		"uuid": "^9.0.0"
 	}
 }
