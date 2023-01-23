@@ -66,6 +66,6 @@
 <main class="min-h-screen bg-gray-100">
   <Header />
   {#each pageData.children as blockData, index}
-    <Block {blockData} pageId={pageData.id} {index} />
+    <Block {blockData} pageId={pageData.id} blockIndex={index} />
   {/each}
 </main>

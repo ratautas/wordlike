@@ -37,8 +37,8 @@
 
   // props:
   export let blockData;
-  export let pageId;
-  export let index;
+  export let pageId: string;
+  export let blockIndex: number;
 
   // state:
   let width = blockData?.width ?? DEFAULT_GRID_MAX_WIDTH;
@@ -52,7 +52,7 @@
     elementRefs = blockData?.children.reduce((acc, element) => {
       return {
         ...acc,
-        [element.id]: blockRef.querySelector(`[id="${element.id}"]`),
+        [element.id]: blockRef.querySelector(`[data-el-id="${element.id}"]`),
       };
     }, []);
   });
@@ -131,6 +131,7 @@
   style:--max-width={`${width}px`}
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
+  data-block-id={blockData.id}
   bind:this={blockRef}
   on:mouseenter|stopPropagation={handleMouseEnter}
   on:mouseleave|stopPropagation={() => (isHovered = false)}

@@ -52,7 +52,7 @@
   bind:this={elementRef}
   bind:clientWidth
   style:grid-area={area}
-  id={element.id}
+  data-el-id={element.id}
 >
   {clientWidth}
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre> -->
