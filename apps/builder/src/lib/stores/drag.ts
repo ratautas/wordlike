@@ -37,14 +37,3 @@ export const dragDiffY = derived(
     return $mousePosition.y - $initialMousePosition.y;
   }
 );
-
-export function dragEndHandler(event: MouseEvent) {
-  // add if statement to check if the element is being dragged at all
-  updateDraggedElementsData();
-
-  mousePosition.set({ x: null, y: null });
-  initialMousePosition.set({ x: null, y: null });
-  elementPath.set([]);
-  isDragging.set(false);
-  resizeDirection.set(null);
-};

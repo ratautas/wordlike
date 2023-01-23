@@ -2,26 +2,31 @@
   import type { PageData } from "./$types";
   import { page } from "$app/stores";
   import Block from "$lib/components/Block.svelte";
-  import Floating from "$lib/components/Floating.svelte";
   import Header from "../components/Header.svelte";
   import {
     elementPath,
     isDragging,
     initialMousePosition,
     mousePosition,
-    dragEndHandler,
+    resizeDirection,
   } from "$lib/stores/drag";
   import { doc } from "$lib/stores/doc";
-  import BiTextareaT from "~icons/bi/textarea-t";
-  import BiImage from "~icons/bi/image";
-  import BiSuitDiamond from "~icons/bi/suit-diamond";
-  import MdiFormatTextbox from "~icons/mdi/format-textbox";
-  import CarbonTextCreation from "~icons/carbon/text-creation";
-  import FluentTextField20Regular from "~icons/fluent/text-field-20-regular";
-  import IconParkOutlineText from "~icons/icon-park-outline/text";
+  import { updateDraggedElementsData } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
 
-  function handleMouseDown(event: any) {
+  function handleMouseUp(event: MouseEvent) {
+    console.log("handleMouseUp", event.composedPath());
+    // add if statement to check if the element is being dragged at all
+    updateDraggedElementsData();
+
+    mousePosition.set({ x: null, y: null });
+    initialMousePosition.set({ x: null, y: null });
+    elementPath.set([]);
+    isDragging.set(false);
+    resizeDirection.set(null);
+  }
+
+  function handleMouseDown(event: MouseEvent) {
     elementPath.set(event.path);
     isDragging.set(true);
     initialMousePosition.set({ x: event.clientX, y: event.clientY });
@@ -31,8 +36,6 @@
     if (!$isDragging) return;
     mousePosition.set({ x: event.clientX, y: event.clientY });
   }
-
-  function handleClick(event: MouseEvent) {}
 
   function handleKeyDown(event: KeyboardEvent) {
     if (event.key === "Shift") isShiftPressed.set(true);
@@ -56,15 +59,12 @@
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
   on:mousedown={handleMouseDown}
-  on:mouseup={dragEndHandler}
+  on:mouseup={handleMouseUp}
   on:mousemove={handleMouseMove}
-  on:click={handleClick}
 />
 
 <main class="min-h-screen bg-gray-100">
   <Header />
-  <!-- <Floating /> -->
-
   {#each pageData.children as blockData, index}
     <Block {blockData} pageId={pageData.id} {index} />
   {/each}

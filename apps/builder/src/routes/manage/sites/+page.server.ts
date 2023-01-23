@@ -11,10 +11,7 @@ export const load: PageServerLoad = async (event): PageData => {
     .select()
     .eq('user_id', userId);
 
-  console.log(data, error)
-
   return {
-    hi: 'hi',
     sites: data,
   }
 };
