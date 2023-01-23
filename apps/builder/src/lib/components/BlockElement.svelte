@@ -3,6 +3,7 @@
   import { resizeDirection } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
+  import { ref } from "$lib/actions/ref";
 
   let elementRef: HTMLElement | null;
 
@@ -36,8 +37,14 @@
     gridArea);
 
   $: area = `${rowStartIndex}/${columnStartIndex}/${rowEndIndex}/${columnEndIndex}`;
+  $: refParams = {
+    id: element.id,
+    width: clientWidth,
+    height: clientHeight,
+  };
 
-  let clientWidth;
+  let clientWidth: number;
+  let clientHeight: number;
 
   export let element;
   export let gridArea;
@@ -51,10 +58,11 @@
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
   bind:clientWidth
+  bind:clientHeight
+  use:ref={refParams}
   style:grid-area={area}
   data-el-id={element.id}
 >
-  {clientWidth}
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre> -->
   {#if element.type === "TEXT"}
     <TextElement {element} />
