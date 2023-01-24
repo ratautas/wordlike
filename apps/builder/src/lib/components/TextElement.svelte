@@ -1,11 +1,10 @@
 <script lang="ts">
   export let element;
-  $: ({ desktop, html } = element ?? {});
 </script>
 
 <div class="text" contenteditable="true">
-  {#if html}
-    {@html html}
+  {#if element.html}
+    {@html element.html}
   {/if}
 </div>
 

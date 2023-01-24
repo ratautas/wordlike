@@ -4,7 +4,7 @@
   import {
     elementPath,
     isDragging,
-    isInserting,
+    isDragInserting,
     initialMousePosition,
     mousePosition,
     resizeDirection,
@@ -26,7 +26,7 @@
     // first, exclude last 4 elements (body, html, document, window)
     const elementsOnPath = event.composedPath().slice(0, -4);
 
-    if ($isInserting) {
+    if ($isDragInserting) {
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
         return Object.keys($refs).find((key) => {

@@ -11,7 +11,8 @@ type ElementPath = ElementRef[];
 
 export const elementPath = writable([] as ElementPath);
 export const isDragging = writable(false);
-export const isInserting = writable(false);
+export const isDragInserting = writable(false);
+export const isClickInserting = writable(false);
 export const resizeDirection = writable();
 export const initialMousePosition = writable({
   x: null,
@@ -37,3 +38,9 @@ export const dragDiffY = derived(
     return $mousePosition.y - $initialMousePosition.y;
   }
 );
+
+export const isInserting = derived(
+  [isDragInserting, isClickInserting],
+  ([$isDragInserting, $isClickInserting]) => {
+    return $isDragInserting || $isClickInserting;
+  });

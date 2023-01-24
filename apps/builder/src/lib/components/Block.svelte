@@ -7,12 +7,13 @@
     dragDiffY,
     resizeDirection,
     isDragging,
-    isInserting,
+    isDragInserting,
     initialMousePosition,
   } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
   import { calculateGrid } from "$lib/utils/position";
   import { doc } from "$lib/stores/doc";
+  import { positionKey } from "$lib/stores/resolution";
   import { refs } from "$lib/stores/refs";
   import { ref } from "$lib/actions/ref";
 
@@ -31,7 +32,7 @@
     )
     .join(" ");
   $: extendedBlockData =
-    $isInserting && isHovered
+    $isDragInserting && isHovered
       ? {
           ...blockData,
           children: [...blockData.children, $insertingElement],
@@ -74,8 +75,8 @@
 
                 return {
                   ...el,
-                  desktop: {
-                    ...el.desktop,
+                  [$positionKey]: {
+                    ...el[$positionKey],
                     x: offsetLeft,
                     width: clientWidth,
                   },
@@ -92,7 +93,7 @@
 
   function handleMouseEnter(event: MouseEvent) {
     isHovered = true;
-    if (!$isInserting) return;
+    if (!$isDragInserting) return;
 
     const { clientX, clientY } = event;
     const { left, top } = blockRef.getBoundingClientRect();
@@ -107,8 +108,8 @@
     insertingElement.update((elementData) => {
       return {
         ...elementData,
-        desktop: {
-          ...elementData.desktop,
+        [$positionKey]: {
+          ...elementData[$positionKey],
           x,
           y,
         },

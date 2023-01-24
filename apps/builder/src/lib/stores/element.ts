@@ -3,8 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import { isInserting, dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
+import { isDragInserting, dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
+import { positionKey } from '$lib/stores/resolution';
 import { refs } from '$lib/stores/refs';
 import { getPosition } from "$lib/utils/position";
 import { selectAll } from "$lib/utils/selectAll";
@@ -35,7 +36,7 @@ export function createInsertedElement(type) {
   const element = {
     id: uuidv4(),
     type,
-    desktop: {
+    [get(positionKey)]: {
       width: DEFAULT_INSERTED_ELEMENT_WIDTH,
       height: DEFAULT_INSERTED_ELEMENT_HEIGHT,
     },
@@ -50,7 +51,7 @@ export function createInsertedElement(type) {
 };
 
 export function startInserting(type) {
-  isInserting.set(true);
+  isDragInserting.set(true);
   createInsertedElement(type);
 };
 
@@ -82,7 +83,7 @@ export async function insertElement(closestParentId) {
       elementData,
     ];
 
-    isInserting.set(false);
+    isDragInserting.set(false);
     insertingElement.set(null);
 
     activeElement?.focus();

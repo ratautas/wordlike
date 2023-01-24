@@ -3,7 +3,7 @@
   import BiImage from "~icons/bi/image";
   import BiSuitDiamond from "~icons/bi/suit-diamond";
 
-  import { mousePosition, isInserting } from "$lib/stores/drag";
+  import { mousePosition, isDragInserting } from "$lib/stores/drag";
   import { startInserting, INSERTED_TYPES } from "$lib/stores/element";
 
   function handleParagraphMouseDown(event: MouseEvent) {
@@ -20,7 +20,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <header class="sticky left-0 right-0 top-0 z-50 bg-white">
-  {#if !$isInserting}
+  {#if !$isDragInserting}
     <div class="flex p-2 justify-center">
       <button
         class="group/action flex flex-col items-center justify-center w-12 h-12 mx-1 rounded hover:bg-gray-100 relative cursor-grab"
