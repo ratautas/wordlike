@@ -21,7 +21,7 @@ export const INSERTED_TYPES = {
 };
 
 export const selectedElementIds = writable([] as string[]);
-export const insertedElement = writable();
+export const insertingElement = writable();
 
 export const findById = (array, id) => {
   return array?.find((i) => i.id === id || i.children && findById(i.children, id));
@@ -42,7 +42,7 @@ export function createInsertedElement(type) {
     element.html = `<p>${INITIAL_INSERTED_PARAGRAPHS[Math.floor(Math.random() * INITIAL_INSERTED_PARAGRAPHS.length)]}</p>`;
   }
 
-  insertedElement.set(element);
+  insertingElement.set(element);
 };
 
 export function startInserting(type) {

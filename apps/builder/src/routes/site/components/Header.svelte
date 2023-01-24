@@ -2,34 +2,18 @@
   import BiTextareaT from "~icons/bi/textarea-t";
   import BiImage from "~icons/bi/image";
   import BiSuitDiamond from "~icons/bi/suit-diamond";
-  import { fade, fly } from "svelte/transition";
 
   import { mousePosition, isInserting } from "$lib/stores/drag";
-  import {
-    insertedElement,
-    startInserting,
-    INSERTED_TYPES,
-  } from "$lib/stores/element";
-
-  let isClicked = false;
+  import { startInserting, INSERTED_TYPES } from "$lib/stores/element";
 
   function handleParagraphMouseDown(event: MouseEvent) {
     mousePosition.set({ x: event.clientX, y: event.clientY });
     startInserting(INSERTED_TYPES.PARAGRAPH);
   }
 
-  function handleParagraphMouseUp() {
-    isClicked = true;
-  }
+  function handleParagraphMouseUp(event: MouseEvent) {}
 
-  function handleWindowMouseUp(event: any) {
-    if (!isClicked) {
-      isInserting.set(false);
-    }
-  }
-
-  $: left = `${$mousePosition.x}px`;
-  $: top = `${$mousePosition.y}px`;
+  function handleWindowMouseUp(event: MouseEvent) {}
 </script>
 
 <svelte:window on:mouseup={handleWindowMouseUp} />

@@ -1,21 +1,49 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
-  import { page } from "$app/stores";
   import Block from "$lib/components/Block.svelte";
   import Header from "../components/Header.svelte";
   import {
     elementPath,
     isDragging,
+    isInserting,
     initialMousePosition,
     mousePosition,
     resizeDirection,
   } from "$lib/stores/drag";
-  import { doc } from "$lib/stores/doc";
-  import { updateDraggedElementsData } from "$lib/stores/element";
+  import { currentPageData } from "$lib/stores/doc";
+  import {
+    updateDraggedElementsData,
+    insertingElement,
+    insertElement,
+  } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
+  import { refs } from "$lib/stores/refs";
+  import { selectAll } from "$lib/utils/selectAll";
 
   function handleMouseUp(event: MouseEvent) {
-    console.log("handleMouseUp", event.composedPath());
+    // event.composedPath() returns an array of all the elements on the path,
+    // starting from the element that triggered the event and
+    // propagating up to the root element (document)
+
+    // first, exclude last 4 elements (body, html, document, window)
+    const elementsOnPath = event.composedPath().slice(0, -4);
+
+    if ($isInserting) {
+      const closestParentId = elementsOnPath.reduce((acc, el) => {
+        if (!!acc) return acc;
+        return Object.keys($refs).find((key) => {
+          return $refs[key] === el && key !== $insertingElement.id;
+        });
+      }, null);
+      const insertedElementRef = $refs[$insertingElement.id];
+
+      insertElement(closestParentId);
+      isInserting.set(false);
+      insertingElement.set(null);
+
+      insertedElementRef?.querySelector("[contenteditable]")?.focus();
+      selectAll(insertedElementRef?.querySelector("[contenteditable]"));
+    }
+
     // add if statement to check if the element is being dragged at all
     updateDraggedElementsData();
 
@@ -45,14 +73,6 @@
   function handleKeyUp(event: KeyboardEvent) {
     if (event.key === "Shift") isShiftPressed.set(false);
   }
-
-  $: pageData = $doc?.pages?.find(({ slug, isHome }) => {
-    return $page.params.slug ? slug === $page.params.slug : isHome;
-  });
-
-  export let data: PageData;
-
-  doc.set(data?.doc);
 </script>
 
 <svelte:window
@@ -65,7 +85,7 @@
 
 <main class="min-h-screen bg-gray-100">
   <Header />
-  {#each pageData.children as blockData, index}
-    <Block {blockData} pageId={pageData.id} blockIndex={index} />
+  {#each $currentPageData.children as blockData, index}
+    <Block {blockData} pageId={$currentPageData.id} blockIndex={index} />
   {/each}
 </main>

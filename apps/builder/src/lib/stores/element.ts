@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import { doc } from '$lib/stores/doc';
+import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
 import { isInserting } from '$lib/stores/drag';
 import { dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
 import { getPosition } from "$lib/utils/position";
@@ -21,7 +21,7 @@ export const INSERTED_TYPES = {
 };
 
 export const selectedElementIds = writable([] as string[]);
-export const insertedElement = writable();
+export const insertingElement = writable();
 
 export const findById = (array, id) => {
   return array?.find((i) => i.id === id || i.children && findById(i.children, id));
@@ -42,7 +42,7 @@ export function createInsertedElement(type) {
     element.html = `<p>${INITIAL_INSERTED_PARAGRAPHS[Math.floor(Math.random() * INITIAL_INSERTED_PARAGRAPHS.length)]}</p>`;
   }
 
-  insertedElement.set(element);
+  insertingElement.set(element);
 };
 
 export function startInserting(type) {
@@ -50,56 +50,21 @@ export function startInserting(type) {
   createInsertedElement(type);
 };
 
-export async function insertElement() {
-  function mapChildren(children) {
-    return children?.map((element) => {
-      if (elementIds.includes(element.id)) {
-        const position = getPosition({
-          elementData: element,
-          diffX: get(dragDiffX),
-          diffY: get(dragDiffY),
-          resizeDirection: get(resizeDirection),
-          blockWidth: element.width,
-        });
+export async function insertElement(closestParentId) {
+  const $insertingElement = get(insertingElement);
+  const $currentPageData = get(currentPageData);
+  const $currentPageIndex = get(currentPageIndex);
 
-        return {
-          ...element,
-          desktop: position,
-        };
-      }
-      return {
-        ...element,
-        children: mapChildren(element.children),
-      };
-    });
-  };
+  doc.update((doc) => {
+    const $insertingParentIndex = $currentPageData.children.findIndex((el) => el.id === closestParentId);
+    // TODO: should be recursive
+    doc.pages[$currentPageIndex].children[$insertingParentIndex].children = [
+      ...doc.pages[$currentPageIndex].children[$insertingParentIndex].children,
+      $insertingElement,
+    ];
 
-  const elementIds = get(selectedElementIds);
-  const $doc = get(doc);
-
-  $doc.pages = $doc?.pages.map((page) => {
-    return {
-      ...page,
-      children: mapChildren(page.children),
-    }
+    return doc;
   });
-
-  // TODO: this is kinda optimistic, we should wait for the response from the server
-  // we can do this, but on failure we need to revert the doc to the initial state
-  doc.set($doc);
-
-  const { siteId } = get(page).params;
-  // const { data, error } = await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
-
-  // await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
 };
 
 export async function updateDraggedElementsData() {

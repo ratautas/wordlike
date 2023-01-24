@@ -1,5 +1,6 @@
 import type { PageData, PageLoad } from './$types';
 import { supabaseClient } from "$lib/supabase";
+import { doc } from "$lib/stores/doc";
 
 export const load: PageLoad = async (event): PageData => {
   const { siteId } = event.params;
@@ -7,9 +8,11 @@ export const load: PageLoad = async (event): PageData => {
     .from('sites')
     .select()
     .eq('id', siteId);
-  const [{ doc }] = data ?? [{}];
+  const [site] = data ?? [];
+
+  doc.set(site?.doc);
 
   return {
-    doc,
+    doc: site.doc,
   }
 };

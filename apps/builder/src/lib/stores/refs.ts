@@ -6,7 +6,7 @@
 import { writable, derived } from 'svelte/store';
 
 type ElementRef = HTMLElement | null;
-type Refs = Record<string, { elementRef: ElementRef; width: number; height: number }>;
+type Refs = Record<string, { ref: ElementRef; width: number; height: number }>;
 
 // Kas gali būti draggable:
 // - elementas
@@ -17,21 +17,21 @@ type Refs = Record<string, { elementRef: ElementRef; width: number; height: numb
 // - drag and drop image upload
 // - draggable toolbar'as
 
-export const elementRefs = writable<Record<string, Refs>>({});
+export const refs = writable<Record<string, Refs>>({});
 
 export function setElementRef(
   id: string,
-  elementRef: ElementRef,
+  ref: ElementRef,
 ) {
-  elementRefs.update((refs) => {
-    refs[id] = elementRef;
+  refs.update((refs) => {
+    refs[id] = ref;
 
     return refs;
   });
 };
 
 export function deleteElementRef(id: string) {
-  elementRefs.update((refs) => {
+  refs.update((refs) => {
     delete refs[id];
     return refs;
   });

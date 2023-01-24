@@ -1,6 +1,6 @@
 <script lang="ts">
   import TextElement from "$lib/components/TextElement.svelte";
-  import { resizeDirection } from "$lib/stores/drag";
+  import { dragDiffX, dragDiffY, resizeDirection } from "$lib/stores/drag";
   import { selectedElementIds } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { ref } from "$lib/actions/ref";
@@ -37,9 +37,8 @@
     gridArea);
 
   $: area = `${rowStartIndex}/${columnStartIndex}/${rowEndIndex}/${columnEndIndex}`;
-
-  let clientWidth: number;
-  let clientHeight: number;
+  $: isSelected = $selectedElementIds.includes(element.id);
+  $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);
 
   export let element;
   export let gridArea;
@@ -48,8 +47,9 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="element relative"
-  class:is-selected={$selectedElementIds.includes(element.id)}
+  class:is-selected={isSelected}
   class:is-grid={!!area}
+  class:has-moved={hasMoved}
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
   use:ref={element.id}
@@ -78,6 +78,44 @@
   @use "sass:math";
   $size: 8px;
 
+  @keyframes shake {
+    0% {
+      transform: translate(0.5px, 0.25px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-0.25px, -0.5px) rotate(-0.25deg);
+    }
+    20% {
+      transform: translate(-0.75px, 0px) rotate(0.25deg);
+    }
+    30% {
+      transform: translate(0px, 0.5px) rotate(0deg);
+    }
+    40% {
+      transform: translate(0.25px, -0.25px) rotate(0.25deg);
+    }
+    50% {
+      transform: translate(-0.25px, 0.5px) rotate(-0.25deg);
+    }
+    60% {
+      transform: translate(-0.75px, 0.25px) rotate(0deg);
+    }
+    70% {
+      transform: translate(0.5px, 0.25px) rotate(-0.25deg);
+    }
+    80% {
+      transform: translate(-0.25px, -0.25px) rotate(0.25deg);
+    }
+    90% {
+      transform: translate(0.5px, 0.5px) rotate(0deg);
+    }
+    100% {
+      transform: translate(0.25px, -0.5px) rotate(-0.25deg);
+    }
+  }
+
+  // write fast keyframe shake animation:
+
   .element {
     z-index: 2;
     position: relative;
@@ -86,6 +124,12 @@
         opacity: 0.5;
       }
     }
+
+    &.is-selected {
+      animation-iteration-count: 1;
+      animation: shake 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    }
+
     &.is-selected {
       z-index: 3;
 

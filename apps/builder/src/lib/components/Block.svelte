@@ -10,10 +10,10 @@
     isInserting,
     initialMousePosition,
   } from "$lib/stores/drag";
-  import { selectedElementIds, insertedElement } from "$lib/stores/element";
+  import { selectedElementIds, insertingElement } from "$lib/stores/element";
   import { calculateGrid } from "$lib/utils/position";
   import { doc } from "$lib/stores/doc";
-  import { elementRefs } from "$lib/stores/refs";
+  import { refs } from "$lib/stores/refs";
   import { ref } from "$lib/actions/ref";
 
   // derived data:
@@ -32,7 +32,7 @@
     .join(" ");
   $: extendedBlockData =
     $isInserting && isHovered
-      ? { ...blockData, children: [...blockData.children, $insertedElement] }
+      ? { ...blockData, children: [...blockData.children, $insertingElement] }
       : blockData;
 
   // props:
@@ -66,13 +66,13 @@
             return {
               ...docBlock,
               width,
-              children: docBlock.children.map((docElement) => {
-                const { clientWidth, offsetLeft } = $elementRefs[docElement.id];
+              children: docBlock.children.map((el) => {
+                const { clientWidth, offsetLeft } = $refs[el.id];
 
                 return {
-                  ...docElement,
+                  ...el,
                   desktop: {
-                    ...docElement.desktop,
+                    ...el.desktop,
                     x: offsetLeft,
                     width: clientWidth,
                   },
@@ -101,7 +101,7 @@
 
     const x = clientX - left;
     const y = clientY - top;
-    insertedElement.update((elementData) => {
+    insertingElement.update((elementData) => {
       return {
         ...elementData,
         desktop: {
@@ -111,7 +111,7 @@
         },
       };
     });
-    selectedElementIds.set([$insertedElement?.id]);
+    selectedElementIds.set([$insertingElement?.id]);
     isDragging.set(true);
   }
 </script>
