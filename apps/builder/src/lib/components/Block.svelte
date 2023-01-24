@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ref } from "$lib/actions/ref";
   import BlockBackground from "$lib/components/BlockBackground.svelte";
   import BlockElement from "$lib/components/BlockElement.svelte";
   import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
@@ -7,15 +8,14 @@
     dragDiffY,
     resizeDirection,
     isDragging,
-    isDragInserting,
+    isInserting,
     initialMousePosition,
   } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
-  import { calculateGrid } from "$lib/utils/position";
   import { doc } from "$lib/stores/doc";
   import { positionKey } from "$lib/stores/resolution";
   import { refs } from "$lib/stores/refs";
-  import { ref } from "$lib/actions/ref";
+  import { calculateGrid } from "$lib/utils/position";
 
   // derived data:
   $: ({ gridAreas, gridTemplateRows, gridTemplateColumns } = calculateGrid(
@@ -32,7 +32,7 @@
     )
     .join(" ");
   $: extendedBlockData =
-    $isDragInserting && isHovered
+    $isInserting && isHovered
       ? {
           ...blockData,
           children: [...blockData.children, $insertingElement],
@@ -93,7 +93,7 @@
 
   function handleMouseEnter(event: MouseEvent) {
     isHovered = true;
-    if (!$isDragInserting) return;
+    if (!$isInserting) return;
 
     const { clientX, clientY } = event;
     const { left, top } = blockRef.getBoundingClientRect();

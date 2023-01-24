@@ -50,11 +50,6 @@ export function createInsertedElement(type) {
   insertingElement.set(element);
 };
 
-export function startInserting(type) {
-  isDragInserting.set(true);
-  createInsertedElement(type);
-};
-
 export async function insertElement(closestParentId) {
   const elementData = get(insertingElement);
   const pageData = get(currentPageData);

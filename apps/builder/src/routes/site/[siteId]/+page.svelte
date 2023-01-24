@@ -2,11 +2,12 @@
   import Block from "$lib/components/Block.svelte";
   import Header from "../components/Header.svelte";
   import {
-    elementPath,
+    mouseDownComposedPath,
     isDragging,
     isDragInserting,
+    mouseMoveEvent,
     initialMousePosition,
-    mousePosition,
+    dragMousePosition,
     resizeDirection,
   } from "$lib/stores/drag";
   import { currentPageData } from "$lib/stores/doc";
@@ -39,22 +40,24 @@
       updateDraggedElementsData();
     }
 
-    mousePosition.set({ x: null, y: null });
+    dragMousePosition.set({ x: null, y: null });
     initialMousePosition.set({ x: null, y: null });
-    elementPath.set([]);
+    mouseDownComposedPath.set([]);
     isDragging.set(false);
     resizeDirection.set(null);
   }
 
   function handleMouseDown(event: MouseEvent) {
-    elementPath.set(event.path);
+    mouseDownComposedPath.set(event.composedPath());
     isDragging.set(true);
     initialMousePosition.set({ x: event.clientX, y: event.clientY });
   }
 
   function handleMouseMove(event: MouseEvent) {
+    mouseMoveEvent.set(event);
     if (!$isDragging) return;
-    mousePosition.set({ x: event.clientX, y: event.clientY });
+    dragMousePosition.set({ x: event.clientX, y: event.clientY });
+    // TODO: check if this kills performance:
   }
 
   function handleKeyDown(event: KeyboardEvent) {

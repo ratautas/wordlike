@@ -77,7 +77,8 @@ export function calculateGrid(
   selectedElementIds
 ) {
   const { rows, columns, positions } = blockData?.children?.reduce((acc, element) => {
-    const isElementDragged = selectedElementIds.includes(element.id);
+    if (!element) return acc;
+    const isElementDragged = selectedElementIds.includes(element?.id);
     const { x, y, width, height } = isElementDragged
       ? getPosition({
         elementData: element,
