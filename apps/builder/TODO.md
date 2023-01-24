@@ -2,6 +2,7 @@
 [ ] allow going out of bounds
 [ ] add grid guides with config
 [ ] zoom
+[ ] reveal animation
 [ ] image
 
 Element types:

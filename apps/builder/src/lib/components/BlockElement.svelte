@@ -125,8 +125,18 @@
   .element {
     z-index: 2;
     position: relative;
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      inset: -0.5px;
+      border: 1px solid cadetblue;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 2;
+    }
     &:hover {
-      .side {
+      &::before {
         opacity: 0.5;
       }
     }
@@ -138,85 +148,99 @@
 
     &.is-selected {
       z-index: 3;
+      &::before {
+        opacity: 1;
+      }
 
       .side,
       .handle {
         opacity: 1;
-        &::before,
-        &::after {
-          opacity: 0.5;
-        }
       }
     }
   }
 
   .side {
-    background-color: cadetblue;
+    // background-color: cadetblue;
     position: absolute;
     opacity: 0;
-    &:before,
-    &:after {
+    z-index: 4;
+    &::before {
       content: "";
       display: block;
       position: absolute;
-      // background-color: cadetblue;
+      background-color: #fff;
+      min-width: $size;
+      min-height: $size;
+      transform: translate3d(-50%, -50%, 0);
+      top: 50%;
+      left: 50%;
+      border-radius: math.div($size, 2);
+      border: solid 1px cadetblue;
+      max-width: calc(100% - ($size * 2));
+    }
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      border: dotted 1px cadetblue;
+      width: 2px;
+      height: 2px;
+      transform: translate3d(-50%, -50%, 0);
+      top: 50%;
+      left: 50%;
+      max-width: calc(100% - ($size * 4));
+      opacity: 0.5;
     }
     &--n {
-      left: math.div($size, 2);
-      right: math.div($size, 2);
+      cursor: row-resize;
+      height: $size;
+      top: math.div($size, -2);
       left: 0;
       right: 0;
-      top: 0;
-      height: 1px;
-      cursor: row-resize;
       &::before {
-        height: $size;
-        top: math.div($size, -2);
-        left: 0;
-        right: 0;
+        width: 48px;
+      }
+      &::after {
+        width: 24px;
       }
     }
     &--e {
-      top: math.div($size, 2);
-      bottom: math.div($size, 2);
+      cursor: col-resize;
+      width: $size;
+      right: math.div($size, -2);
       top: 0;
       bottom: 0;
-      right: 0;
-      width: 1px;
-      cursor: col-resize;
       &::before {
-        width: $size;
-        right: math.div($size, -2);
-        top: 0;
-        bottom: 0;
+        height: 48px;
+      }
+      &::after {
+        height: 24px;
       }
     }
     &--s {
+      height: $size;
+      bottom: math.div($size, -2);
       left: 0;
       right: 0;
-      bottom: 0;
-      height: 1px;
       cursor: row-resize;
       &::before {
-        height: $size;
-        bottom: math.div($size, -2);
-        left: 0;
-        right: 0;
+        width: 48px;
+      }
+      &::after {
+        width: 24px;
       }
     }
     &--w {
-      top: math.div($size, 2);
-      bottom: math.div($size, 2);
+      width: $size;
+      left: math.div($size, -2);
       top: 0;
       bottom: 0;
-      left: 0;
-      width: 1px;
       cursor: col-resize;
       &::before {
-        width: $size;
-        left: math.div($size, -2);
-        top: 0;
-        bottom: 0;
+        height: 48px;
+      }
+      &::after {
+        height: 24px;
       }
     }
   }
@@ -228,6 +252,7 @@
     border: solid 1px cadetblue;
     background-color: #fff;
     border-radius: math.div($size, 2);
+    z-index: 3;
     &--ne {
       right: math.div($size, -2);
       top: math.div($size, -2);
