@@ -1,3 +1,9 @@
+[ ] update resize horizontal
+[ ] allow going out of bounds
+[ ] add grid guides with config
+[ ] zoom
+[ ] image
+
 Element types:
 - Text;
 - Image;

@@ -3,11 +3,20 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import { isDragInserting, dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
+import {
+  dragDiffX,
+  dragDiffY,
+  dragMousePosition,
+  initialMousePosition,
+  isClickInserting,
+  isDragInserting,
+  isDragging,
+  resizeDirection,
+} from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
-import { positionKey } from '$lib/stores/resolution';
-import { refs } from '$lib/stores/refs';
 import { getPosition } from "$lib/utils/position";
+import { refs } from '$lib/stores/refs';
+import { positionKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 
@@ -51,6 +60,7 @@ export function createInsertedElement(type) {
 };
 
 export async function insertElement(closestParentId) {
+  console.log(closestParentId);
   const elementData = get(insertingElement);
   const pageData = get(currentPageData);
   const pageIndex = get(currentPageIndex);
@@ -63,8 +73,8 @@ export async function insertElement(closestParentId) {
   // This is a hack, we should not rely on the first child
   const elementRect = elementRef.firstChild.getBoundingClientRect();
 
-  elementData.desktop = {
-    ...elementData.desktop,
+  elementData[get(positionKey)] = {
+    ...elementData[get(positionKey)],
     x: elementRect.x - parentRect.x,
     y: elementRect.y - parentRect.y,
     width: elementRect.width,
@@ -73,13 +83,19 @@ export async function insertElement(closestParentId) {
 
   doc.update((doc) => {
     // TODO: should be recursive
+
+    isDragInserting.set(false);
+    isClickInserting.set(false);
+    insertingElement.set(null);
+    dragMousePosition.set({ x: null, y: null });
+    initialMousePosition.set({ x: null, y: null });
+    isDragging.set(false);
+    resizeDirection.set(null);
+
     doc.pages[pageIndex].children[parentIndex].children = [
       ...doc.pages[pageIndex].children[parentIndex].children,
       elementData,
     ];
-
-    isDragInserting.set(false);
-    insertingElement.set(null);
 
     activeElement?.focus();
     selectAll(activeElement);
@@ -102,7 +118,7 @@ export async function updateDraggedElementsData() {
 
         return {
           ...element,
-          desktop: position,
+          [get(positionKey)]: position,
         };
       }
       return {

@@ -14,7 +14,7 @@ export function getPosition({
 }) {
   const { desktop } = elementData;
 
-  const positon = { ...desktop };
+  const position = { ...desktop };
 
   // Default drag behaviour (without resizing)
   if (!resizeDirection) {
@@ -23,10 +23,10 @@ export function getPosition({
     const minY = Math.max(desktop.y + diffY, 0);
     const maxY = blockWidth - desktop.height;
 
-    positon.x = Math.min(minX, maxX);
-    positon.y = Math.min(minY, maxY);
+    position.x = Math.min(minX, maxX);
+    position.y = Math.min(minY, maxY);
 
-    return positon;
+    return position;
   }
 
   if (resizeDirection.includes("N")) {
@@ -35,24 +35,24 @@ export function getPosition({
     const minHeight = Math.max(desktop.height - diffY, MIN_HEIGHT);
     const maxHeight = desktop.y + desktop.height;
 
-    positon.y = Math.min(minY, maxY);
-    positon.height = Math.min(minHeight, maxHeight);
-    if (resizeDirection === "N") return positon;
+    position.y = Math.min(minY, maxY);
+    position.height = Math.min(minHeight, maxHeight);
+    if (resizeDirection === "N") return position;
   }
 
   if (resizeDirection.includes("E")) {
     const minWidth = Math.max(desktop.width + diffX, MIN_WIDTH);
     const maxWidth = blockWidth - desktop.x;
 
-    positon.width = Math.min(minWidth, maxWidth);
-    if (resizeDirection === "E") return positon;
+    position.width = Math.min(minWidth, maxWidth);
+    if (resizeDirection === "E") return position;
   }
 
   if (resizeDirection.includes("S")) {
     const minHeight = Math.max(desktop.height + diffY, MIN_HEIGHT);
 
-    positon.height = Math.min(minHeight, blockWidth - desktop.y);
-    if (resizeDirection === "S") return positon;
+    position.height = Math.min(minHeight, blockWidth - desktop.y);
+    if (resizeDirection === "S") return position;
   }
 
   if (resizeDirection.includes("W")) {
@@ -61,12 +61,12 @@ export function getPosition({
     const minWidth = Math.max(desktop.width - diffX, MIN_WIDTH);
     const maxWidth = desktop.x + desktop.width;
 
-    positon.x = Math.min(minX, maxX);
-    positon.width = Math.min(minWidth, maxWidth);
-    if (resizeDirection === "W") return positon;
+    position.x = Math.min(minX, maxX);
+    position.width = Math.min(minWidth, maxWidth);
+    if (resizeDirection === "W") return position;
   }
 
-  return positon;
+  return position;
 };
 
 export function calculateGrid(

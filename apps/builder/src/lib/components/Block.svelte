@@ -134,17 +134,20 @@
   {#each extendedBlockData.children as element, i}
     <BlockElement {element} gridArea={gridAreas[i]} />
   {/each}
-  <div
-    class="absolute bg-white top-2 left-1/2 p-2 w-56 -translate-x-28"
-    on:mouseenter|stopPropagation={enableWidthUpdate}
-    on:mousedown|stopPropagation={enableWidthUpdate}
-    on:mouseleave|stopPropagation={disableWidthUpdate}
-    on:mouseup|stopPropagation={disableWidthUpdate}
-    on:mousemove|stopPropagation
-  >
-    <input type="range" bind:value={width} min="672" max="1240" />
-    <input type="number" bind:value={width} min="672" max="1240" />
-  </div>
+  {#if false}
+    <div
+      class="absolute bg-white top-2 left-1/2 p-2 w-56 -translate-x-28"
+      on:mouseenter|stopPropagation={enableWidthUpdate}
+      on:mousedown|stopPropagation={enableWidthUpdate}
+      on:mouseleave|stopPropagation={disableWidthUpdate}
+      on:mouseup|stopPropagation={disableWidthUpdate}
+      on:mousemove|stopPropagation
+    >
+      <input type="range" bind:value={width} min="672" max="1240" />
+      <input type="number" bind:value={width} min="672" max="1240" />
+    </div>
+    <!-- content here -->
+  {/if}
 </div>
 
 <style lang="scss">

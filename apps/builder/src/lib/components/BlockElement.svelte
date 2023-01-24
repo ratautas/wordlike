@@ -1,7 +1,12 @@
 <script lang="ts">
   import TextElement from "$lib/components/TextElement.svelte";
-  import { dragDiffX, dragDiffY, resizeDirection } from "$lib/stores/drag";
-  import { selectedElementIds } from "$lib/stores/element";
+  import {
+    dragDiffX,
+    dragDiffY,
+    isClickInserting,
+    resizeDirection,
+  } from "$lib/stores/drag";
+  import { selectedElementIds, insertingElement } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { ref } from "$lib/actions/ref";
 
@@ -19,6 +24,7 @@
   };
 
   function handleElementMouseDown(event: MouseEvent) {
+    if ($isClickInserting) return;
     if (!$selectedElementIds.includes(element.id)) {
       const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
       selectedElementIds.set([element.id, ...previousElementIds]);
@@ -48,7 +54,7 @@
 <div
   class="element relative"
   class:is-selected={isSelected}
-  class:is-grid={!!area}
+  class:cursor-grabbing={$insertingElement?.id === element.id}
   class:has-moved={hasMoved}
   on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
