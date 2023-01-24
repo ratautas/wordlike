@@ -7,9 +7,6 @@
   {#if html}
     {@html html}
   {/if}
-  <details>
-    <pre style="font-size: xx-small;">{JSON.stringify(desktop, null, 2)}</pre>
-  </details>
 </div>
 
 <style lang="scss">

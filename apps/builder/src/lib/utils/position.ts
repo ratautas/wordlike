@@ -1,9 +1,10 @@
 import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
 
-export const MIN_WIDTH = 100;
-export const MIN_HEIGHT = 100;
+export const MIN_WIDTH = 24;
+export const MIN_HEIGHT = 24;
 
 // This function is used to limit position bounds to the grid
+// TODO: prevent resizing to be smaller than inner content
 export function getPosition({
   elementData,
   diffX,

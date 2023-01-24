@@ -3,18 +3,22 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
+import { isInserting, dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
-import { isInserting } from '$lib/stores/drag';
-import { dragDiffX, dragDiffY, resizeDirection } from '$lib/stores/drag';
+import { refs } from '$lib/stores/refs';
 import { getPosition } from "$lib/utils/position";
+import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 
 export const DEFAULT_INSERTED_ELEMENT_WIDTH = 300;
+export const DEFAULT_INSERTED_ELEMENT_HEIGHT = 72;
 export const INITIAL_INSERTED_PARAGRAPHS = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-  "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur",
+  "Sometimes I’ll start a sentence and I don’t even know where it’s going. I just hope I find it along the way.",
+  "I’m not superstitious, but I am a little stitious.",
+  "And I knew exactly what to do. But in a much more real sense, I had no idea what to do.",
+  "I wish there was a way to know you’re in the good old days before you’ve actually left them.",
+  "Would I rather be feared or loved? Easy. Both. I want people to be afraid of how much they love me.",
+  "I’m not saying I invented the question mark. But I’m also not saying I didn’t.",
 ];
 export const INSERTED_TYPES = {
   PARAGRAPH: "PARAGRAPH"
@@ -33,7 +37,7 @@ export function createInsertedElement(type) {
     type,
     desktop: {
       width: DEFAULT_INSERTED_ELEMENT_WIDTH,
-      height: 200,
+      height: DEFAULT_INSERTED_ELEMENT_HEIGHT,
     },
   };
 
@@ -51,17 +55,38 @@ export function startInserting(type) {
 };
 
 export async function insertElement(closestParentId) {
-  const $insertingElement = get(insertingElement);
-  const $currentPageData = get(currentPageData);
-  const $currentPageIndex = get(currentPageIndex);
+  const elementData = get(insertingElement);
+  const pageData = get(currentPageData);
+  const pageIndex = get(currentPageIndex);
+  const $refs = get(refs);
+  const parentIndex = pageData.children.findIndex((el) => el.id === closestParentId);
+  const closestParentRef = $refs[closestParentId];
+  const elementRef = $refs[elementData.id];
+  const activeElement = elementRef?.querySelector("[contenteditable]");
+  const parentRect = closestParentRef.getBoundingClientRect();
+  // This is a hack, we should not rely on the first child
+  const elementRect = elementRef.firstChild.getBoundingClientRect();
+
+  elementData.desktop = {
+    ...elementData.desktop,
+    x: elementRect.x - parentRect.x,
+    y: elementRect.y - parentRect.y,
+    width: elementRect.width,
+    height: elementRect.height,
+  };
 
   doc.update((doc) => {
-    const $insertingParentIndex = $currentPageData.children.findIndex((el) => el.id === closestParentId);
     // TODO: should be recursive
-    doc.pages[$currentPageIndex].children[$insertingParentIndex].children = [
-      ...doc.pages[$currentPageIndex].children[$insertingParentIndex].children,
-      $insertingElement,
+    doc.pages[pageIndex].children[parentIndex].children = [
+      ...doc.pages[pageIndex].children[parentIndex].children,
+      elementData,
     ];
+
+    isInserting.set(false);
+    insertingElement.set(null);
+
+    activeElement?.focus();
+    selectAll(activeElement);
 
     return doc;
   });

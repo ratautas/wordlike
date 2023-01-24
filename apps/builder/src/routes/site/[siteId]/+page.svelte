@@ -17,7 +17,6 @@
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { refs } from "$lib/stores/refs";
-  import { selectAll } from "$lib/utils/selectAll";
 
   function handleMouseUp(event: MouseEvent) {
     // event.composedPath() returns an array of all the elements on the path,
@@ -34,18 +33,11 @@
           return $refs[key] === el && key !== $insertingElement.id;
         });
       }, null);
-      const insertedElementRef = $refs[$insertingElement.id];
-
       insertElement(closestParentId);
-      isInserting.set(false);
-      insertingElement.set(null);
-
-      insertedElementRef?.querySelector("[contenteditable]")?.focus();
-      selectAll(insertedElementRef?.querySelector("[contenteditable]"));
+    } else {
+      // add if statement to check if the element is being dragged at all
+      updateDraggedElementsData();
     }
-
-    // add if statement to check if the element is being dragged at all
-    updateDraggedElementsData();
 
     mousePosition.set({ x: null, y: null });
     initialMousePosition.set({ x: null, y: null });

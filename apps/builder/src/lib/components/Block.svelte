@@ -32,7 +32,10 @@
     .join(" ");
   $: extendedBlockData =
     $isInserting && isHovered
-      ? { ...blockData, children: [...blockData.children, $insertingElement] }
+      ? {
+          ...blockData,
+          children: [...blockData.children, $insertingElement],
+        }
       : blockData;
 
   // props:
@@ -87,11 +90,11 @@
     initialWidth = null;
   }
 
-  function handleMouseEnter(e: MouseEvent) {
+  function handleMouseEnter(event: MouseEvent) {
     isHovered = true;
     if (!$isInserting) return;
 
-    const { clientX, clientY } = e;
+    const { clientX, clientY } = event;
     const { left, top } = blockRef.getBoundingClientRect();
 
     initialMousePosition.set({
@@ -99,8 +102,8 @@
       y: clientY,
     });
 
-    const x = clientX - left;
-    const y = clientY - top;
+    const x = clientX - left - 150;
+    const y = clientY - top - 24;
     insertingElement.update((elementData) => {
       return {
         ...elementData,
