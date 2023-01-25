@@ -2,36 +2,17 @@
   import { ref } from "$lib/actions/ref";
   import TextElement from "$lib/components/TextElement.svelte";
   import ElementControls from "$lib/components/ElementControls.svelte";
-  import {
-    dragDiffX,
-    dragDiffY,
-    isClickInserting,
-    resizeDirection,
-  } from "$lib/stores/drag";
+  import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
-  import { isShiftPressed } from "$lib/stores/keys";
-
-  let elementRef: HTMLElement | null;
-
-  let resizeDirectionRefs = {
-    N: null as HTMLElement | null,
-    E: null as HTMLElement | null,
-    S: null as HTMLElement | null,
-    W: null as HTMLElement | null,
-    NE: null as HTMLElement | null,
-    NW: null as HTMLElement | null,
-    SE: null as HTMLElement | null,
-    SW: null as HTMLElement | null,
-  };
 
   $: ({ rowStartIndex, columnStartIndex, rowEndIndex, columnEndIndex } =
     gridArea);
 
   $: area = `${rowStartIndex}/${columnStartIndex}/${rowEndIndex}/${columnEndIndex}`;
-  $: isSelected = $selectedElementIds.includes(element.id);
+  $: isSelected = $selectedElementIds.includes(elementData.id);
   $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);
 
-  export let element;
+  export let elementData;
   export let gridArea;
 </script>
 
@@ -39,22 +20,24 @@
 <div
   class="element relative"
   class:is-selected={isSelected}
-  class:cursor-grabbing={$insertingElement?.id === element.id}
+  class:cursor-grabbing={$insertingElement?.id === elementData.id}
   class:has-moved={hasMoved}
-  bind:this={elementRef}
-  use:ref={element.id}
+  use:ref={elementData.id}
   style:grid-area={area}
 >
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre> -->
-  {#if element.type === "TEXT"}
-    <TextElement {element} />
-  {:else if element.type === "IMAGE"}
+  {#if elementData.type === "TEXT"}
+    <TextElement {elementData} />
+  {:else if elementData.type === "IMAGE"}
     <!-- else if content here -->
   {:else}
     <!-- else content here -->
   {/if}
   {#if isSelected}
-    <ElementControls elementId={element.id} elementType={element.type} />
+    <ElementControls
+      elementId={elementData.id}
+      elementType={elementData.type}
+    />
   {/if}
 </div>
 

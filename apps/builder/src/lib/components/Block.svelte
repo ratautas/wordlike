@@ -131,8 +131,8 @@
   use:ref={blockData.id}
 >
   <BlockBackground {blockData} />
-  {#each extendedBlockData.children as element, i}
-    <BlockElement {element} gridArea={gridAreas[i]} />
+  {#each extendedBlockData.children as elementData, i}
+    <BlockElement {elementData} gridArea={gridAreas[i]} />
   {/each}
   {#if false}
     <div

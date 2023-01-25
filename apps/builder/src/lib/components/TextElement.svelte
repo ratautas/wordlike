@@ -1,15 +1,15 @@
 <script lang="ts">
-  export let element;
+  export let elementData;
 </script>
 
 <div class="text" contenteditable="true">
-  {#if element.html}
-    {@html element.html}
+  {#if elementData?.html}
+    {@html elementData?.html}
   {/if}
   {#if false}
     <details open>
       <pre style="font-size: xx-small;">
-         {JSON.stringify(element?.desktop, null, 2)}
+         {JSON.stringify(elementData?.desktop, null, 2)}
         </pre>
     </details>
   {/if}

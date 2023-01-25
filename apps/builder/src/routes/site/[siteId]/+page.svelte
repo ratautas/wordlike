@@ -1,5 +1,6 @@
 <script lang="ts">
   import Block from "$lib/components/Block.svelte";
+  import Element from "$lib/components/Element.svelte";
   import Header from "../components/Header.svelte";
   import {
     dragMousePosition,
@@ -12,7 +13,7 @@
     mouseMoveEvent,
     resizeDirection,
   } from "$lib/stores/drag";
-  import { currentPageData } from "$lib/stores/doc";
+  import { currentPageData, doc } from "$lib/stores/doc";
   import {
     insertingElement,
     insertElement,
@@ -21,6 +22,7 @@
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { refs } from "$lib/stores/refs";
+  import { onMount } from "svelte";
 
   function handleMouseDown(event: MouseEvent) {
     const elementsOnPath = event.composedPath().slice(0, -4);
@@ -111,12 +113,17 @@
     if (event.key === "Escape") {
       isDragInserting.set(false);
       insertingElement.set(null);
+      selectedElementIds.set([]);
     }
   }
 
   function handleKeyUp(event: KeyboardEvent) {
     if (event.key === "Shift") isShiftPressed.set(false);
   }
+
+  onMount(() => {
+    window.doc = $doc;
+  });
 </script>
 
 <svelte:window
@@ -129,7 +136,13 @@
 
 <main class="min-h-screen bg-gray-100">
   <Header />
-  {#each $currentPageData.children as blockData, index}
-    <Block {blockData} pageId={$currentPageData.id} blockIndex={index} />
-  {/each}
+  {#if false}
+    {#each $currentPageData.children as blockData, index}
+      <Block {blockData} pageId={$currentPageData.id} blockIndex={index} />
+    {/each}
+  {:else}
+    {#each $currentPageData.children as elementData, index}
+      <Element {elementData} {index} />
+    {/each}
+  {/if}
 </main>
