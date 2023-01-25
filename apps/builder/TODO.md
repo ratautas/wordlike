@@ -1,8 +1,8 @@
-[ ] move handle refs to global refs
-[ ] split handles to separate components
-[ ] update resize horizontal
-[ ] allow going out of bounds
+[x] move handle refs to global refs
+[x] split handles to separate components
+[x] update resize horizontal
 [ ] add grid guides with config
+[ ] allow going out of bounds
 [ ] zoom
 [ ] reveal animation
 [ ] image

@@ -79,7 +79,7 @@
         });
       }, null);
       insertElement(closestParentId);
-    } else {
+    } else if ($hasDragged) {
       // TODO: add if statement to check if the element is being dragged at all
       updateDraggedElementsData();
     }
