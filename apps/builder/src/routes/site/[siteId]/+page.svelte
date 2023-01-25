@@ -62,12 +62,13 @@
     const isTargetSelected = $selectedElementIds.includes(elementId);
     const isTargetSibling = selectedSiblingsRefs.includes(elementRef);
 
-    if (isTargetSibling) {
-      selectedElementIds.set([elementId, ...$selectedElementIds]);
-    } else if (!isTargetSelected) {
-      const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
-      selectedElementIds.set([elementId, ...previousElementIds]);
-    }
+    // if (isTargetSibling) {
+    //   selectedElementIds.set([elementId, ...$selectedElementIds]);
+    // } else if (!isTargetSelected) {
+    //   const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
+    //   selectedElementIds.set([elementId, ...previousElementIds]);
+    // }
+    selectedElementIds.set([elementId]);
 
     isDragging.set(true);
     initialMousePosition.set({ x: event.clientX, y: event.clientY });

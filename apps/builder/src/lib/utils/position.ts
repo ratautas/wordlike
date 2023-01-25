@@ -70,13 +70,13 @@ export function getPosition({
 };
 
 export function calculateGrid(
-  blockData,
+  gridElementData,
   dragDiffX,
   dragDiffY,
   resizeDirection,
   selectedElementIds
 ) {
-  const { rows, columns, positions } = blockData?.children?.reduce((acc, element) => {
+  const { rows, columns, positions } = gridElementData?.children?.reduce((acc, element) => {
     if (!element) return acc;
     const isElementDragged = selectedElementIds.includes(element?.id);
     const { x, y, width, height } = isElementDragged
@@ -97,7 +97,7 @@ export function calculateGrid(
     return acc;
   }, {
     rows: new Set([0]),
-    columns: new Set([0, blockData.width ?? DEFAULT_GRID_MAX_WIDTH]),
+    columns: new Set([0, gridElementData.width ?? DEFAULT_GRID_MAX_WIDTH]),
     positions: [],
   }
   );

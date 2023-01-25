@@ -18,10 +18,12 @@
 
   // state:
   let width = elementData?.[$positionKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
-  let isUpdatingWidth = false;
+  let isRelativeWidth = false;
   let gridRef: HTMLElement | undefined;
   let initialWidth = width;
   let isHovered = false;
+  let paddingY = 10;
+  let paddingX = 24;
 
   // derived data:
   $: ({ gridAreas, gridTemplateRows, gridTemplateColumns } = calculateGrid(
@@ -31,14 +33,24 @@
     $resizeDirection,
     $selectedElementIds
   ));
-  $: templateRows = gridTemplateRows.map((row) => `${row}px`).join(" ");
-  $: templateColumns = gridTemplateColumns
-    .map((col) =>
-      isUpdatingWidth ? `${(col / initialWidth) * 100}%` : `${col}px`
-    )
+
+  $: templateRows = [paddingY ?? 0, ...gridTemplateRows, paddingY ?? 0]
+    .map((row) => `${row}px`)
     .join(" ");
+
+  $: templateColumns = [
+    `minmax(${paddingX ?? 0}px, calc(50% - ${initialWidth / 2}px))`,
+    ...gridTemplateColumns,
+    `minmax(${paddingX ?? 0}px, calc(50% - ${initialWidth / 2}px))`,
+  ]
+    .map((col) => {
+      if (isNaN(col)) return col;
+      return isRelativeWidth ? `${col / initialWidth}fr` : `${col}px`;
+    })
+    .join(" ");
+
   $: extendedElementData =
-    $isInserting && isHovered
+    $isInserting && isHovered && $insertingElement
       ? {
           ...elementData,
           children: [...elementData.children, $insertingElement],
@@ -51,7 +63,7 @@
     if (!$isInserting) return;
 
     const { clientX, clientY } = event;
-    const { left, top } = gridRef.getBoundingClientRect();
+    const { left = 0, top = 0 } = gridRef?.getBoundingClientRect() ?? {};
 
     initialMousePosition.set({
       x: clientX,
@@ -76,15 +88,15 @@
 </script>
 
 <div
-  class="grid relative mx-auto"
-  style:--max-width={`${width}px`}
+  class="grid"
+  style:--width={`${width}px`}
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
   bind:this={gridRef}
   on:mouseenter|stopPropagation={handleMouseEnter}
   on:mouseleave|stopPropagation={() => (isHovered = false)}
 >
-  {#each elementData.children as element, index}
+  {#each extendedElementData.children as element, index}
     <Element elementData={element} gridData={gridAreas[index]} {index} />
   {/each}
 </div>
@@ -93,8 +105,8 @@
   .grid {
     background-color: antiquewhite;
     display: grid;
+    position: relative;
     grid-template-columns: var(--grid-template-columns);
     grid-template-rows: var(--grid-template-rows);
-    width: var(--max-width);
   }
 </style>

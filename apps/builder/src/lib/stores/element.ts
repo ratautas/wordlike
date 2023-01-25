@@ -42,6 +42,7 @@ export const findById = (array, id) => {
 };
 
 export function createInsertedElement(type) {
+  console.log("createInsertedElement", type);
   const element = {
     id: uuidv4(),
     type,

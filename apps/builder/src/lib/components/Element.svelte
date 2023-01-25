@@ -19,7 +19,9 @@
       gridData?.columnStartIndex,
       gridData?.rowEndIndex,
       gridData?.columnEndIndex,
-    ].join("/");
+    ]
+      .map((i) => i + 1)
+      .join("/");
   $: isSelected = $selectedElementIds.includes(elementData.id);
   $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);
 </script>
