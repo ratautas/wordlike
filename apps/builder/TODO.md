@@ -1,3 +1,5 @@
+[ ] move handle refs to global refs
+[ ] split handles to separate components
 [ ] update resize horizontal
 [ ] allow going out of bounds
 [ ] add grid guides with config

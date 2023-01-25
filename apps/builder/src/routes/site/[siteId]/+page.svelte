@@ -14,17 +14,18 @@
   } from "$lib/stores/drag";
   import { currentPageData } from "$lib/stores/doc";
   import {
-    updateDraggedElementsData,
     insertingElement,
     insertElement,
+    selectedElementIds,
+    updateDraggedElementsData,
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { refs } from "$lib/stores/refs";
 
   function handleMouseDown(event: MouseEvent) {
-    mouseDownComposedPath.set(event.composedPath());
+    const elementsOnPath = event.composedPath().slice(0, -4);
+
     if ($isClickInserting) {
-      const elementsOnPath = event.composedPath().slice(0, -4);
       elementsOnPath.reverse();
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
@@ -35,6 +36,25 @@
       insertElement(closestParentId);
 
       return;
+    }
+
+    const refId = elementsOnPath.reduce((acc, el) => {
+      if (!!acc) return acc;
+      return Object.keys($refs).find((key) => $refs[key] === el);
+    }, null);
+
+    const [elementId, direction] = refId?.split("::") ?? [];
+
+    if (!elementId) return;
+
+    // TODO: add deselect
+    if (!$selectedElementIds.includes(elementId)) {
+      const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
+      selectedElementIds.set([elementId, ...previousElementIds]);
+    }
+
+    if (direction) {
+      resizeDirection.set(direction);
     }
 
     isDragging.set(true);
@@ -60,7 +80,6 @@
       }, null);
       insertElement(closestParentId);
     } else {
-      console.log("not click dragging");
       // TODO: add if statement to check if the element is being dragged at all
       updateDraggedElementsData();
     }

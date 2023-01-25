@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { ref } from "$lib/actions/ref";
   import TextElement from "$lib/components/TextElement.svelte";
+  import ElementControls from "$lib/components/ElementControls.svelte";
   import {
     dragDiffX,
     dragDiffY,
@@ -8,7 +10,6 @@
   } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
-  import { ref } from "$lib/actions/ref";
 
   let elementRef: HTMLElement | null;
 
@@ -64,20 +65,14 @@
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridArea, null, 1)}</pre> -->
   {#if element.type === "TEXT"}
     <TextElement {element} />
-    <!-- content here -->
   {:else if element.type === "IMAGE"}
     <!-- else if content here -->
   {:else}
     <!-- else content here -->
   {/if}
-  <div class="side side--n" bind:this={resizeDirectionRefs.N} />
-  <div class="side side--e" bind:this={resizeDirectionRefs.E} />
-  <div class="side side--s" bind:this={resizeDirectionRefs.S} />
-  <div class="side side--w" bind:this={resizeDirectionRefs.W} />
-  <div class="handle handle--ne" bind:this={resizeDirectionRefs.NE} />
-  <div class="handle handle--nw" bind:this={resizeDirectionRefs.NW} />
-  <div class="handle handle--se" bind:this={resizeDirectionRefs.SE} />
-  <div class="handle handle--sw" bind:this={resizeDirectionRefs.SW} />
+  {#if isSelected}
+    <ElementControls elementId={element.id} elementType={element.type} />
+  {/if}
 </div>
 
 <style lang="scss">
@@ -120,8 +115,6 @@
     }
   }
 
-  // write fast keyframe shake animation:
-
   .element {
     z-index: 2;
     position: relative;
@@ -137,24 +130,24 @@
     }
     &:hover {
       &::before {
-        opacity: 0.5;
+        opacity: 0.3;
       }
     }
 
     &.is-selected {
       animation-iteration-count: 1;
       animation: shake 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-    }
-
-    &.is-selected {
       z-index: 3;
       &::before {
-        opacity: 1;
+        opacity: 0.5;
       }
 
       .side,
       .handle {
-        opacity: 1;
+        opacity: 0.8;
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
@@ -191,6 +184,7 @@
       max-width: calc(100% - ($size * 4));
       opacity: 0.5;
     }
+
     &--n {
       cursor: row-resize;
       height: $size;
@@ -198,10 +192,10 @@
       left: 0;
       right: 0;
       &::before {
-        width: 48px;
+        width: 24px;
       }
       &::after {
-        width: 24px;
+        width: 12px;
       }
     }
     &--e {
@@ -211,10 +205,10 @@
       top: 0;
       bottom: 0;
       &::before {
-        height: 48px;
+        height: 24px;
       }
       &::after {
-        height: 24px;
+        height: 12px;
       }
     }
     &--s {
@@ -224,10 +218,10 @@
       right: 0;
       cursor: row-resize;
       &::before {
-        width: 48px;
+        width: 24px;
       }
       &::after {
-        width: 24px;
+        width: 12px;
       }
     }
     &--w {
@@ -237,10 +231,10 @@
       bottom: 0;
       cursor: col-resize;
       &::before {
-        height: 48px;
+        height: 24px;
       }
       &::after {
-        height: 24px;
+        height: 12px;
       }
     }
   }
