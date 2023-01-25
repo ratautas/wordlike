@@ -18,7 +18,7 @@
 
   // state:
   let width = elementData?.[$positionKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
-  let isRelativeWidth = false;
+  let isRelativeWidth = true;
   let gridRef: HTMLElement | undefined;
   let initialWidth = width;
   let isHovered = false;

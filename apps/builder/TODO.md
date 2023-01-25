@@ -1,9 +1,11 @@
 [x] move handle refs to global refs
 [x] split handles to separate components
 [x] update resize horizontal
+[x] update grid element handles
+[ ] auto update element width / height on content change
 [ ] add grid guides with config
 [ ] allow going out of bounds
-[ ] merge Block and BlockElement
+[x] merge Block and BlockElement
 [ ] zoom
 [ ] reveal animation
 [ ] image

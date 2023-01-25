@@ -1,23 +1,28 @@
 <script lang="ts">
   import { ref } from "$lib/actions/ref";
-  import { VERTICAL_RESIZE_TYPES } from "$lib/constants";
+  import { VERTICAL_RESIZE_TYPES, ELEMENT_TYPES } from "$lib/constants";
+  // props:
+  export let id: string;
+  export let type: string;
 
-  $: canResizeHeight = VERTICAL_RESIZE_TYPES.includes(elementType);
-
-  export let elementId: string;
-  export let elementType: string;
   // See +page.svelte for implementation of :: syntax
+
+  // derived data:
+  $: canResizeHeight = VERTICAL_RESIZE_TYPES.includes(type);
+  $: canResizeTop = type !== ELEMENT_TYPES.GRID;
 </script>
 
-<div class="side side--e" use:ref={`${elementId}::E`} />
-<div class="side side--w" use:ref={`${elementId}::W`} />
+<div class={`side side--e side--${type}`} use:ref={`${id}::E`} />
+<div class={`side side--w side--${type}`} use:ref={`${id}::W`} />
 {#if canResizeHeight}
-  <div class="side side--n" use:ref={`${elementId}::N`} />
-  <div class="side side--s" use:ref={`${elementId}::S`} />
-  <div class="handle handle--ne" use:ref={`${elementId}::NE`} />
-  <div class="handle handle--nw" use:ref={`${elementId}::NW`} />
-  <div class="handle handle--se" use:ref={`${elementId}::SE`} />
-  <div class="handle handle--sw" use:ref={`${elementId}::SW`} />
+  {#if canResizeTop}
+    <div class={`side side--n side--${type}`} use:ref={`${id}::N`} />
+  {/if}
+  <div class={`side side--s side--${type}`} use:ref={`${id}::S`} />
+  <div class={`corner corner--ne corner--${type}`} use:ref={`${id}::NE`} />
+  <div class={`corner corner--nw corner--${type}`} use:ref={`${id}::NW`} />
+  <div class={`corner corner--se corner--${type}`} use:ref={`${id}::SE`} />
+  <div class={`corner corner--sw corner--${type}`} use:ref={`${id}::SW`} />
 {/if}
 
 <style lang="scss">
@@ -27,6 +32,7 @@
   .side {
     position: absolute;
     z-index: 4;
+
     &::before {
       content: "";
       display: block;
@@ -107,8 +113,19 @@
         height: 12px;
       }
     }
+
+    &--GRID {
+      &.side {
+        &--e {
+          right: calc((100% - var(--desktop-width) - math.div($size, 2)) / 2);
+        }
+        &--w {
+          left: calc((100% - var(--desktop-width) - math.div($size, 2)) / 2);
+        }
+      }
+    }
   }
-  .handle {
+  .corner {
     position: absolute;
     width: $size;
     height: $size;
