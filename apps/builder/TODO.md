@@ -3,6 +3,7 @@
 [x] update resize horizontal
 [x] update grid element handles
 [ ] auto update element width / height on content change
+[ ] add snap to sides
 [ ] add grid guides with config
 [ ] allow going out of bounds
 [x] merge Block and BlockElement

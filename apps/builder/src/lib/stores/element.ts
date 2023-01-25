@@ -61,7 +61,6 @@ export function createInsertedElement(type) {
 };
 
 export async function insertElement(closestParentId) {
-  console.log(closestParentId);
   const elementData = get(insertingElement);
   const pageData = get(currentPageData);
   const pageIndex = get(currentPageIndex);
@@ -82,7 +81,7 @@ export async function insertElement(closestParentId) {
     height: elementRect.height,
   };
 
-  doc.update((doc) => {
+  doc.update(($doc) => {
     // TODO: should be recursive
 
     isDragInserting.set(false);
@@ -93,16 +92,38 @@ export async function insertElement(closestParentId) {
     isDragging.set(false);
     resizeDirection.set(null);
 
-    doc.pages[pageIndex].children[parentIndex].children = [
-      ...doc.pages[pageIndex].children[parentIndex].children,
+    $doc.pages[pageIndex].children[parentIndex].children = [
+      ...$doc.pages[pageIndex].children[parentIndex].children,
       elementData,
     ];
 
     activeElement?.focus();
     selectAll(activeElement);
 
-    return doc;
+    return $doc;
   });
+};
+
+export async function deleteSelectedElements() {
+  const elementIds = get(selectedElementIds);
+  const pageIndex = get(currentPageIndex);
+
+  function mapChildren(children) {
+    return children?.filter((el) => !elementIds.includes(el.id))
+      .map((el) => ({
+        ...el,
+        children: mapChildren(el.children),
+      }))
+  };
+
+  doc.update(($doc) => {
+    $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
+
+    return $doc;
+  });
+
+
+  selectedElementIds.set([]);
 };
 
 export async function updateDraggedElementsData() {

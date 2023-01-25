@@ -10,6 +10,7 @@
   // props:
   export let elementData;
   export let gridData;
+  export let index: number;
 
   // derived data:
   $: gridArea = gridData

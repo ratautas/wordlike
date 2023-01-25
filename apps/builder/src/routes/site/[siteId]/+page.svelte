@@ -17,6 +17,7 @@
   import {
     insertingElement,
     insertElement,
+    deleteSelectedElements,
     selectedElementIds,
     updateDraggedElementsData,
   } from "$lib/stores/element";
@@ -115,6 +116,9 @@
       isDragInserting.set(false);
       insertingElement.set(null);
       selectedElementIds.set([]);
+    }
+    if (event.key === "Backspace") {
+      deleteSelectedElements();
     }
   }
 
