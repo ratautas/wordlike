@@ -3,6 +3,7 @@
 [x] update resize horizontal
 [ ] add grid guides with config
 [ ] allow going out of bounds
+[ ] merge Block and BlockElement
 [ ] zoom
 [ ] reveal animation
 [ ] image

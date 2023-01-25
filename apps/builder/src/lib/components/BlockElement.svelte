@@ -24,22 +24,6 @@
     SW: null as HTMLElement | null,
   };
 
-  function handleElementMouseDown(event: MouseEvent) {
-    if ($isClickInserting) return;
-    if (!$selectedElementIds.includes(element.id)) {
-      const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
-      selectedElementIds.set([element.id, ...previousElementIds]);
-    }
-
-    const directionEntry = Object.entries(resizeDirectionRefs).find(
-      ([key, ref]) => event.composedPath().includes(ref)
-    );
-
-    if (directionEntry) {
-      resizeDirection.set(directionEntry[0]);
-    }
-  }
-
   $: ({ rowStartIndex, columnStartIndex, rowEndIndex, columnEndIndex } =
     gridArea);
 
@@ -57,7 +41,6 @@
   class:is-selected={isSelected}
   class:cursor-grabbing={$insertingElement?.id === element.id}
   class:has-moved={hasMoved}
-  on:mousedown={handleElementMouseDown}
   bind:this={elementRef}
   use:ref={element.id}
   style:grid-area={area}

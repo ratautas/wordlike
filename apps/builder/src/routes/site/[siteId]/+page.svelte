@@ -47,14 +47,24 @@
 
     if (!elementId) return;
 
-    // TODO: add deselect
-    if (!$selectedElementIds.includes(elementId)) {
-      const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
-      selectedElementIds.set([elementId, ...previousElementIds]);
-    }
-
     if (direction) {
       resizeDirection.set(direction);
+    }
+
+    const [firstSelectedElementId] = $selectedElementIds;
+    const elementRef = $refs[elementId];
+    const firstSelectedRef = $refs[firstSelectedElementId];
+    const selectedSiblingsRefs = [
+      ...(firstSelectedRef?.parentElement.children ?? []),
+    ];
+    const isTargetSelected = $selectedElementIds.includes(elementId);
+    const isTargetSibling = selectedSiblingsRefs.includes(elementRef);
+
+    if (isTargetSibling) {
+      selectedElementIds.set([elementId, ...$selectedElementIds]);
+    } else if (!isTargetSelected) {
+      const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
+      selectedElementIds.set([elementId, ...previousElementIds]);
     }
 
     isDragging.set(true);
@@ -79,10 +89,10 @@
         });
       }, null);
       insertElement(closestParentId);
-    } else if ($hasDragged) {
-      // TODO: add if statement to check if the element is being dragged at all
+    } else if ($selectedElementIds.length > 0) {
       updateDraggedElementsData();
     }
+
     dragMousePosition.set({ x: null, y: null });
     initialMousePosition.set({ x: null, y: null });
     mouseDownComposedPath.set([]);
