@@ -104,6 +104,7 @@ export function calculateGrid(
 
   const gridRows = [...rows].sort((a, b) => a - b);
   const gridColumns = [...columns].sort((a, b) => a - b);
+  const gridHeight = gridRows[gridRows.length - 1];
 
   const gridAreas = positions.map((position) => {
     const { x, y, width, height } = position;
@@ -155,5 +156,5 @@ export function calculateGrid(
       }
     );
 
-  return { gridAreas, gridTemplateRows, gridTemplateColumns };
+  return { gridAreas, gridHeight, gridTemplateRows, gridTemplateColumns };
 }

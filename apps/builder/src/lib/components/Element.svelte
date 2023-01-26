@@ -12,24 +12,6 @@
   export let gridData;
   export let index: number;
 
-  function getGridArea(d) {
-    if (!gridData) return null;
-
-    const {
-      rowStartIndex,
-      columnStartIndex,
-      rowEndIndex,
-      columnEndIndex,
-      columnCount,
-    } = d;
-    const rowStart = rowStartIndex + 1;
-    const columnStart = snapLeft ? 1 : columnStartIndex + 1;
-    const rowEnd = rowEndIndex + 1;
-    const columnEnd = snapRight ? columnCount + 1 : columnEndIndex + 1;
-
-    return [rowStart, columnStart, rowEnd, columnEnd].join("/");
-  }
-
   // derived data:
   $: ({
     rowStartIndex,

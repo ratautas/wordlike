@@ -1,6 +1,7 @@
 <script lang="ts">
   import Element from "$lib/components/Element.svelte";
   import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
+  import Guides from "$lib/components/Guides.svelte";
   import {
     dragDiffX,
     dragDiffY,
@@ -99,6 +100,7 @@
   {#each extendedElementData.children as element, index}
     <Element elementData={element} gridData={gridAreas[index]} {index} />
   {/each}
+  <Guides elementData={extendedElementData} gridWidth={width} />
 </div>
 
 <style lang="scss">

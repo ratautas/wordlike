@@ -41,6 +41,32 @@ export const findById = (array, id) => {
   return array?.find((i) => i.id === id || i.children && findById(i.children, id));
 };
 
+export function findSelectedIds(array, ids) {
+  return array?.reduce((acc, el) => {
+    if (ids.includes(el.id)) {
+      return { ...acc, [el.id]: el };
+    }
+    if (el.children) {
+      const childrenIds = findSelectedIds(el.children, ids);
+      if (childrenIds) {
+        return { ...acc, ...childrenIds };
+      }
+    }
+    return acc;
+  }, {});
+}
+
+export const selectedElementsData = derived(
+  [doc, selectedElementIds],
+  ([$doc, $selectedElementIds]) => {
+    if ($selectedElementIds.length === 0) return {};
+
+    return findSelectedIds(
+      $doc.pages[get(currentPageIndex)].children,
+      $selectedElementIds
+    );
+  });
+
 export function createInsertedElement(type) {
   console.log("createInsertedElement", type);
   const element = {

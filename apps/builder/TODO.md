@@ -2,13 +2,17 @@
 [x] split handles to separate components
 [x] update resize horizontal
 [x] update grid element handles
-[ ] add snap to sides
+[x] add snap to sides
 [ ] add grid guides with config
 [ ] auto update element width / height on content change
 [ ] fix inserting new element
 [ ] fix selecting multiple elements
 
 [ ] allow going out of bounds
+[ ] validate data before sending to backend
+[ ] improve snap to sides UX
+[ ] add type definitions
+[ ] move element to another grid
 [ ] round position before saving to json
 [x] merge Block and BlockElement
 [ ] zoom
