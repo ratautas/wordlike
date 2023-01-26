@@ -2,14 +2,19 @@
 [x] split handles to separate components
 [x] update resize horizontal
 [x] update grid element handles
-[ ] auto update element width / height on content change
 [ ] add snap to sides
 [ ] add grid guides with config
+[ ] auto update element width / height on content change
+[ ] fix inserting new element
+[ ] fix selecting multiple elements
+
 [ ] allow going out of bounds
+[ ] round position before saving to json
 [x] merge Block and BlockElement
 [ ] zoom
 [ ] reveal animation
 [ ] image
+[ ] 
 
 Element types:
 - Text;

@@ -12,46 +12,68 @@
   export let gridData;
   export let index: number;
 
+  function getGridArea(d) {
+    if (!gridData) return null;
+
+    const {
+      rowStartIndex,
+      columnStartIndex,
+      rowEndIndex,
+      columnEndIndex,
+      columnCount,
+    } = d;
+    const rowStart = rowStartIndex + 1;
+    const columnStart = snapLeft ? 1 : columnStartIndex + 1;
+    const rowEnd = rowEndIndex + 1;
+    const columnEnd = snapRight ? columnCount + 1 : columnEndIndex + 1;
+
+    return [rowStart, columnStart, rowEnd, columnEnd].join("/");
+  }
+
   // derived data:
-  $: gridArea = gridData
-    ? [
-        gridData?.rowStartIndex,
-        gridData?.columnStartIndex,
-        gridData?.rowEndIndex,
-        gridData?.columnEndIndex,
-      ]
-        .map((i) => i + 1)
-        .join("/")
-    : null;
-  $: isSelected = $selectedElementIds.includes(elementData.id);
+  $: ({
+    rowStartIndex,
+    columnStartIndex,
+    rowEndIndex,
+    columnEndIndex,
+    columnCount,
+  } = gridData ?? {});
+  $: gridArea = [rowStart, columnStart, rowEnd, columnEnd].join("/");
+  $: rowStart = rowStartIndex + 1;
+  $: columnStart = snapLeft ? 1 : columnStartIndex + 1;
+  $: rowEnd = rowEndIndex + 1;
+  $: columnEnd = snapRight ? columnCount + 2 : columnEndIndex + 1;
+
+  $: isSelected = $selectedElementIds.includes(id);
   $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);
-  $: ({ desktop } = elementData);
+  $: ({ desktop, id, type } = elementData ?? {});
+  $: ({ snapLeft, snapRight } = desktop ?? {});
   $: desktopWidth = `${desktop?.width ?? DEFAULT_GRID_MAX_WIDTH}px`;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-  class={`element element--${elementData.type}`}
+  class={`element element--${type}`}
   class:is-selected={isSelected}
-  class:cursor-grabbing={$insertingElement?.id === elementData.id}
+  class:cursor-grabbing={$insertingElement?.id === id}
   class:has-moved={hasMoved}
   style:grid-area={gridArea}
   style:--desktop-width={desktopWidth}
-  use:ref={elementData.id}
+  use:ref={id}
 >
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridData, null, 1)}</pre> -->
-  {#if elementData.type === ELEMENT_TYPES.GRID}
+  {#if type === ELEMENT_TYPES.GRID}
     <Grid {elementData} />
-  {:else if elementData.type === ELEMENT_TYPES.TEXT}
+  {:else if type === ELEMENT_TYPES.TEXT}
     <TextElement {elementData} />
-  {:else if elementData.type === ELEMENT_TYPES.IMAGE}
+  {:else if type === ELEMENT_TYPES.IMAGE}
     <!-- else if content here -->
   {:else}
     <!-- else content here -->
   {/if}
 
   {#if isSelected}
-    <ElementControls id={elementData.id} type={elementData.type} />
+    <ElementControls {id} {type} />
   {/if}
 </div>
 

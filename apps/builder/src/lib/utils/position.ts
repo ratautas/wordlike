@@ -116,8 +116,10 @@ export function calculateGrid(
     return {
       rowStartIndex,
       rowEndIndex,
+      rowCount: gridRows.length,
       columnStartIndex,
       columnEndIndex,
+      columnCount: gridColumns.length,
     };
   });
 
