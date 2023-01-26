@@ -3,22 +3,24 @@
 [x] update resize horizontal
 [x] update grid element handles
 [x] add snap to sides
-[ ] add grid guides with config
+[x] add grid guides
 [ ] auto update element width / height on content change
 [ ] fix inserting new element
 [ ] fix selecting multiple elements
 
+[ ] add grid guides config
 [ ] allow going out of bounds
-[ ] validate data before sending to backend
 [ ] improve snap to sides UX
+[ ] round position before saving to json
+[ ] validate data before sending to backend (zod?)
 [ ] add type definitions
 [ ] move element to another grid
-[ ] round position before saving to json
 [x] merge Block and BlockElement
 [ ] zoom
 [ ] reveal animation
 [ ] image
-[ ] 
+[ ] background video
+[ ] draggable popup
 
 Element types:
 - Text;

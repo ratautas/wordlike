@@ -36,8 +36,7 @@
   $: rowCount = Math.floor(gridHeight / rowHeight) ?? 0;
   $: rowArray = Array.from(Array(rowCount));
   $: rowHeightPx = `${rowHeight}px`;
-  $: [selectedElementId] = $selectedElementIds;
-  $: selectedElementData = $selectedElementsData[selectedElementId];
+  $: selectedElementData = $selectedElementsData[$selectedElementIds[0]];
   $: ({ x, y, width, height, snapLeft, snapRight } = selectedElementData
     ? getPosition({
         elementData: selectedElementData,
@@ -68,32 +67,21 @@
 </script>
 
 <div
-  class={`guides flex flex-col content-start gap-[var(--gap)]`}
+  class="flex flex-col content-start gap-[var(--gap)]"
   style:--column-width={columnWidthPercent}
   style:--row-height={rowHeightPx}
   style:--gap={gapPx}
 >
-  {#if true}
-    {#each guideMap as row}
-      <div
-        class="row flex justify-between h-[var(--row-height)] gap-[var(--gap)]"
-      >
-        {#each row as column}
-          <div
-            class="column w-[var(--column-width)] border-[1px] border-solid border-dark-600"
-            class:bg-red-800={column}
-          />
-        {/each}
-      </div>
-    {/each}
-  {/if}
+  {#each guideMap as row}
+    <div
+      class="row flex justify-between h-[var(--row-height)] gap-[var(--gap)]"
+    >
+      {#each row as column}
+        <div
+          class="column w-[var(--column-width)] border-[1px] border-solid border-dark-600"
+          class:bg-red-800={column}
+        />
+      {/each}
+    </div>
+  {/each}
 </div>
-
-<style lang="scss">
-  .guides {
-    background-color: pink;
-    display: grid;
-    position: relative;
-    grid-area: 2/2/-2/-2;
-  }
-</style>

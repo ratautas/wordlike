@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Block from "$lib/components/Block.svelte";
   import Element from "$lib/components/Element.svelte";
   import Header from "../components/Header.svelte";
   import {
@@ -141,13 +140,7 @@
 
 <main class="min-h-screen bg-gray-100">
   <Header />
-  {#if false}
-    {#each $currentPageData.children as blockData, index}
-      <Block {blockData} pageId={$currentPageData.id} blockIndex={index} />
-    {/each}
-  {:else}
-    {#each $currentPageData.children as elementData, index}
-      <Element {elementData} {index} />
-    {/each}
-  {/if}
+  {#each $currentPageData.children as elementData, index}
+    <Element {elementData} {index} />
+  {/each}
 </main>

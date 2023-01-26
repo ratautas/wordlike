@@ -55,6 +55,8 @@ export const isInserting = derived(
 export const mouseMoveComposedPath = derived(
   [mouseMoveEvent],
   ([$mouseMoveEvent]) => {
-    return $mouseMoveEvent?.composedPath() || [];
+    const path = $mouseMoveEvent?.composedPath().slice(0, -4) ?? []; // shave off the last 4 elements (the body, html, document, window)
+    path.reverse(); // reverse the path so that the first element is the root element
+    return path;
   }
 )

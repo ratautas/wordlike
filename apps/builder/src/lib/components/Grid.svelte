@@ -9,6 +9,8 @@
     isDragging,
     isInserting,
     initialMousePosition,
+    mouseMoveEvent,
+    mouseMoveComposedPath,
   } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
   import { positionKey } from "$lib/stores/resolution";
@@ -21,7 +23,7 @@
   let width = elementData?.[$positionKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
   let isRelativeWidth = true;
   let gridRef: HTMLElement | undefined;
-  let initialWidth = width;
+  let guidesRef: HTMLElement | undefined;
   let isHovered = false;
   let paddingY = 10;
   let paddingX = 24;
@@ -40,13 +42,13 @@
     .join(" ");
 
   $: templateColumns = [
-    `minmax(${paddingX ?? 0}px, calc(50% - ${initialWidth / 2}px))`,
+    `minmax(${paddingX ?? 0}px, calc(50% - ${width / 2}px))`,
     ...gridTemplateColumns,
-    `minmax(${paddingX ?? 0}px, calc(50% - ${initialWidth / 2}px))`,
+    `minmax(${paddingX ?? 0}px, calc(50% - ${width / 2}px))`,
   ]
     .map((col) => {
       if (isNaN(col)) return col;
-      return isRelativeWidth ? `${col / initialWidth}fr` : `${col}px`;
+      return isRelativeWidth ? `${col / width}fr` : `${col}px`;
     })
     .join(" ");
 
@@ -58,33 +60,37 @@
         }
       : elementData;
 
-  // methods:
-  function handleMouseEnter(event: MouseEvent) {
-    isHovered = true;
-    if (!$isInserting) return;
+  $: {
+    const isInPath = $mouseMoveComposedPath.includes(gridRef);
+    if (!isInPath && isHovered) {
+      isHovered = false;
+    } else if (isInPath && !isHovered) {
+      isHovered = true;
+      if ($isInserting) {
+        const { clientX, clientY } = $mouseMoveEvent;
+        const { left = 0, top = 0 } = guidesRef?.getBoundingClientRect() ?? {};
 
-    const { clientX, clientY } = event;
-    const { left = 0, top = 0 } = gridRef?.getBoundingClientRect() ?? {};
+        initialMousePosition.set({
+          x: clientX,
+          y: clientY,
+        });
 
-    initialMousePosition.set({
-      x: clientX,
-      y: clientY,
-    });
-
-    const x = clientX - left - 150;
-    const y = clientY - top - 24;
-    insertingElement.update((elementData) => {
-      return {
-        ...elementData,
-        [$positionKey]: {
-          ...elementData[$positionKey],
-          x,
-          y,
-        },
-      };
-    });
-    selectedElementIds.set([$insertingElement?.id]);
-    isDragging.set(true);
+        const x = clientX - left - 150;
+        const y = clientY - top - 24;
+        insertingElement.update((elementData) => {
+          return {
+            ...elementData,
+            [$positionKey]: {
+              ...elementData[$positionKey],
+              x,
+              y,
+            },
+          };
+        });
+        selectedElementIds.set([$insertingElement?.id]);
+        isDragging.set(true);
+      }
+    }
   }
 </script>
 
@@ -94,21 +100,30 @@
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
   bind:this={gridRef}
-  on:mouseenter|stopPropagation={handleMouseEnter}
-  on:mouseleave|stopPropagation={() => (isHovered = false)}
 >
   {#each extendedElementData.children as element, index}
     <Element elementData={element} gridData={gridAreas[index]} {index} />
   {/each}
-  <Guides elementData={extendedElementData} gridWidth={width} />
+  <div
+    class="grid__guides opacity-0 pointer-events-none"
+    class:opacity-100={isHovered}
+    bind:this={guidesRef}
+  >
+    <Guides elementData={extendedElementData} gridWidth={width} />
+  </div>
+  {isHovered}
 </div>
 
 <style lang="scss">
   .grid {
     background-color: antiquewhite;
     display: grid;
-    position: relative;
     grid-template-columns: var(--grid-template-columns);
     grid-template-rows: var(--grid-template-rows);
+
+    &__guides {
+      display: grid;
+      grid-area: 2/2/-2/-2;
+    }
   }
 </style>
