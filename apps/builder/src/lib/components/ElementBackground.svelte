@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let blockData;
+  export let elementData;
   $: ({
     backgroundColor,
     backgroundOverlayColor,
@@ -9,7 +9,7 @@
     backgroundVideoProvider,
     backgroundVideoPath,
     backgroundEffect,
-  } = blockData);
+  } = elementData);
 </script>
 
 <div class="background">

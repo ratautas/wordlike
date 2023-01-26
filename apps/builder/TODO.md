@@ -5,9 +5,12 @@
 [x] add snap to sides
 [x] add grid guides
 [ ] auto update element width / height on content change
-[ ] fix inserting new element
 [ ] fix selecting multiple elements
 
+[ ] disable tailwind reset
+[ ] add more text types
+[ ] block resize handles
+[ ] tweak inserting new element
 [ ] add grid guides config
 [ ] allow going out of bounds
 [ ] improve snap to sides UX
@@ -16,6 +19,7 @@
 [ ] add type definitions
 [ ] move element to another grid
 [x] merge Block and BlockElement
+[ ] add some parallax
 [ ] zoom
 [ ] reveal animation
 [ ] image

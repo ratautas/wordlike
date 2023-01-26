@@ -1,6 +1,4 @@
 import { writable, derived } from 'svelte/store';
-
-import { updateDraggedElementsData } from '$lib/stores/element';
 interface MousePosition {
   x: number | null;
   y: number | null;
@@ -55,8 +53,6 @@ export const isInserting = derived(
 export const mouseMoveComposedPath = derived(
   [mouseMoveEvent],
   ([$mouseMoveEvent]) => {
-    const path = $mouseMoveEvent?.composedPath().slice(0, -4) ?? []; // shave off the last 4 elements (the body, html, document, window)
-    path.reverse(); // reverse the path so that the first element is the root element
-    return path;
+    return $mouseMoveEvent?.composedPath() ?? [];
   }
 )
