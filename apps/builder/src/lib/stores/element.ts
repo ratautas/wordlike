@@ -159,14 +159,14 @@ export async function deleteSelectedElements() {
   selectedElementIds.set([]);
 };
 
-export async function updateDraggedElementsData() {
+export async function updateElementsPosition(diffX, diffY) {
   function mapChildren(children) {
     return children?.map((element) => {
       if (elementIds.includes(element.id)) {
         const position = getPosition({
           elementData: element,
-          diffX: get(dragDiffX),
-          diffY: get(dragDiffY),
+          diffX,
+          diffY,
           resizeDirection: get(resizeDirection),
           blockWidth: element.width,
         });
@@ -184,18 +184,16 @@ export async function updateDraggedElementsData() {
   };
 
   const elementIds = get(selectedElementIds);
-  const $doc = get(doc);
+  const pageIndex = get(currentPageIndex);
 
-  $doc.pages = $doc?.pages.map((page) => {
-    return {
-      ...page,
-      children: mapChildren(page.children),
-    }
+  doc.update(($doc) => {
+    $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
+
+    return $doc;
   });
 
   // TODO: this is kinda optimistic, we should wait for the response from the server
   // we can do this, but on failure we need to revert the doc to the initial state
-  doc.set($doc);
 
   const { siteId } = get(page).params;
   // const { data, error } = await supabaseClient

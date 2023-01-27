@@ -12,6 +12,8 @@
     mouseDownComposedPath,
     mouseMoveEvent,
     resizeDirection,
+    dragDiffX,
+    dragDiffY,
   } from "$lib/stores/drag";
   import { currentPageData } from "$lib/stores/doc";
   import {
@@ -19,7 +21,7 @@
     insertElement,
     deleteSelectedElements,
     selectedElementIds,
-    updateDraggedElementsData,
+    updateElementsPosition,
     findElementById,
     recalculatePositions,
   } from "$lib/stores/element";
@@ -62,8 +64,6 @@
     const isTargetSelected = $selectedElementIds.includes(targetElementId);
     const isOneOfSiblings = selectedSiblingsRefs.includes(targetElementRef);
 
-    // GALIOJA IR DRAG IR CLICK!!
-
     if ($selectedElementIds.length) {
       if (isOneOfSiblings) {
         if ($isShiftPressed) {
@@ -81,13 +81,6 @@
     } else {
       selectedElementIds.set([targetElementId]);
     }
-
-    // if (isTargetSibling) {
-    //   selectedElementIds.set([targetElementId, ...$selectedElementIds]);
-    // } else if (!isTargetSelected) {
-    //   const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
-    //   selectedElementIds.set([targetElementId, ...previousElementIds]);
-    // }
 
     isDragging.set(true);
     initialMousePosition.set({ x: event.clientX, y: event.clientY });
@@ -112,7 +105,7 @@
       }, null);
       insertElement(closestParentId);
     } else if ($selectedElementIds.length > 0) {
-      updateDraggedElementsData();
+      updateElementsPosition($dragDiffX, $dragDiffY);
     }
 
     dragMousePosition.set({ x: null, y: null });
@@ -136,8 +129,16 @@
       selectedElementIds.set([]);
     }
     if (event.key === "Backspace") {
-      deleteSelectedElements();
+      // TODO: check if focused etc
+      if (!document.activeElement) deleteSelectedElements();
     }
+
+    const moveOffset = $isShiftPressed ? 10 : 1;
+
+    if (event.key === "ArrowLeft") updateElementsPosition(-moveOffset, 0);
+    if (event.key === "ArrowRight") updateElementsPosition(moveOffset, 0);
+    if (event.key === "ArrowUp") updateElementsPosition(0, -moveOffset);
+    if (event.key === "ArrowDown") updateElementsPosition(0, moveOffset);
   }
 
   function handleKeyUp(event: KeyboardEvent) {

@@ -5,7 +5,7 @@
 [x] add snap to sides
 [x] add grid guides
 [x] auto update element width / height on content change
-[ ] move with keyboard arrows
+[x] move with keyboard arrows
 [ ] disable tailwind reset
 [ ] add more text types
 [ ] fix selecting multiple elements
