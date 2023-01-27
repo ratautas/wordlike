@@ -5,11 +5,12 @@
 [x] add snap to sides
 [x] add grid guides
 [x] auto update element width / height on content change
-[ ] fix selecting multiple elements
-
+[ ] move with keyboard arrows
 [ ] disable tailwind reset
 [ ] add more text types
+[ ] fix selecting multiple elements
 [ ] block resize handles
+[ ] snap to grid
 [ ] improve snap to sides UX
 [ ] round position before saving to json
 
@@ -43,7 +44,6 @@ Element types:
 - Video;
 
 
-- move with keyboard arrows
 - select all elements within selected grid element
 - multiple gird variations - grid.studio, figma dots, vertical lines;
 - draggable popups;

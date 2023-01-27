@@ -47,30 +47,47 @@
       return Object.keys($refs).find((key) => $refs[key] === el);
     }, null);
 
-    const [elementId, direction] = refId?.split("::") ?? [];
+    const [targetElementId, direction] = refId?.split("::") ?? [];
 
-    if (!elementId) return;
+    if (!targetElementId) return;
 
     if (direction) {
       resizeDirection.set(direction);
     }
 
-    const [firstSelectedElementId] = $selectedElementIds;
-    const elementRef = $refs[elementId];
-    const firstSelectedRef = $refs[firstSelectedElementId];
+    const targetElementRef = $refs[targetElementId];
     const selectedSiblingsRefs = [
-      ...(firstSelectedRef?.parentElement.children ?? []),
+      ...($refs[$selectedElementIds[0]]?.parentElement.children ?? []),
     ];
-    const isTargetSelected = $selectedElementIds.includes(elementId);
-    const isTargetSibling = selectedSiblingsRefs.includes(elementRef);
+    const isTargetSelected = $selectedElementIds.includes(targetElementId);
+    const isOneOfSiblings = selectedSiblingsRefs.includes(targetElementRef);
+
+    // GALIOJA IR DRAG IR CLICK!!
+
+    if ($selectedElementIds.length) {
+      if (isOneOfSiblings) {
+        if ($isShiftPressed) {
+          if (isTargetSelected) {
+            selectedElementIds.set(
+              $selectedElementIds.filter((id) => id !== targetElementId)
+            );
+          } else {
+            selectedElementIds.set([...$selectedElementIds, targetElementId]);
+          }
+        }
+      } else {
+        selectedElementIds.set([targetElementId]);
+      }
+    } else {
+      selectedElementIds.set([targetElementId]);
+    }
 
     // if (isTargetSibling) {
-    //   selectedElementIds.set([elementId, ...$selectedElementIds]);
+    //   selectedElementIds.set([targetElementId, ...$selectedElementIds]);
     // } else if (!isTargetSelected) {
     //   const previousElementIds = $isShiftPressed ? $selectedElementIds : [];
-    //   selectedElementIds.set([elementId, ...previousElementIds]);
+    //   selectedElementIds.set([targetElementId, ...previousElementIds]);
     // }
-    selectedElementIds.set([elementId]);
 
     isDragging.set(true);
     initialMousePosition.set({ x: event.clientX, y: event.clientY });
