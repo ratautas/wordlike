@@ -22,6 +22,6 @@ export const actions: Actions = {
       })
     }
 
-    throw redirect(303, "/sites")
+    throw redirect(303, "/manage/sites")
   },
 }

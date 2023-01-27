@@ -4,17 +4,18 @@
 [x] update grid element handles
 [x] add snap to sides
 [x] add grid guides
-[ ] auto update element width / height on content change
+[x] auto update element width / height on content change
 [ ] fix selecting multiple elements
 
 [ ] disable tailwind reset
 [ ] add more text types
 [ ] block resize handles
+[ ] improve snap to sides UX
+[ ] round position before saving to json
+
 [ ] tweak inserting new element
 [ ] add grid guides config
 [ ] allow going out of bounds
-[ ] improve snap to sides UX
-[ ] round position before saving to json
 [ ] validate data before sending to backend (zod?)
 [ ] add type definitions
 [ ] move element to another grid
@@ -22,9 +23,13 @@
 [ ] add some parallax
 [ ] zoom
 [ ] reveal animation
+[ ] rotate
 [ ] image
 [ ] background video
 [ ] draggable popup
+[ ] undo/redo
+[ ] GIF
+[ ] REM scaling
 
 Element types:
 - Text;

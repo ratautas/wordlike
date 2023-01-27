@@ -2,12 +2,12 @@
   import { ref } from "$lib/actions/ref";
   import { VERTICAL_RESIZE_TYPES, ELEMENT_TYPES } from "$lib/constants";
   // props:
-  export let id: string;
-  export let type: string;
+  export let elementData;
 
   // See +page.svelte for implementation of :: syntax
 
   // derived data:
+  $: ({ id, type } = elementData ?? {});
   $: canResizeHeight = VERTICAL_RESIZE_TYPES.includes(type);
   $: canResizeTop = type !== ELEMENT_TYPES.GRID;
 </script>

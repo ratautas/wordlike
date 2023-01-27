@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ref } from "$lib/actions/ref";
   import Element from "$lib/components/Element.svelte";
   import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
   import Guides from "$lib/components/Guides.svelte";
@@ -38,7 +39,8 @@
   ));
 
   $: templateRows = [paddingY ?? 0, ...gridTemplateRows, paddingY ?? 0]
-    .map((row) => `${row}px`)
+    // .map((row) => `${row}px`)
+    .map((row) => `minmax(${row}px, 0fr)`)
     .join(" ");
 
   $: templateColumns = [
@@ -95,7 +97,7 @@
 </script>
 
 <div
-  class="grid"
+  class="grid grid-cols-[var(--grid-template-columns)] grid-rows-[var(--grid-template-rows)]"
   style:--width={`${width}px`}
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
@@ -105,25 +107,11 @@
     <Element elementData={element} gridData={gridAreas[index]} {index} />
   {/each}
   <div
-    class="grid__guides opacity-0 pointer-events-none"
+    class="opacity-0 pointer-events-none grid col-start-2 row-start-2 col-end-[-2] row-end-[-2]"
     class:opacity-100={isHovered}
     bind:this={guidesRef}
+    use:ref={`${elementData.id}::GRID`}
   >
     <Guides elementData={extendedElementData} gridWidth={width} />
   </div>
-  {isHovered}
 </div>
-
-<style lang="scss">
-  .grid {
-    background-color: antiquewhite;
-    display: grid;
-    grid-template-columns: var(--grid-template-columns);
-    grid-template-rows: var(--grid-template-rows);
-
-    &__guides {
-      display: grid;
-      grid-area: 2/2/-2/-2;
-    }
-  }
-</style>

@@ -19,6 +19,7 @@ import { refs } from '$lib/stores/refs';
 import { positionKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
+import { ELEMENT_TYPES } from '$lib/constants';
 
 export const DEFAULT_INSERTED_ELEMENT_WIDTH = 300;
 export const DEFAULT_INSERTED_ELEMENT_HEIGHT = 72;
@@ -40,6 +41,12 @@ export const insertingElement = writable();
 export const findById = (array, id) => {
   return array?.find((i) => i.id === id || i.children && findById(i.children, id));
 };
+
+export function findElementById(id) {
+  return derived(doc, ($doc) => {
+    return findById($doc?.pages[get(currentPageIndex)].children, id);
+  });
+}
 
 export function findSelectedIds(array, ids) {
   return array?.reduce((acc, el) => {
@@ -203,3 +210,50 @@ export async function updateDraggedElementsData() {
   //   .eq('id', siteId)
   //   .select();
 };
+
+export function recalculatePositions() {
+  // return;
+  console.log('recalculatePositions');
+  function mapChildren(el) {
+    if (el.type !== ELEMENT_TYPES.GRID) return el;
+
+    const $refs = get(refs);
+
+    if (!Object.keys($refs).length) return el;
+
+    return {
+      ...el,
+      children: el.children?.map((element) => {
+
+        const elementRef = $refs[element.id];
+        const gridRef = $refs[`${el.id}::GRID`];
+
+        if (!elementRef) return element;
+        if (!gridRef) return element;
+
+        // const parentRef = get(refs)[element.parentId];
+        const gridRect = gridRef.getBoundingClientRect();
+        const elementRect = elementRef.getBoundingClientRect();
+
+        return {
+          ...element,
+          [get(positionKey)]: {
+            ...element[get(positionKey)],
+            x: elementRect.x - gridRect.x,
+            y: elementRect.y - gridRect.y,
+            width: elementRect.width,
+            height: elementRect.height,
+          },
+          children: element.children?.map(mapChildren),
+        };
+      })
+    }
+  };
+
+  const pageIndex = get(currentPageIndex);
+  doc.update(($doc) => {
+    $doc.pages[pageIndex].children = $doc.pages[pageIndex].children.map(mapChildren);
+
+    return $doc;
+  });
+}

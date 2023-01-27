@@ -58,7 +58,7 @@
     return columnArray.map((_, col) => {
       return (
         ($isDragging || $isInserting) &&
-        selectedElementData.type !== ELEMENT_TYPES.GRID &&
+        selectedElementData?.type !== ELEMENT_TYPES.GRID &&
         row >= rowStart &&
         row < rowEnd &&
         col >= colStart &&

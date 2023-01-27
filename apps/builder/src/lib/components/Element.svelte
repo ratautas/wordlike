@@ -20,7 +20,9 @@
     columnEndIndex,
     columnCount,
   } = gridData ?? {});
-  $: gridArea = [rowStart, columnStart, rowEnd, columnEnd].join("/");
+  $: gridArea = gridData
+    ? [rowStart, columnStart, rowEnd, columnEnd].join("/")
+    : null;
   $: rowStart = rowStartIndex + 1;
   $: columnStart = snapLeft ? 1 : columnStartIndex + 1;
   $: rowEnd = rowEndIndex + 1;
@@ -55,7 +57,7 @@
   {/if}
 
   {#if isSelected}
-    <ElementControls {id} {type} />
+    <ElementControls {elementData} {id} {type} />
   {/if}
 </div>
 
@@ -66,6 +68,7 @@
   .element {
     z-index: 2;
     position: relative;
+    align-self: start;
     &::before {
       content: "";
       display: block;
@@ -79,8 +82,8 @@
 
     &--GRID {
       &::before {
-        right: calc((100% - var(--desktop-width) + 2px) / 2);
-        left: calc((100% - var(--desktop-width) + 2px) / 2);
+        right: calc((100% - var(--desktop-width)) / 2);
+        left: calc((100% - var(--desktop-width)) / 2);
       }
     }
 

@@ -8,21 +8,23 @@
     isDragging,
     isDragInserting,
     isClickInserting,
+    isInserting,
     mouseDownComposedPath,
     mouseMoveEvent,
     resizeDirection,
   } from "$lib/stores/drag";
-  import { currentPageData, doc } from "$lib/stores/doc";
+  import { currentPageData } from "$lib/stores/doc";
   import {
     insertingElement,
     insertElement,
     deleteSelectedElements,
     selectedElementIds,
     updateDraggedElementsData,
+    findElementById,
+    recalculatePositions,
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { refs } from "$lib/stores/refs";
-  import { onMount } from "svelte";
 
   function handleMouseDown(event: MouseEvent) {
     const elementsOnPath = event.composedPath().slice(0, -4);
@@ -125,9 +127,22 @@
     if (event.key === "Shift") isShiftPressed.set(false);
   }
 
-  onMount(() => {
-    window.doc = $doc;
-  });
+  function handleFocusIn(e: FocusEvent) {
+    console.log("handleFocusIn");
+    // isShiftPressed.set(false);
+  }
+
+  function handleFocusOut(e: FocusEvent) {
+    console.log("handleFocusOut");
+    // recalculatePositions();
+  }
+
+  $: {
+    $selectedElementIds &&
+      !$isInserting &&
+      !$isDragging &&
+      recalculatePositions();
+  }
 </script>
 
 <svelte:window
@@ -136,6 +151,8 @@
   on:mousedown={handleMouseDown}
   on:mouseup={handleMouseUp}
   on:mousemove={handleMouseMove}
+  on:focusin={handleFocusIn}
+  on:focusout={handleFocusOut}
 />
 
 <main class="min-h-screen bg-gray-100">
