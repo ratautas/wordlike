@@ -7,14 +7,16 @@
 [x] auto update element width / height on content change
 [x] move with keyboard arrows
 [x] disable tailwind reset
+[ ] improve snap to sides UX
+[ ] snap to grid
+[ ] block resize handles
 [ ] add more text types
 [ ] fix selecting multiple elements
-[ ] block resize handles
-[ ] snap to grid
-[ ] improve snap to sides UX
 [ ] round position before saving to json
-
+[ ] fix multiple selection
 [ ] tweak inserting new element
+[ ] add popup
+
 [ ] add grid guides config
 [ ] allow going out of bounds
 [ ] validate data before sending to backend (zod?)

@@ -9,7 +9,6 @@
     isDragInserting,
     isClickInserting,
     isInserting,
-    mouseDownComposedPath,
     mouseMoveEvent,
     resizeDirection,
     dragDiffX,
@@ -24,6 +23,7 @@
     updateElementsPosition,
     findElementById,
     recalculatePositions,
+    updateElementsSnap,
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import { refs } from "$lib/stores/refs";
@@ -64,7 +64,10 @@
     const isTargetSelected = $selectedElementIds.includes(targetElementId);
     const isOneOfSiblings = selectedSiblingsRefs.includes(targetElementRef);
 
-    if ($selectedElementIds.length) {
+    isDragging.set(true);
+    initialMousePosition.set({ x: event.clientX, y: event.clientY });
+
+    if ($selectedElementIds.length > 0) {
       if (isOneOfSiblings) {
         if ($isShiftPressed) {
           if (isTargetSelected) {
@@ -74,6 +77,10 @@
           } else {
             selectedElementIds.set([...$selectedElementIds, targetElementId]);
           }
+        } else if ($selectedElementIds.length === 1) {
+          if ($selectedElementIds[0] !== targetElementId) {
+            selectedElementIds.set([targetElementId]);
+          }
         }
       } else {
         selectedElementIds.set([targetElementId]);
@@ -81,14 +88,10 @@
     } else {
       selectedElementIds.set([targetElementId]);
     }
-
-    isDragging.set(true);
-    initialMousePosition.set({ x: event.clientX, y: event.clientY });
   }
 
   function handleMouseUp(event: MouseEvent) {
     const elementsOnPath = event.composedPath().slice(0, -4);
-    elementsOnPath.reverse();
 
     if ($isDragInserting) {
       // if the element hasn't been dragged, then it's a click
@@ -97,6 +100,8 @@
         isDragInserting.set(false);
         return;
       }
+
+      elementsOnPath.reverse();
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
         return Object.keys($refs).find((key) => {
@@ -105,12 +110,22 @@
       }, null);
       insertElement(closestParentId);
     } else if ($selectedElementIds.length > 0) {
+      console.log("update?");
       updateElementsPosition($dragDiffX, $dragDiffY);
+    }
+
+    if ($resizeDirection) {
+      console.log("resizeDirection");
+      const snap = elementsOnPath.reduce((acc, el) => {
+        if (!!acc) return acc;
+
+        return el.dataset.overshoot?.split("::").at(-1);
+      }, null);
+      if (snap) updateElementsSnap(snap);
     }
 
     dragMousePosition.set({ x: null, y: null });
     initialMousePosition.set({ x: null, y: null });
-    mouseDownComposedPath.set([]);
     isDragging.set(false);
     resizeDirection.set(null);
   }
@@ -159,6 +174,7 @@
     $selectedElementIds &&
       !$isInserting &&
       !$isDragging &&
+      false &&
       recalculatePositions();
   }
 </script>

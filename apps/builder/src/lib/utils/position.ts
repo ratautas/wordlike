@@ -1,4 +1,5 @@
 import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
+import { element } from "svelte/internal";
 
 export const MIN_WIDTH = 24;
 export const MIN_HEIGHT = 24;
@@ -23,7 +24,10 @@ export function getPosition({
     const minY = Math.max(desktop.y + diffY, 0);
     const maxY = blockWidth - desktop.height;
 
-    position.x = Math.min(minX, maxX);
+    if (!desktop.snapLeft && !desktop.snapRight) {
+      position.x = Math.min(minX, maxX);
+    }
+
     position.y = Math.min(minY, maxY);
 
     return position;

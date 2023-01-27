@@ -7,11 +7,10 @@ interface MousePosition {
 type ElementRef = HTMLElement | null;
 type ElementPath = ElementRef[];
 
-export const mouseDownComposedPath = writable([] as ElementPath);
 export const isDragging = writable(false);
 export const isDragInserting = writable(false);
 export const isClickInserting = writable(false);
-export const resizeDirection = writable();
+export const resizeDirection = writable<string>();
 export const mouseMoveEvent = writable<MouseEvent>();
 export const initialMousePosition = writable({
   x: null,

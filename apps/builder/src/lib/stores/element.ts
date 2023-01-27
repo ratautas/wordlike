@@ -209,9 +209,54 @@ export async function updateElementsPosition(diffX, diffY) {
   //   .select();
 };
 
+
+export async function updateElementsSnap(snap) {
+  const elementIds = get(selectedElementIds);
+  const pageIndex = get(currentPageIndex);
+
+  function mapChildren(children) {
+    return children?.map((element) => {
+      if (elementIds.includes(element.id)) {
+        return {
+          ...element,
+          [get(positionKey)]: {
+            ...element[get(positionKey)],
+            ...(snap === "LEFT" ? { snapLeft: true } : {}),
+            ...(snap === "RIGHT" ? { snapRight: true } : {}),
+          }
+        };
+      }
+      return {
+        ...element,
+        children: mapChildren(element.children),
+      };
+    });
+  };
+
+  doc.update(($doc) => {
+    $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
+
+    return $doc;
+  });
+
+  // TODO: this is kinda optimistic, we should wait for the response from the server
+  // we can do this, but on failure we need to revert the doc to the initial state
+
+  const { siteId } = get(page).params;
+  // const { data, error } = await supabaseClient
+  //   .from('sites')
+  //   .update({ doc: $doc })
+  //   .eq('id', siteId)
+  //   .select();
+
+  // await supabaseClient
+  //   .from('sites')
+  //   .update({ doc: $doc })
+  //   .eq('id', siteId)
+  //   .select();
+};
+
 export function recalculatePositions() {
-  // return;
-  console.log('recalculatePositions');
   function mapChildren(el) {
     if (el.type !== ELEMENT_TYPES.GRID) return el;
 
@@ -222,24 +267,26 @@ export function recalculatePositions() {
     return {
       ...el,
       children: el.children?.map((element) => {
-
         const elementRef = $refs[element.id];
         const gridRef = $refs[`${el.id}::GRID`];
+        const $positionKey = get(positionKey);
+        const position = element[$positionKey];
+        const { x, width, snapLeft, snapRight } = position;
+        const snap = snapLeft || snapRight;
 
         if (!elementRef) return element;
         if (!gridRef) return element;
 
-        // const parentRef = get(refs)[element.parentId];
         const gridRect = gridRef.getBoundingClientRect();
         const elementRect = elementRef.getBoundingClientRect();
 
         return {
           ...element,
-          [get(positionKey)]: {
-            ...element[get(positionKey)],
-            x: elementRect.x - gridRect.x,
+          [$positionKey]: {
+            ...element[$positionKey],
+            x: snap ? x : elementRect.x - gridRect.x,
             y: elementRect.y - gridRect.y,
-            width: elementRect.width,
+            width: snap ? width : elementRect.width,
             height: elementRect.height,
           },
           children: element.children?.map(mapChildren),

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ref } from "$lib/actions/ref";
   import Element from "$lib/components/Element.svelte";
-  import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
+  import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
   import Guides from "$lib/components/Guides.svelte";
   import {
     dragDiffX,
@@ -94,10 +94,25 @@
       }
     }
   }
+
+  $: overShoot = (() => {
+    if (!$isDragging) return;
+    if (elementData.type !== ELEMENT_TYPES.GRID) return;
+    if (!$resizeDirection) return;
+
+    const { x, width } = guidesRef?.getBoundingClientRect() ?? {};
+    const { clientX } = $mouseMoveEvent;
+
+    if ($resizeDirection.includes("W") && clientX - x < 0) return "LEFT";
+    if ($resizeDirection.includes("E") && clientX - x > width) return "RIGHT";
+    return;
+  })();
 </script>
 
 <div
-  class="grid grid-cols-[var(--grid-template-columns)] grid-rows-[var(--grid-template-rows)]"
+  class="grid relative grid-cols-[var(--grid-template-columns)] grid-rows-[var(--grid-template-rows)]"
+  class:cursor-[e-resize]={overShoot === "RIGHT"}
+  class:cursor-[w-resize]={overShoot === "LEFT"}
   style:--width={`${width}px`}
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
@@ -114,4 +129,18 @@
   >
     <Guides elementData={extendedElementData} gridWidth={width} />
   </div>
+  {#if isHovered && overShoot === "LEFT"}
+    <div
+      class="absolute left-0 w-8 bg-[rgba(0,0,0,0.1)] inset-y-0 hover:bg-[rgba(0,0,0,0.3)]"
+      data-overshoot={`${elementData.id}::OVERSHOOT::LEFT`}
+      use:ref={`${elementData.id}::OVERSHOOT::LEFT`}
+    />
+  {/if}
+  {#if isHovered && overShoot === "RIGHT"}
+    <div
+      class="absolute right-0 w-8 bg-[rgba(0,0,0,0.1)] inset-y-0 hover:bg-[rgba(0,0,0,0.3)]"
+      data-overshoot={`${elementData.id}::OVERSHOOT::RIGHT`}
+      use:ref={`${elementData.id}::OVERSHOOT::RIGHT`}
+    />
+  {/if}
 </div>
