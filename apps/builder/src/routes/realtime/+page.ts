@@ -1,6 +1,5 @@
 import type { PageLoad } from "./$types";
 import { supabaseClient } from "$lib/supabase";
-import { doc } from "$lib/stores/diff";
 
 export const load: PageLoad = async () => {
     const { data, error } = await supabaseClient

@@ -6,7 +6,7 @@
 [x] add grid guides
 [x] auto update element width / height on content change
 [x] move with keyboard arrows
-[ ] disable tailwind reset
+[x] disable tailwind reset
 [ ] add more text types
 [ ] fix selecting multiple elements
 [ ] block resize handles

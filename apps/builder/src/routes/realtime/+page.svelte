@@ -1,6 +1,5 @@
 <script lang="ts">
   import { browser, building, dev } from "$app/environment";
-  import { isLoaded, doc } from "$lib/stores/diff";
   import { subscribe, broadcast, listen } from "$lib/realtime";
 
   import type { PageData } from "../$types";
