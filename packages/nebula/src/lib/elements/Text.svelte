@@ -1,22 +1,22 @@
 <script lang="ts">
+	import { onMount, createEventDispatcher, onDestroy } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+
 	export let elementData;
+
+	let elementRef: HTMLDivElement;
+
+	onMount(() => dispatch('mount', elementRef));
+	onDestroy(() => dispatch('destroy'));
 </script>
 
-{#if elementData?.html}
-	<div class="text" contenteditable="true">
-		{@html elementData?.html}
-	</div>
-{/if}
+<div class="text" bind:this={elementRef} on:focus={(e) => dispatch('focus', e)}>
+	{@html elementData?.html}
+</div>
 
 <style lang="scss">
 	.text {
-		&[contenteditable='true'] {
-			outline: none;
-			&:focus {
-				outline: none;
-			}
-		}
-
 		:global(h1) {
 			font-size: 2rem;
 			font-weight: 700;

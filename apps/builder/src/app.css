@@ -5,3 +5,12 @@
 html {
   font-family: Inter, sans-serif;
 }
+
+
+[contenteditable="true"] {
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}

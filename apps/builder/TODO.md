@@ -16,6 +16,7 @@
 [ ] snap to grid
 [ ] drop on click insertion is not working correctly
 [x] fix selecting multiple elements
+[ ] move schmeas to separate package
 [ ] round position before saving to json
 [ ] tweak inserting new element
 [ ] add popup

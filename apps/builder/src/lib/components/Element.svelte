@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { Text } from "@wordlike/nebula";
-
   import { ref } from "$lib/actions/ref";
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
-  import Grid from "$lib/components/Grid.svelte";
   import ElementControls from "$lib/components/ElementControls.svelte";
+  import Grid from "$lib/components/Grid.svelte";
+  import TextEditor from "$lib/components/TextEditor.svelte";
   import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
   import type { ElementType } from "$lib/schema";
@@ -52,7 +51,7 @@
   {#if type === ELEMENT_TYPES.GRID}
     <Grid {elementData} />
   {:else if type === ELEMENT_TYPES.TEXT}
-    <Text {elementData} />
+    <TextEditor {elementData} />
   {:else if type === ELEMENT_TYPES.IMAGE}
     <!-- else if content here -->
   {:else}
