@@ -1,5 +1,5 @@
 {
-  "name": "@example/basics",
+  "name": "@wordlike/astro",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -11,6 +11,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^2.0.2"
+    "@astrojs/svelte": "^2.0.0",
+    "@wordlike/nebula": "workspace:*",
+    "astro": "^2.0.2",
+    "svelte": "^3.54.0"
   }
 }

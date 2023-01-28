@@ -2,7 +2,8 @@
   "name": "@wordlike/nebula",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite dev",
+    "dev:legacy": "vite dev",
+    "dev": "svelte-kit sync && svelte-package --watch",
     "build": "svelte-kit sync && svelte-package",
     "prepublishOnly": "echo 'Did you mean to publish `./package/`, instead of `./`?' && exit 1",
     "test": "playwright test",
