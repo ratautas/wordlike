@@ -23,8 +23,8 @@ export const BREAKPOINTS = {
 
 export const currentBreakpoint = writable(BREAKPOINTS.DESKTOP);
 
-export const positionKey = derived(currentBreakpoint, ($breakpoint) => $breakpoint.key);
+export const deviceKey = derived(currentBreakpoint, ($breakpoint) => $breakpoint.key);
 
-export const isDesktop = derived(positionKey, ($key) => $key === POSITION_KEYS.DESKTOP);
-export const isTablet = derived(positionKey, ($key) => $key === POSITION_KEYS.TABLET);
-export const isMobile = derived(positionKey, ($key) => $key === POSITION_KEYS.MOBILE);
+export const isDesktop = derived(deviceKey, ($key) => $key === POSITION_KEYS.DESKTOP);
+export const isTablet = derived(deviceKey, ($key) => $key === POSITION_KEYS.TABLET);
+export const isMobile = derived(deviceKey, ($key) => $key === POSITION_KEYS.MOBILE);

@@ -15,14 +15,14 @@
     mouseMoveComposedPath,
   } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
-  import { positionKey } from "$lib/stores/resolution";
+  import { deviceKey } from "$lib/stores/resolution";
   import { calculateGrid } from "$lib/utils/position";
 
   // props:
   export let elementData: GridElementType;
 
   // state:
-  let width = elementData?.[$positionKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
+  let width = elementData?.[$deviceKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
   let isRelativeWidth = true;
   let gridRef: HTMLElement | undefined;
   let guidesRef: HTMLElement | undefined;
@@ -83,8 +83,8 @@
         insertingElement.update((elementData) => {
           return {
             ...elementData,
-            [$positionKey]: {
-              ...elementData[$positionKey],
+            [$deviceKey]: {
+              ...elementData[$deviceKey],
               x,
               y,
             },
@@ -110,14 +110,14 @@
     return;
   })();
 
-  $: growLeft = () => {
+  $: growLeft = (() => {
     if (!isHovered && overShoot !== "LEFT") return 0;
 
     const { clientX } = $mouseMoveEvent ?? {};
     const { x } = guidesRef?.getBoundingClientRect() ?? {};
     if (!x) return 8;
     return 8 + (x - clientX) / 16;
-  };
+  })();
 
   $: growRight = (() => {
     if (!isHovered && overShoot !== "RIGHT") return 0;

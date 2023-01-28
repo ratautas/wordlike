@@ -14,7 +14,7 @@ import {
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
 import { getPosition } from "$lib/utils/position";
 import { refs } from '$lib/stores/refs';
-import { positionKey } from '$lib/stores/resolution';
+import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
@@ -78,7 +78,7 @@ export function createInsertedElement(type) {
   const element = {
     id: uuidv4(),
     type,
-    [get(positionKey)]: {
+    [get(deviceKey)]: {
       width: DEFAULT_INSERTED_ELEMENT_WIDTH,
       height: DEFAULT_INSERTED_ELEMENT_HEIGHT,
     },
@@ -105,8 +105,8 @@ export async function insertElement(closestParentId: string) {
   // This is a hack, we should not rely on the first child
   const elementRect = elementRef.firstChild.getBoundingClientRect();
 
-  elementData[get(positionKey)] = {
-    ...elementData[get(positionKey)],
+  elementData[get(deviceKey)] = {
+    ...elementData[get(deviceKey)],
     x: elementRect.x - parentRect.x,
     y: elementRect.y - parentRect.y,
     width: elementRect.width,
@@ -172,7 +172,7 @@ export async function updateElementsPosition(diffX, diffY) {
 
         return {
           ...element,
-          [get(positionKey)]: position,
+          [get(deviceKey)]: position,
         };
       }
       return {
@@ -218,8 +218,8 @@ export async function updateElementsSnap(snap) {
       if (elementIds.includes(element.id)) {
         return {
           ...element,
-          [get(positionKey)]: {
-            ...element[get(positionKey)],
+          [get(deviceKey)]: {
+            ...element[get(deviceKey)],
             ...(snap === "LEFT" ? { snapLeft: true } : {}),
             ...(snap === "RIGHT" ? { snapRight: true } : {}),
           }
@@ -268,8 +268,8 @@ export function recalculatePositions() {
       children: el.children?.map((element) => {
         const elementRef = $refs[element.id];
         const gridRef = $refs[`${el.id}::GRID`];
-        const $positionKey = get(positionKey);
-        const position = element[$positionKey];
+        const $deviceKey = get(deviceKey);
+        const position = element[$deviceKey];
         const { x, width, snapLeft, snapRight } = position;
         const snap = snapLeft || snapRight;
 
@@ -281,8 +281,8 @@ export function recalculatePositions() {
 
         return {
           ...element,
-          [$positionKey]: {
-            ...element[$positionKey],
+          [$deviceKey]: {
+            ...element[$deviceKey],
             x: snap ? x : elementRect.x - gridRect.x,
             y: elementRect.y - gridRect.y,
             width: snap ? width : elementRect.width,
