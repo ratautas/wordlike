@@ -52,8 +52,6 @@
 
     const [targetElementId, direction] = refId?.split("::") ?? [];
 
-    console.log({ direction });
-
     if (!targetElementId) return;
 
     if (direction) {
