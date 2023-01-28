@@ -22,7 +22,7 @@
   export let elementData: GridElementType;
 
   // state:
-  let width = elementData?.[$deviceKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
+  let gridWidth = elementData?.[$deviceKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
   let isRelativeWidth = true;
   let gridRef: HTMLElement | undefined;
   let guidesRef: HTMLElement | undefined;
@@ -45,13 +45,13 @@
     .join(" ");
 
   $: templateColumns = [
-    `minmax(${paddingX ?? 0}px, calc(50% - ${width / 2}px))`,
+    `minmax(${paddingX ?? 0}px, calc(50% - ${gridWidth / 2}px))`,
     ...gridTemplateColumns,
-    `minmax(${paddingX ?? 0}px, calc(50% - ${width / 2}px))`,
+    `minmax(${paddingX ?? 0}px, calc(50% - ${gridWidth / 2}px))`,
   ]
     .map((col) => {
       if (isNaN(col)) return col;
-      return isRelativeWidth ? `${col / width}fr` : `${col}px`;
+      return isRelativeWidth ? `${col / gridWidth}fr` : `${col}px`;
     })
     .join(" ");
 
@@ -133,7 +133,7 @@
   class="grid relative grid-cols-[var(--grid-template-columns)] grid-rows-[var(--grid-template-rows)]"
   class:cursor-[e-resize]={overShoot === "RIGHT"}
   class:cursor-[w-resize]={overShoot === "LEFT"}
-  style:--width={`${width}px`}
+  style:--width={`${gridWidth}px`}
   style:--grid-template-rows={templateRows}
   style:--grid-template-columns={templateColumns}
   bind:this={gridRef}
@@ -147,7 +147,7 @@
     bind:this={guidesRef}
     use:ref={`${elementData.id}::GRID`}
   >
-    <Guides elementData={extendedElementData} gridWidth={width} />
+    <Guides elementData={extendedElementData} {gridWidth} />
   </div>
   <div
     class="absolute left-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-left)] transition-opacity"

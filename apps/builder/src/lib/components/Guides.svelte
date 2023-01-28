@@ -1,3 +1,51 @@
+<script lang="ts" context="module">
+  export type GuidMapParams = {
+    isDragging: boolean;
+    isInserting: boolean;
+    selectedElementData: any;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rowArray: boolean[];
+    columnArray: boolean[];
+    columnWidth: number;
+    rowHeight: number;
+    gap: number;
+  };
+
+  export function getGuideMap({
+    isDragging,
+    isInserting,
+    selectedElementData,
+    x,
+    y,
+    width,
+    height,
+    rowArray,
+    columnArray,
+    columnWidth,
+    rowHeight,
+    gap,
+  }: GuidMapParams) {
+    return rowArray.map((_: boolean, row: number) => {
+      return columnArray.map((_: boolean, col: number) => {
+        if (!isDragging && !isInserting) return false;
+        if (selectedElementData?.type === ELEMENT_TYPES.GRID) return false;
+
+        const cellLeft = col * (columnWidth + gap) + columnWidth;
+        const cellRight = cellLeft - columnWidth + gap;
+        const cellTop = row * (rowHeight + gap) + rowHeight;
+        const cellBottom = cellTop - rowHeight + gap;
+
+        const withinY = y <= cellTop && cellBottom <= y + height;
+        const withinX = x <= cellLeft && cellRight <= x + width;
+        return withinX && withinY;
+      });
+    });
+  }
+</script>
+
 <script lang="ts">
   import { ELEMENT_TYPES } from "$lib/constants";
   import type { GridElementType } from "$lib/schema";
@@ -32,14 +80,14 @@
     $selectedElementIds
   ));
   $: gapPx = `${gap}px`;
-  $: columnArray = Array.from(Array(columnCount));
-  $: columnWidth = (gridWidth + gap) / columnCount;
+  $: columnArray = Array.from(Array(columnCount)) as boolean[];
+  $: columnWidth = (gridWidth + gap) / columnCount - gap;
   $: columnWidthPercent = `${(columnWidth / gridWidth) * 100}%`;
   $: rowCount = Math.floor(gridHeight / rowHeight) ?? 0;
-  $: rowArray = Array.from(Array(rowCount));
+  $: rowArray = Array.from(Array(rowCount)) as boolean[];
   $: rowHeightPx = `${rowHeight}px`;
   $: selectedElementData = $selectedElementsData[$selectedElementIds[0]];
-  $: ({ x, y, width, height, snapLeft, snapRight } = selectedElementData
+  $: ({ x, y, width, height } = selectedElementData
     ? getPosition({
         elementData: selectedElementData,
         diffX: $dragDiffX,
@@ -48,24 +96,20 @@
         blockWidth: elementData?.desktop?.width,
       })
     : {});
-  $: colStart = snapLeft ? 0 : Math.floor((x + gap) / (columnWidth + gap));
-  $: colEnd = snapRight
-    ? columnArray.length
-    : colStart + Math.ceil((width + gap) / (columnWidth + gap));
-  $: rowStart = Math.floor((y + gap) / (rowHeight + gap));
-  $: rowEnd = rowStart + Math.ceil((height + gap) / (rowHeight + gap));
 
-  $: guideMap = rowArray.map((_, row) => {
-    return columnArray.map((_, col) => {
-      return (
-        ($isDragging || $isInserting) &&
-        selectedElementData?.type !== ELEMENT_TYPES.GRID &&
-        row >= rowStart &&
-        row < rowEnd &&
-        col >= colStart &&
-        col < colEnd
-      );
-    });
+  $: guideMap = getGuideMap({
+    isDragging: $isDragging,
+    isInserting: $isInserting,
+    selectedElementData,
+    x,
+    y,
+    width,
+    height,
+    rowArray,
+    columnArray,
+    columnWidth,
+    rowHeight,
+    gap,
   });
 </script>
 
@@ -81,9 +125,11 @@
     >
       {#each row as column}
         <div
-          class="column w-[var(--column-width)] border-[1px] border-solid border-dark-600"
-          class:bg-red-800={column}
-        />
+          class="column w-[var(--column-width)] text-xs border-[1px] border-solid border-dark-600"
+          class:border-red-800={column}
+        >
+          {column}
+        </div>
       {/each}
     </div>
   {/each}

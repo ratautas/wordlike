@@ -8,7 +8,7 @@
 [x] auto update element width / height on content change
 [x] move with keyboard arrows
 [x] disable tailwind reset
-[ ] improve snap to sides UX
+[x] improve snap to sides UX
 [ ] snap to grid
 [ ] block resize handles
 [ ] add more text types
@@ -20,6 +20,8 @@
 [ ] background color + overlay
 [ ] padding
 [ ] border + radius
+[ ] add functionalty to de-snap from side
+[ ] add alignment between elements guides
 
 [ ] mobile
 [ ] preview
@@ -39,7 +41,8 @@
 [ ] undo/redo
 [ ] GIF
 [ ] REM scaling
-
+[ ] custom code injection
+ 
 Element types:
 - Text;
 - Image;
