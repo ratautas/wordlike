@@ -11,10 +11,11 @@
   } from "$lib/stores/drag";
   import { INSERTED_TYPES, createInsertedElement } from "$lib/stores/element";
 
-  function handleParagraphMouseDown(event: MouseEvent) {
-    console.log("handleParagraphMouseDown");
+  const { PARAGRAPH, HEADING, BUTTON, CUSTOM_1, CUSTOM_2 } = INSERTED_TYPES;
+
+  function startDragInsert(event: MouseEvent, type: string) {
     dragMousePosition.set({ x: event.clientX, y: event.clientY });
-    createInsertedElement(INSERTED_TYPES.PARAGRAPH);
+    createInsertedElement(type);
     isDragInserting.set(true);
   }
 </script>
@@ -28,7 +29,7 @@
       >
         <div
           class="flex flex-col items-center"
-          on:mousedown={handleParagraphMouseDown}
+          on:mousedown={(e) => startDragInsert(e, PARAGRAPH)}
         >
           <BiTextareaT />
           <div class="text-xs pointer-events-none">Text</div>
@@ -36,7 +37,10 @@
         <div
           class="hidden group-hover/action:block absolute -left-8 -right-8 top-full text-xs"
         >
-          <div class="flex p-2" on:mousedown={handleParagraphMouseDown}>
+          <div
+            class="flex p-2"
+            on:mousedown={(e) => startDragInsert(e, PARAGRAPH)}
+          >
             Paragraph <span>(default)</span> [t]
           </div>
           <div class="flex">Heading [h]</div>

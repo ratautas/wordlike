@@ -9,10 +9,12 @@
 [x] move with keyboard arrows
 [x] disable tailwind reset
 [x] improve snap to sides UX
+[ ] astro
+[ ] add more text types
 [ ] block resize handles
 [ ] store grid width to json
 [ ] snap to grid
-[ ] add more text types
+[ ] drop on click insertion is not working correctly
 [x] fix selecting multiple elements
 [ ] round position before saving to json
 [ ] tweak inserting new element

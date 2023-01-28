@@ -31,7 +31,9 @@ export const INITIAL_INSERTED_PARAGRAPHS = [
   "I’m not saying I invented the question mark. But I’m also not saying I didn’t.",
 ];
 export const INSERTED_TYPES = {
-  PARAGRAPH: "PARAGRAPH"
+  PARAGRAPH: "PARAGRAPH",
+  HEADING: "HEADING",
+  BUTOTN: "BUTTON",
 };
 
 export const selectedElementIds = writable([] as string[]);
