@@ -158,8 +158,8 @@ export async function deleteSelectedElements() {
   selectedElementIds.set([]);
 };
 
-export async function updateElementsPosition(diffX, diffY) {
-  function mapChildren(children) {
+export async function updateElementsPosition(diffX: number | null, diffY: number | null) {
+  function mapChildren(children: ElementType[]) {
     return children?.map((element) => {
       if (elementIds.includes(element.id)) {
         const position = getPosition({
@@ -167,7 +167,7 @@ export async function updateElementsPosition(diffX, diffY) {
           diffX,
           diffY,
           resizeDirection: get(resizeDirection),
-          blockWidth: element.width,
+          blockWidth: element.desktop.width,
         });
 
         return {
@@ -263,9 +263,11 @@ export function recalculatePositions() {
 
     if (!Object.keys($refs).length) return el;
 
+    console.log('recalc');
+
     return {
       ...el,
-      children: el.children?.map((element) => {
+      children: el.children?.map((element: ElementType) => {
         const elementRef = $refs[element.id];
         const gridRef = $refs[`${el.id}::GRID`];
         const $deviceKey = get(deviceKey);

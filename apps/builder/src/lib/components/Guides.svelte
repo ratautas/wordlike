@@ -125,7 +125,8 @@
 </script>
 
 <div
-  class="flex flex-col content-start gap-[var(--gap)]"
+  class="flex flex-col content-start gap-[var(--gap)] opacity-0"
+  class:opacity-100={$isDragging || $isInserting}
   style:--column-width={columnWidthPercent}
   style:--row-height={rowHeightPx}
   style:--gap={gapPx}
@@ -136,11 +137,9 @@
     >
       {#each row as column}
         <div
-          class="column w-[var(--column-width)] text-xs border-[1px] border-solid border-dark-600"
+          class="column w-[var(--column-width)] text-xs border-[1px] border-solid border-dark-600 rounded-sm"
           class:border-red-800={column}
-        >
-          {column}
-        </div>
+        />
       {/each}
     </div>
   {/each}

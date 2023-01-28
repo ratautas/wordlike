@@ -11,10 +11,10 @@
 [x] improve snap to sides UX
 [ ] snap to grid
 [ ] block resize handles
+[ ] store grid width to json
 [ ] add more text types
-[ ] fix selecting multiple elements
+[x] fix selecting multiple elements
 [ ] round position before saving to json
-[ ] fix multiple selection
 [ ] tweak inserting new element
 [ ] add popup
 [ ] background color + overlay

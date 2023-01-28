@@ -22,7 +22,6 @@
     deleteSelectedElements,
     selectedElementIds,
     updateElementsPosition,
-    findElementById,
     recalculatePositions,
     updateElementsSnap,
   } from "$lib/stores/element";
@@ -175,14 +174,13 @@
 
   function handleFocusOut(e: FocusEvent) {
     console.log("handleFocusOut");
-    // recalculatePositions();
+    recalculatePositions();
   }
 
   $: {
     $selectedElementIds &&
       !$isInserting &&
       !$isDragging &&
-      false &&
       recalculatePositions();
   }
 </script>
