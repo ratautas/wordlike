@@ -107,6 +107,24 @@
     if ($resizeDirection.includes("E") && clientX - x > width) return "RIGHT";
     return;
   })();
+
+  export function getGrowLeft(mouseMoveEvent, isHovered, overShoot) {
+    if (!isHovered && overShoot !== "LEFT") return 0;
+
+    const { clientX } = mouseMoveEvent ?? {};
+    const { x } = guidesRef?.getBoundingClientRect() ?? {};
+    return 8 + (x - clientX) / 16;
+  }
+  $: growLeft = getGrowLeft($mouseMoveEvent, isHovered, overShoot);
+
+  export function getGrowRight(mouseMoveEvent, isHovered, overShoot) {
+    if (!isHovered && overShoot !== "RIGHT") return 0;
+
+    const { clientX } = mouseMoveEvent ?? {};
+    const { x, width } = guidesRef?.getBoundingClientRect() ?? {};
+    return 8 + (clientX - x - width) / 16;
+  }
+  $: growRight = getGrowRight($mouseMoveEvent, isHovered, overShoot);
 </script>
 
 <div
@@ -129,18 +147,16 @@
   >
     <Guides elementData={extendedElementData} gridWidth={width} />
   </div>
-  {#if isHovered && overShoot === "LEFT"}
-    <div
-      class="absolute left-0 w-8 bg-[rgba(0,0,0,0.1)] inset-y-0 hover:bg-[rgba(0,0,0,0.3)]"
-      data-overshoot={`${elementData.id}::OVERSHOOT::LEFT`}
-      use:ref={`${elementData.id}::OVERSHOOT::LEFT`}
-    />
-  {/if}
-  {#if isHovered && overShoot === "RIGHT"}
-    <div
-      class="absolute right-0 w-8 bg-[rgba(0,0,0,0.1)] inset-y-0 hover:bg-[rgba(0,0,0,0.3)]"
-      data-overshoot={`${elementData.id}::OVERSHOOT::RIGHT`}
-      use:ref={`${elementData.id}::OVERSHOOT::RIGHT`}
-    />
-  {/if}
+  <div
+    class="absolute left-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-left)] transition-opacity"
+    class:opacity-10={isHovered && overShoot === "LEFT"}
+    style:--grow-left={`${growLeft}px`}
+    use:ref={`${elementData.id}::OVERSHOOT::LEFT`}
+  />
+  <div
+    class="absolute right-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-right)] transition-opacity"
+    class:opacity-10={isHovered && overShoot === "RIGHT"}
+    style:--grow-right={`${growRight}px`}
+    use:ref={`${elementData.id}::OVERSHOOT::RIGHT`}
+  />
 </div>

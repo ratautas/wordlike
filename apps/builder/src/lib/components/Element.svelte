@@ -31,7 +31,7 @@
   $: isSelected = $selectedElementIds.includes(id);
   $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);
   $: ({ desktop, id, type } = elementData ?? {});
-  $: ({ snapLeft, snapRight } = desktop ?? {});
+  $: ({ snapLeft, snapRight, paddingY } = desktop ?? {});
   $: desktopWidth = `${desktop?.width ?? DEFAULT_GRID_MAX_WIDTH}px`;
 </script>
 
@@ -43,6 +43,7 @@
   class:has-moved={hasMoved}
   style:grid-area={gridArea}
   style:--desktop-width={desktopWidth}
+  style:--desktop-padding-y={`${paddingY ?? 0}px`}
   use:ref={id}
 >
   <!-- <pre style="font-size:10px;">{JSON.stringify(gridData, null, 1)}</pre> -->
@@ -82,6 +83,7 @@
 
     &--GRID {
       &::before {
+        top: var(--desktop-padding-y);
         right: calc((100% - var(--desktop-width)) / 2);
         left: calc((100% - var(--desktop-width)) / 2);
       }

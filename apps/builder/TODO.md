@@ -1,3 +1,4 @@
+[x] merge Block and BlockElement
 [x] move handle refs to global refs
 [x] split handles to separate components
 [x] update resize horizontal
@@ -16,18 +17,23 @@
 [ ] fix multiple selection
 [ ] tweak inserting new element
 [ ] add popup
+[ ] background color + overlay
+[ ] padding
+[ ] border + radius
 
+[ ] mobile
+[ ] preview
 [ ] add grid guides config
 [ ] allow going out of bounds
 [ ] validate data before sending to backend (zod?)
 [ ] add type definitions
 [ ] move element to another grid
-[x] merge Block and BlockElement
+[ ] image
 [ ] add some parallax
 [ ] zoom
 [ ] reveal animation
 [ ] rotate
-[ ] image
+[ ] skew/rotateX/rotateY
 [ ] background video
 [ ] draggable popup
 [ ] undo/redo

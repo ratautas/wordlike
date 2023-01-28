@@ -51,6 +51,8 @@
 
     const [targetElementId, direction] = refId?.split("::") ?? [];
 
+    console.log({ direction });
+
     if (!targetElementId) return;
 
     if (direction) {
@@ -115,11 +117,15 @@
     }
 
     if ($resizeDirection) {
-      console.log("resizeDirection");
       const snap = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
 
-        return el.dataset.overshoot?.split("::").at(-1);
+        return Object.entries($refs).reduce((dir, [key, $ref]) => {
+          if (!!dir) return dir;
+          const [id, control, direction] = key.split("::");
+          if (control !== "OVERSHOOT") return dir;
+          if ($ref === el) return direction;
+        }, null);
       }, null);
       if (snap) updateElementsSnap(snap);
     }
