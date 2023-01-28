@@ -11,6 +11,13 @@
 		"test": "vitest",
 		"lint": "eslint ."
 	},
+	"dependencies": {
+		"@supabase/auth-helpers-sveltekit": "^0.8.7",
+		"@supabase/supabase-js": "^2.5.0",
+		"@wordlike/nebula": "workspace:*",
+		"uuid": "^9.0.0",
+		"zod": "^3.20.2"
+	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.13",
 		"@iconify/svelte": "^3.1.0",
@@ -33,11 +40,5 @@
 		"vite": "^4.0.0",
 		"vitest": "^0.28.3"
 	},
-	"type": "module",
-	"dependencies": {
-		"@supabase/auth-helpers-sveltekit": "^0.8.7",
-		"@supabase/supabase-js": "^2.5.0",
-		"uuid": "^9.0.0",
-		"zod": "^3.20.2"
-	}
+	"type": "module"
 }
