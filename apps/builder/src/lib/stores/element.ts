@@ -62,7 +62,7 @@ export function findSelectedIds(array, ids) {
   }, {});
 }
 
-export const selectedElementsData = derived(
+export const selectedElementsDataMap = derived(
   [doc, selectedElementIds],
   ([$doc, $selectedElementIds]) => {
     if ($selectedElementIds.length === 0) return {};

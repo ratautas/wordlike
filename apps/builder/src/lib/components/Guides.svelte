@@ -1,46 +1,67 @@
 <script lang="ts" context="module">
-  export type GuidMapParams = {
+  export type GuideMapParams = {
     isDragging: boolean;
     isInserting: boolean;
-    selectedElementData: any;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    selectedElementsDataMap: Record<string, ElementType>;
     rowArray: boolean[];
     columnArray: boolean[];
     columnWidth: number;
     rowHeight: number;
     gap: number;
+    diffX: number | null;
+    diffY: number | null;
+    resizeDirection: string | null;
+    elementData: ElementType;
   };
 
   export function getGuideMap({
     isDragging,
     isInserting,
-    selectedElementData,
-    x,
-    y,
-    width,
-    height,
+    selectedElementsDataMap,
     rowArray,
     columnArray,
     columnWidth,
     rowHeight,
     gap,
-  }: GuidMapParams) {
+    diffX,
+    diffY,
+    resizeDirection,
+    elementData,
+  }: GuideMapParams) {
     return rowArray.map((_: boolean, row: number) => {
       return columnArray.map((_: boolean, col: number) => {
         if (!isDragging && !isInserting) return false;
-        if (selectedElementData?.type === ELEMENT_TYPES.GRID) return false;
 
-        const cellLeft = col * (columnWidth + gap) + columnWidth;
-        const cellRight = cellLeft - columnWidth + gap;
-        const cellTop = row * (rowHeight + gap) + rowHeight;
-        const cellBottom = cellTop - rowHeight + gap;
+        return Object.entries(selectedElementsDataMap).some(
+          ([_, selectedElementData]) => {
+            const { x, y, width, height, type } = selectedElementData
+              ? getPosition({
+                  elementData: selectedElementData,
+                  diffX,
+                  diffY,
+                  resizeDirection,
+                  blockWidth: elementData?.desktop?.width,
+                })
+              : {
+                  x: 0,
+                  y: 0,
+                  width: 0,
+                  height: 0,
+                  type: ELEMENT_TYPES.GRID,
+                };
 
-        const withinY = y <= cellTop && cellBottom <= y + height;
-        const withinX = x <= cellLeft && cellRight <= x + width;
-        return withinX && withinY;
+            if (type === ELEMENT_TYPES.GRID) return false;
+
+            const cellLeft = col * (columnWidth + gap) + columnWidth;
+            const cellRight = cellLeft - columnWidth + gap;
+            const cellTop = row * (rowHeight + gap) + rowHeight;
+            const cellBottom = cellTop - rowHeight + gap;
+
+            const withinY = y <= cellTop && cellBottom <= y + height;
+            const withinX = x <= cellLeft && cellRight <= x + width;
+            return withinX && withinY;
+          }
+        );
       });
     });
   }
@@ -48,7 +69,7 @@
 
 <script lang="ts">
   import { ELEMENT_TYPES } from "$lib/constants";
-  import type { GridElementType } from "$lib/schema";
+  import type { ElementType, GridElementType } from "$lib/schema";
   import {
     dragDiffX,
     dragDiffY,
@@ -58,7 +79,7 @@
   } from "$lib/stores/drag";
   import {
     selectedElementIds,
-    selectedElementsData,
+    selectedElementsDataMap,
   } from "$lib/stores/element";
   import { calculateGrid, getPosition } from "$lib/utils/position";
 
@@ -86,30 +107,20 @@
   $: rowCount = Math.floor(gridHeight / rowHeight) ?? 0;
   $: rowArray = Array.from(Array(rowCount)) as boolean[];
   $: rowHeightPx = `${rowHeight}px`;
-  $: selectedElementData = $selectedElementsData[$selectedElementIds[0]];
-  $: ({ x, y, width, height } = selectedElementData
-    ? getPosition({
-        elementData: selectedElementData,
-        diffX: $dragDiffX,
-        diffY: $dragDiffY,
-        resizeDirection: $resizeDirection,
-        blockWidth: elementData?.desktop?.width,
-      })
-    : {});
 
   $: guideMap = getGuideMap({
     isDragging: $isDragging,
     isInserting: $isInserting,
-    selectedElementData,
-    x,
-    y,
-    width,
-    height,
+    selectedElementsDataMap: $selectedElementsDataMap,
     rowArray,
     columnArray,
     columnWidth,
     rowHeight,
     gap,
+    diffX: $dragDiffX,
+    diffY: $dragDiffY,
+    resizeDirection: $resizeDirection,
+    elementData,
   });
 </script>
 
