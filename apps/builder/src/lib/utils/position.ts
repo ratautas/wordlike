@@ -1,5 +1,5 @@
 import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
-import { element } from "svelte/internal";
+import type { ElementType, GridElementType } from "$lib/schema";
 
 export const MIN_WIDTH = 24;
 export const MIN_HEIGHT = 24;
@@ -73,14 +73,25 @@ export function getPosition({
   return position;
 };
 
-export function calculateGrid(
+export type GridData = {
+  rows: Set<number>;
+  columns: Set<number>;
+  positions: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }[];
+};
+
+export function calculateGrid<GridData>(
   gridElementData,
   dragDiffX,
   dragDiffY,
   resizeDirection,
   selectedElementIds
 ) {
-  const { rows, columns, positions } = gridElementData?.children?.reduce((acc, element) => {
+  const { rows, columns, positions } = gridElementData.children?.reduce((acc, element: ElementType) => {
     if (!element) return acc;
     const isElementDragged = selectedElementIds.includes(element?.id);
     const { x, y, width, height } = isElementDragged

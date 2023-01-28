@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ELEMENT_TYPES } from "$lib/constants";
+  import type { GridElementType } from "$lib/schema";
   import {
     dragDiffX,
     dragDiffY,
@@ -14,7 +15,7 @@
   import { calculateGrid, getPosition } from "$lib/utils/position";
 
   // props:
-  export let elementData;
+  export let elementData: GridElementType;
   export let gridWidth: number;
 
   // state:

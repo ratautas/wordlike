@@ -3,6 +3,7 @@
   import Element from "$lib/components/Element.svelte";
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
   import Guides from "$lib/components/Guides.svelte";
+  import type { GridElementType } from "$lib/schema";
   import {
     dragDiffX,
     dragDiffY,
@@ -18,7 +19,7 @@
   import { calculateGrid } from "$lib/utils/position";
 
   // props:
-  export let elementData;
+  export let elementData: GridElementType;
 
   // state:
   let width = elementData?.[$positionKey]?.width ?? DEFAULT_GRID_MAX_WIDTH;
@@ -102,29 +103,30 @@
 
     const { x, width } = guidesRef?.getBoundingClientRect() ?? {};
     const { clientX } = $mouseMoveEvent;
+    if (!x || !width) return;
 
     if ($resizeDirection.includes("W") && clientX - x < 0) return "LEFT";
     if ($resizeDirection.includes("E") && clientX - x > width) return "RIGHT";
     return;
   })();
 
-  export function getGrowLeft(mouseMoveEvent, isHovered, overShoot) {
+  $: growLeft = () => {
     if (!isHovered && overShoot !== "LEFT") return 0;
 
-    const { clientX } = mouseMoveEvent ?? {};
+    const { clientX } = $mouseMoveEvent ?? {};
     const { x } = guidesRef?.getBoundingClientRect() ?? {};
+    if (!x) return 8;
     return 8 + (x - clientX) / 16;
-  }
-  $: growLeft = getGrowLeft($mouseMoveEvent, isHovered, overShoot);
+  };
 
-  export function getGrowRight(mouseMoveEvent, isHovered, overShoot) {
+  $: growRight = (() => {
     if (!isHovered && overShoot !== "RIGHT") return 0;
 
-    const { clientX } = mouseMoveEvent ?? {};
+    const { clientX } = $mouseMoveEvent ?? {};
     const { x, width } = guidesRef?.getBoundingClientRect() ?? {};
+    if (!x || !width) return 8;
     return 8 + (clientX - x - width) / 16;
-  }
-  $: growRight = getGrowRight($mouseMoveEvent, isHovered, overShoot);
+  })();
 </script>
 
 <div

@@ -10,7 +10,7 @@ type ElementPath = ElementRef[];
 export const isDragging = writable(false);
 export const isDragInserting = writable(false);
 export const isClickInserting = writable(false);
-export const resizeDirection = writable<string>();
+export const resizeDirection = writable<string | null>(null);
 export const mouseMoveEvent = writable<MouseEvent>();
 export const initialMousePosition = writable({
   x: null,

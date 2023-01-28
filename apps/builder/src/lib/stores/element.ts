@@ -4,8 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import { page } from "$app/stores";
 
 import {
-  dragDiffX,
-  dragDiffY,
   dragMousePosition,
   initialMousePosition,
   isClickInserting,
@@ -20,6 +18,7 @@ import { positionKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
+import type { ElementType } from '$lib/schema';
 
 export const DEFAULT_INSERTED_ELEMENT_WIDTH = 300;
 export const DEFAULT_INSERTED_ELEMENT_HEIGHT = 72;
@@ -36,13 +35,13 @@ export const INSERTED_TYPES = {
 };
 
 export const selectedElementIds = writable([] as string[]);
-export const insertingElement = writable();
+export const insertingElement = writable<ElementType | undefined | null>();
 
-export const findById = (array, id) => {
+export const findById = (array: string[], id: string) => {
   return array?.find((i) => i.id === id || i.children && findById(i.children, id));
 };
 
-export function findElementById(id) {
+export function findElementById(id: string) {
   return derived(doc, ($doc) => {
     return findById($doc?.pages[get(currentPageIndex)].children, id);
   });
@@ -93,7 +92,7 @@ export function createInsertedElement(type) {
   insertingElement.set(element);
 };
 
-export async function insertElement(closestParentId) {
+export async function insertElement(closestParentId: string) {
   const elementData = get(insertingElement);
   const pageData = get(currentPageData);
   const pageIndex = get(currentPageIndex);

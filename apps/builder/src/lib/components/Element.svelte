@@ -6,9 +6,10 @@
   import ElementControls from "$lib/components/ElementControls.svelte";
   import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
+  import type { ElementType } from "$lib/schema";
 
   // props:
-  export let elementData;
+  export let elementData: ElementType;
   export let gridData;
   export let index: number;
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { ElementType } from "$lib/schema";
   import Element from "$lib/components/Element.svelte";
   import Header from "../components/Header.svelte";
   import {
@@ -36,9 +37,10 @@
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
         return Object.keys($refs).find((key) => {
-          return $refs[key] === el && key !== $insertingElement.id;
+          return $refs[key] === el && key !== $insertingElement?.id;
         });
       }, null);
+
       insertElement(closestParentId);
 
       return;
@@ -61,7 +63,7 @@
 
     const targetElementRef = $refs[targetElementId];
     const selectedSiblingsRefs = [
-      ...($refs[$selectedElementIds[0]]?.parentElement.children ?? []),
+      ...($refs[$selectedElementIds[0]]?.parentElement?.children ?? []),
     ];
     const isTargetSelected = $selectedElementIds.includes(targetElementId);
     const isOneOfSiblings = selectedSiblingsRefs.includes(targetElementRef);
@@ -107,7 +109,7 @@
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
         return Object.keys($refs).find((key) => {
-          return $refs[key] === el && key !== $insertingElement.id;
+          return $refs[key] === el && key !== $insertingElement?.id;
         });
       }, null);
       insertElement(closestParentId);
