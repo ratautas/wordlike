@@ -9,9 +9,9 @@
 [x] move with keyboard arrows
 [x] disable tailwind reset
 [x] improve snap to sides UX
-[ ] snap to grid
 [ ] block resize handles
 [ ] store grid width to json
+[ ] snap to grid
 [ ] add more text types
 [x] fix selecting multiple elements
 [ ] round position before saving to json
@@ -20,8 +20,11 @@
 [ ] background color + overlay
 [ ] padding
 [ ] border + radius
+[ ] re-enable saving
+[ ] local backend
 [ ] add functionalty to de-snap from side
 [ ] add alignment between elements guides
+[ ] tiptap
 
 [ ] mobile
 [ ] preview
@@ -41,25 +44,11 @@
 [ ] undo/redo
 [ ] GIF
 [ ] REM scaling
-[ ] custom code injection
- 
-Element types:
-- Text;
-- Image;
-- Button;
-- Shape;
-- Custom;
-
-- Input (for forms);
-- Icon;
-- Video;
-
-
-- select all elements within selected grid element
-- multiple gird variations - grid.studio, figma dots, vertical lines;
-- draggable popups;
-- zoom level;
-- allow input width/height manually via settings;
+[ ] custom code injection with highlight
+[ ] select all elements within selected grid element
+[ ] multiple gird variations - grid.studio, figma dots, vertical lines;
+[ ] draggable popups;
+[ ] allow input width/height manually via settings;
 
 All elements can be links;
 All elements can have a background color;
