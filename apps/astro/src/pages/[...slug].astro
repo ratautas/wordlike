@@ -7,7 +7,7 @@ const { params, url, redirect } = Astro;
 const { slug } = params;
 const { siteId } = Object.fromEntries(url.searchParams);
 
-const response = await fetch(`http://localhost:5173/public/${siteId}`);
+// const response = await fetch(`http://localhost:5173/public/${siteId}`);
 // const { pages } = await response.json();
 const { pages } = mockData;
 const page = pages.find((page) => page.isHome || page.slug === slug);
