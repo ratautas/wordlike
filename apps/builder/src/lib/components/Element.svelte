@@ -1,12 +1,11 @@
 <script lang="ts">
   import { ref } from "$lib/actions/ref";
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
-  import ElementControls from "$lib/components/ElementControls.svelte";
   import Grid from "$lib/components/Grid.svelte";
   import TextEditor from "$lib/components/TextEditor.svelte";
+  import type { ElementType } from "$lib/schema";
   import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
-  import type { ElementType } from "$lib/schema";
 
   // props:
   export let elementData: ElementType;
@@ -57,9 +56,8 @@
   {:else}
     <!-- else content here -->
   {/if}
-
   {#if isSelected}
-    <ElementControls {elementData} {id} {type} />
+    <slot name="controls" />
   {/if}
 </div>
 

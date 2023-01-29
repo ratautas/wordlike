@@ -2,6 +2,7 @@
   import { ref } from "$lib/actions/ref";
   import Element from "$lib/components/Element.svelte";
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
+  import ElementControls from "$lib/components/ElementControls.svelte";
   import Guides from "$lib/components/Guides.svelte";
   import type { GridElementType } from "$lib/schema";
   import {
@@ -138,8 +139,10 @@
   style:--grid-template-columns={templateColumns}
   bind:this={gridRef}
 >
-  {#each extendedElementData.children as element, index}
-    <Element elementData={element} gridData={gridAreas[index]} {index} />
+  {#each extendedElementData.children as elementData, index}
+    <Element {elementData} {index} gridData={gridAreas[index]}>
+      <ElementControls slot="controls" {elementData} />
+    </Element>
   {/each}
   <div
     class="opacity-0 pointer-events-none grid col-start-2 row-start-2 col-end-[-2] row-end-[-2]"

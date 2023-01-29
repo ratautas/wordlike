@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ElementType } from "$lib/schema";
   import Element from "$lib/components/Element.svelte";
+  import ElementControls from "$lib/components/ElementControls.svelte";
   import Header from "../components/Header.svelte";
   import {
     dragMousePosition,
@@ -196,6 +197,8 @@
 <main class="min-h-screen bg-gray-100">
   <Header />
   {#each $currentPageData.children as elementData, index}
-    <Element {elementData} {index} />
+    <Element {elementData} {index}>
+      <ElementControls slot="controls" {elementData} />
+    </Element>
   {/each}
 </main>
