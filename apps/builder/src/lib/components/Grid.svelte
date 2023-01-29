@@ -4,7 +4,7 @@
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
   import ElementControls from "$lib/components/ElementControls.svelte";
   import Guides from "$lib/components/Guides.svelte";
-  import type { GridElementType } from "$lib/schema";
+  import type { GridElementType } from "@wordlike/nebula";
   import {
     dragDiffX,
     dragDiffY,

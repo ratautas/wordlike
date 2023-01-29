@@ -18,7 +18,7 @@ import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
-import type { ElementType } from '$lib/schema';
+import type { ElementType } from '@wordlike/nebula';
 
 export const DEFAULT_INSERTED_ELEMENT_WIDTH = 300;
 export const DEFAULT_INSERTED_ELEMENT_HEIGHT = 72;

@@ -69,7 +69,7 @@
 
 <script lang="ts">
   import { ELEMENT_TYPES } from "$lib/constants";
-  import type { ElementType, GridElementType } from "$lib/schema";
+  import type { ElementType, GridElementType } from "@wordlike/nebula";
   import {
     dragDiffX,
     dragDiffY,

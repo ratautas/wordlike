@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ElementType } from "$lib/schema";
+  import type { ElementType } from "@wordlike/nebula";
   import Element from "$lib/components/Element.svelte";
   import ElementControls from "$lib/components/ElementControls.svelte";
   import Header from "../components/Header.svelte";

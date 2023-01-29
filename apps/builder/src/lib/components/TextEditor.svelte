@@ -5,7 +5,7 @@
 
   import { Text } from "@wordlike/nebula";
 
-  import type { TextElementType } from "$lib/schema";
+  import type { TextElementType } from "@wordlike/nebula";
 
   // props:
   export let elementData: TextElementType;

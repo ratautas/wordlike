@@ -1,9 +1,10 @@
 <script lang="ts">
+  import type { ElementType } from "@wordlike/nebula";
+
   import { ref } from "$lib/actions/ref";
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
   import Grid from "$lib/components/Grid.svelte";
   import TextEditor from "$lib/components/TextEditor.svelte";
-  import type { ElementType } from "$lib/schema";
   import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
 
