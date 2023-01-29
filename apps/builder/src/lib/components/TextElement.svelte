@@ -14,12 +14,3 @@
     </details>
   {/if}
 </div>
-
-<style lang="scss">
-  .text[contenteditable="true"] {
-    outline: none;
-    &:focus {
-      outline: none;
-    }
-  }
-</style>

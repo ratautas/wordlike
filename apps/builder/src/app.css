@@ -7,10 +7,7 @@ html {
 }
 
 
-[contenteditable="true"] {
+[contenteditable="true"],
+[contenteditable="true"]:focus {
   outline: none;
-
-  &:focus {
-    outline: none;
-  }
 }

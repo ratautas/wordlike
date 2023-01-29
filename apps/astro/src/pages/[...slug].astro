@@ -2,6 +2,17 @@
 import { Text } from "@wordlike/nebula";
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
+
+const { params, url, redirect } = Astro;
+const { slug } = params;
+const { siteId } = Object.fromEntries(url.searchParams);
+
+const response = await fetch(`http://localhost:5173/public/${siteId}`);
+const { pages } = await response.json();
+const page = pages.find((page) => page.isHome || page.slug === slug);
+console.log(page);
+if (!page) return redirect("/404");
+const { title, text } = page;
 ---
 
 <Layout title="Welcome to Astro.">
