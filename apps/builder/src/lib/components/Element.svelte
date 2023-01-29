@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ElementType } from "@wordlike/nebula";
+  import { ref } from "@wordlike/nebula";
 
-  import { ref } from "$lib/actions/ref";
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
   import Grid from "$lib/components/Grid.svelte";
   import TextEditor from "$lib/components/TextEditor.svelte";
@@ -21,13 +21,13 @@
     columnEndIndex,
     columnCount,
   } = gridData ?? {});
-  $: gridArea = gridData
-    ? [rowStart, columnStart, rowEnd, columnEnd].join("/")
-    : null;
   $: rowStart = rowStartIndex + 1;
   $: columnStart = snapLeft ? 1 : columnStartIndex + 1;
   $: rowEnd = rowEndIndex + 1;
   $: columnEnd = snapRight ? columnCount + 2 : columnEndIndex + 1;
+  $: gridArea = gridData
+    ? [rowStart, columnStart, rowEnd, columnEnd].join("/")
+    : null;
 
   $: isSelected = $selectedElementIds.includes(id);
   $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);

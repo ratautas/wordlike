@@ -1,6 +1,8 @@
 <script lang="ts">
-  import type { ElementType } from "@wordlike/nebula";
-  import Element from "$lib/components/Element.svelte";
+  import type { ElementType, GridElementType } from "@wordlike/nebula";
+  import { Grid, Text, ref, ELEMENT_TYPES } from "@wordlike/nebula";
+  // import Text from "$lib/elements/Text.svelte";
+
   import ElementControls from "$lib/components/ElementControls.svelte";
   import Header from "../components/Header.svelte";
   import {
@@ -197,8 +199,22 @@
 <main class="min-h-screen bg-gray-100">
   <Header />
   {#each $currentPageData.children as elementData, index}
-    <Element {elementData} {index}>
-      <ElementControls slot="controls" {elementData} />
-    </Element>
+    <Grid {elementData}>
+      {#each elementData.children as child, index}
+        <div class={`element element--${child.type}`} use:ref={child.id}>
+          {#if child.type === ELEMENT_TYPES.GRID}
+            <!-- TODO: pass / inherit slots: -->
+            <Grid elementData={child} />
+          {:else if child.type === ELEMENT_TYPES.TEXT}
+            <Text elementData={child} />
+            <!-- <TextEditor {elementData} /> -->
+          {:else if child.type === ELEMENT_TYPES.IMAGE}
+            <!-- else if content here -->
+          {/if}
+        </div>
+      {/each}
+      <div slot="plane" class="relative z-[1] [grid-area:1/1/-1/-1]" />
+      <div slot="controls" class="relative z-[2] [grid-area:2/2/-2/-2]" />
+    </Grid>
   {/each}
 </main>

@@ -8,11 +8,49 @@ export const BREAKPOINTS = {
         value: 1224,
     },
     TABLET: {
-        key: 'tabled',
+        key: 'tablet',
         value: 768,
     },
     MOBILE: {
         key: 'mobile',
         value: 375,
+    },
+};
+
+export const ELEMENT_TYPES = {
+    TEXT: 'TEXT',
+    IMAGE: 'IMAGE',
+    GRID: 'GRID',
+};
+
+export const VERTICAL_RESIZE_TYPES = [
+    ELEMENT_TYPES.IMAGE,
+    ELEMENT_TYPES.GRID,
+];
+
+export const DEVICE_DEFAULTS = {
+    desktop: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        paddingX: 24,
+        paddingY: 24,
+    },
+    tablet: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        paddingX: 24,
+        paddingY: 24,
+    },
+    mobile: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        paddingX: 24,
+        paddingY: 24,
     },
 };
