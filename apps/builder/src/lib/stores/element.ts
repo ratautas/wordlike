@@ -3,6 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
+import { refs } from "@wordlike/nebula";
+import type { ElementType } from '@wordlike/nebula';
+
 import {
   dragMousePosition,
   initialMousePosition,
@@ -13,12 +16,10 @@ import {
 } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
 import { getPosition } from "$lib/utils/position";
-import { refs } from '$lib/stores/refs';
 import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
-import type { ElementType } from '@wordlike/nebula';
 
 export const DEFAULT_INSERTED_ELEMENT_WIDTH = 300;
 export const DEFAULT_INSERTED_ELEMENT_HEIGHT = 72;

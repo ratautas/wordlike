@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { ElementType } from "@wordlike/nebula";
+    import type { ElementType } from "@wordlike/nebula/schema";
     import { Element } from "@wordlike/nebula";
 
     import { ref } from "$lib/actions/ref";

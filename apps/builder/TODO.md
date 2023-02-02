@@ -10,6 +10,14 @@
 [x] disable tailwind reset
 [x] improve snap to sides UX
 [ ] astro
+[ ] split nebula to:
+- elements
+- utils
+- schema
+- shared UI (is it needed tho?)
+
+[ ] move tailwind resets to Astro
+
 [ ] add more text types
 [ ] block resize handles
 [ ] store grid width to json
@@ -28,6 +36,7 @@
 [ ] add functionalty to de-snap from side
 [ ] add alignment between elements guides
 [ ] tiptap
+[ ] partytown
 
 [ ] mobile
 [ ] preview
@@ -57,3 +66,7 @@ All elements can be links;
 All elements can have a background color;
 All elements can have a border;
 All elements can have a shadow;
+
+- Grid yra Astro arba Builder failas - kaip sharinami stiliai ir struktūra?
+- Grid'e paskaičiuojamos grid'o pozicijos IR parenkami elementai
+- Parenkami elementai gali būti tie patys su slot'ais arba tiesiog skirtingi pagal kontekstą

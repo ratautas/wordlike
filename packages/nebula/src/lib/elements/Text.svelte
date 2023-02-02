@@ -7,8 +7,6 @@
 
 	let elementRef: HTMLDivElement;
 
-	console.log('text');
-
 	onMount(() => dispatch('mount', elementRef));
 	onDestroy(() => dispatch('destroy'));
 </script>

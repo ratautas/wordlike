@@ -68,7 +68,7 @@
 </script>
 
 <script lang="ts">
-  import type { ElementType, GridElementType } from "@wordlike/nebula";
+  import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
 
   import { ELEMENT_TYPES } from "$lib/constants";
   import {

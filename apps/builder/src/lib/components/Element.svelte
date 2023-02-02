@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ElementType } from "@wordlike/nebula";
+  import type { ElementType } from "@wordlike/nebula/schema";
   import { ref } from "@wordlike/nebula";
 
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";

@@ -55,8 +55,7 @@
 </script>
 
 <script lang="ts">
-	import { DEVICE_DEFAULTS, BREAKPOINTS, ELEMENT_TYPES } from '$lib/constants';
-	import Text from '$lib/elements/Text.svelte';
+	import { DEVICE_DEFAULTS, BREAKPOINTS } from '$lib/constants';
 	import type { GridElementType } from '$lib/schema';
 	import { ref } from '$lib/stores/ref';
 	import { calculateGrid } from '$lib/utils/calculateGrid';
@@ -74,8 +73,6 @@
 		mobileColumns,
 		mobileAreas
 	} = getGridVars(elementData));
-
-	let gridRef;
 </script>
 
 <div
@@ -86,7 +83,6 @@
 	style:--tablet-columns={tabletColumns}
 	style:--mobile-rows={mobileRows}
 	style:--mobile-columns={mobileColumns}
-	bind:this={gridRef}
 	use:ref={elementData.id}
 >
 	{#each elementData.children as child, index}
@@ -97,25 +93,27 @@
 			style:--mobile-area={mobileAreas?.[index]}
 			use:ref={child.id}
 		>
-			{#if child.type === ELEMENT_TYPES.GRID}
-				<!-- TODO: pass / inherit slots: -->
-				<svelte:self elementData={child} />
-			{:else if child.type === ELEMENT_TYPES.TEXT}
-				<Text elementData={child} />
-				<!-- <TextEditor {elementData} /> -->
-			{:else if child.type === ELEMENT_TYPES.IMAGE}
-				<!-- else if content here -->
-			{/if}
+			{#if index === 0 && !!$$slots.el00}<slot name="el00" />{/if}
+			{#if index === 1 && !!$$slots.el01}<slot name="el01" />{/if}
+			{#if index === 2 && !!$$slots.el02}<slot name="el02" />{/if}
+			{#if index === 3 && !!$$slots.el03}<slot name="el03" />{/if}
+			{#if index === 4 && !!$$slots.el04}<slot name="el04" />{/if}
+			{#if index === 5 && !!$$slots.el05}<slot name="el05" />{/if}
+			{#if index === 6 && !!$$slots.el06}<slot name="el06" />{/if}
+			{#if index === 7 && !!$$slots.el07}<slot name="el07" />{/if}
+			{#if index === 8 && !!$$slots.el08}<slot name="el08" />{/if}
+			{#if index === 9 && !!$$slots.el09}<slot name="el09" />{/if}
 		</div>
 	{/each}
-	<slot name="grid-controls" />
+	<slot name="plane" />
+	<slot name="controls" />
 </div>
 
 <style lang="scss">
 	@use 'sass:math';
 	$size: 8px;
 
-	:global(.element) {
+	.element {
 		z-index: 3;
 		position: relative;
 		align-self: start;
@@ -127,7 +125,7 @@
 			grid-area: var(--mobile-area);
 		}
 	}
-	:global(.grid) {
+	.grid {
 		display: grid;
 		position: relative;
 		grid-template-rows: var(--desktop-rows);

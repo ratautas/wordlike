@@ -1,24 +1,21 @@
 ---
-import { Grid } from "@wordlike/nebula";
-import Layout from '../layouts/Layout.astro';
-import mockData from '../mockData.json';
+import AstroGrid from "../components/AstroGrid.astro";
+import Layout from "../layouts/Layout.astro";
+import mockData from "../mockData.json";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
 const { siteId } = Object.fromEntries(url.searchParams);
 
-// const response = await fetch(`http://localhost:5173/public/${siteId}`);
-// const { pages } = await response.json();
-const { pages } = mockData;
+const response = await fetch(`http://localhost:5173/public/${siteId}`);
+const { pages } = await response.json();
+// const { pages } = mockData;
 const page = pages.find((page) => page.isHome || page.slug === slug);
 if (!page) return redirect("/404");
 ---
 
 <Layout title="Welcome to Astro.">
-	<main>
-		{page.children.map((elementData) => <Grid {elementData} />)}
-	</main>
+  <main>
+    {page.children.map((elementData) => <AstroGrid {elementData} />)}
+  </main>
 </Layout>
-
-<style>
-</style>

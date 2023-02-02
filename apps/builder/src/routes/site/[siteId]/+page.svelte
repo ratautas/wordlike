@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { ElementType, GridElementType } from "@wordlike/nebula";
-  import { Grid, Text, ref, ELEMENT_TYPES } from "@wordlike/nebula";
+  import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
+  import { Grid, Text, ref, refs, ELEMENT_TYPES } from "@wordlike/nebula";
   // import Text from "$lib/elements/Text.svelte";
 
   import ElementControls from "$lib/components/ElementControls.svelte";
@@ -29,7 +29,7 @@
     updateElementsSnap,
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
-  import { refs } from "$lib/stores/refs";
+  import BuilderElement from "$lib/components/BuilderElement.svelte";
 
   function handleMouseDown(event: MouseEvent) {
     const elementsOnPath = event.composedPath().slice(0, -4);
@@ -48,9 +48,9 @@
       return;
     }
 
-    const refId = elementsOnPath.reduce((acc, el) => {
+    const refId = elementsOnPath.reduce((acc, elOnPath) => {
       if (!!acc) return acc;
-      return Object.keys($refs).find((key) => $refs[key] === el);
+      return Object.keys($refs).find((key) => $refs[key] === elOnPath);
     }, null);
 
     const [targetElementId, direction] = refId?.split("::") ?? [];
@@ -114,7 +114,6 @@
       }, null);
       insertElement(closestParentId);
     } else if ($selectedElementIds.length > 0) {
-      console.log("update?");
       updateElementsPosition($dragDiffX, $dragDiffY);
     }
 
@@ -198,23 +197,7 @@
 
 <main class="min-h-screen bg-gray-100">
   <Header />
-  {#each $currentPageData.children as elementData, index}
-    <Grid {elementData}>
-      {#each elementData.children as child, index}
-        <div class={`element element--${child.type}`} use:ref={child.id}>
-          {#if child.type === ELEMENT_TYPES.GRID}
-            <!-- TODO: pass / inherit slots: -->
-            <Grid elementData={child} />
-          {:else if child.type === ELEMENT_TYPES.TEXT}
-            <Text elementData={child} />
-            <!-- <TextEditor {elementData} /> -->
-          {:else if child.type === ELEMENT_TYPES.IMAGE}
-            <!-- else if content here -->
-          {/if}
-        </div>
-      {/each}
-      <div slot="plane" class="relative z-[1] [grid-area:1/1/-1/-1]" />
-      <div slot="controls" class="relative z-[2] [grid-area:2/2/-2/-2]" />
-    </Grid>
+  {#each $currentPageData.children as elementData}
+    <BuilderElement {elementData} />
   {/each}
 </main>

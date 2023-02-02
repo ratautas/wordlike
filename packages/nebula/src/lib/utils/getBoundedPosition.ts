@@ -1,5 +1,5 @@
 import { DEFAULT_DESKTOP_GRID_WIDTH } from "$lib/constants";
-import type { ElementType, GridElementType } from "@wordlike/nebula";
+import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
 
 export const MIN_WIDTH = 24;
 export const MIN_HEIGHT = 24;
