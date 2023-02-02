@@ -15,7 +15,7 @@ import {
   resizeDirection,
 } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
-import { getBoundedPosition } from "$lib/utils/getBoundedPosition";
+import { elagetBoundedElement } from "$lib/utils/elagetBoundedElement";
 import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { getGridElementsPositions } from "$lib/utils/getGridElementsPositions";
@@ -168,12 +168,13 @@ export async function updateElementsPosition(diffX: number | null, diffY: number
 
   function boundElementChild(parent, element) {
     if (elementIds.includes(element.id)) {
-      return getBoundedPosition({
+      return elagetBoundedElement({
         elementData: element,
         gridElementData: parent,
         diffX,
         diffY,
         device,
+        resizeDirection: get(resizeDirection),
       });
     }
 

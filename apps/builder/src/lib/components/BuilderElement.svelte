@@ -5,10 +5,16 @@
 
     import { refAction } from "$lib/actions/ref";
     import TextEditor from "$lib/components/TextEditor.svelte";
+    import ElementControls from "$lib/components/ElementControls.svelte";
     import { ELEMENT_TYPES } from "$lib/constants";
     import { selectedElementIds, insertingElement } from "$lib/stores/element";
     import { deviceKey } from "$lib/stores/resolution";
-    import { dragDiffX, dragDiffY, isDragging } from "$lib/stores/drag";
+    import {
+        dragDiffX,
+        dragDiffY,
+        isDragging,
+        resizeDirection,
+    } from "$lib/stores/drag";
     import { getGridElementsPositions } from "$lib/utils/getGridElementsPositions";
 
     export let elementData: ElementType;
@@ -23,6 +29,7 @@
         diffX: $dragDiffX,
         diffY: $dragDiffY,
         device: $deviceKey,
+        resizeDirection: $resizeDirection,
     });
     $: ({ gridCssVars, elementCssVars } =
         isGrid && getGridVars(gridElementData));
@@ -30,14 +37,13 @@
 
 {#if isGrid}
     <div class="grid" style={gridCssVars}>
-        {#each gridElementData.children as child, i}
+        {#each gridElementData.children as childElementData, i}
             <div
                 class="element"
-                id={child.id}
                 style={elementCssVars[i]}
-                use:refAction={child.id}
+                use:refAction={childElementData.id}
             >
-                <svelte:self elementData={child} />
+                <svelte:self elementData={childElementData} />
                 <!-- controls here, maybe? -->
             </div>
         {/each}
@@ -50,5 +56,5 @@
     <!-- else content here -->
 {/if}
 {#if isSelected}
-    <slot name="controls" />
+    <ElementControls {elementData} />
 {/if}

@@ -305,5 +305,3 @@ export type PageType = z.infer<typeof PageType>;
 export type DocType = z.infer<typeof DocType>;
 
 export default doc;
-
-console.log('ok');

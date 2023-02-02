@@ -8,14 +8,14 @@ export type GetBoundedPositionParams = {
     elementData: ElementType;
     diffX: number | null;
     diffY: number | null;
-    resizeDirection?: string;
+    resizeDirection: string | null;
     gridElementData: GridElementType;
     device: DeviceKeyType;
 };
 
 // This function is used to limit position bounds to the grid
 // TODO: prevent resizing to be smaller than inner content
-export function getBoundedPosition({
+export function elagetBoundedElement({
     elementData,
     gridElementData,
     diffX,
@@ -24,7 +24,6 @@ export function getBoundedPosition({
     device,
 }: GetBoundedPositionParams): ElementType {
     const initialPosition = elementData[device];
-    console.log(device);
     const gridWidth = gridElementData[device]?.width ?? DEVICE_DEFAULTS[device].width;
     const position = { ...initialPosition };
 
@@ -56,7 +55,12 @@ export function getBoundedPosition({
 
         position.y = Math.min(minY, maxY);
         position.height = Math.min(minHeight, maxHeight);
-        if (resizeDirection === "N") return position;
+        if (resizeDirection === "N") {
+            return {
+                ...elementData,
+                [device]: position
+            }
+        }
     }
 
     if (resizeDirection.includes("E")) {
@@ -64,14 +68,24 @@ export function getBoundedPosition({
         const maxWidth = gridWidth - initialPosition.x;
 
         position.width = Math.min(minWidth, maxWidth);
-        if (resizeDirection === "E") return position;
+        if (resizeDirection === "E") {
+            return {
+                ...elementData,
+                [device]: position
+            }
+        }
     }
 
     if (resizeDirection.includes("S")) {
         const minHeight = Math.max(initialPosition.height + diffY, MIN_HEIGHT);
 
         position.height = Math.min(minHeight, gridWidth - initialPosition.y);
-        if (resizeDirection === "S") return position;
+        if (resizeDirection === "S") {
+            return {
+                ...elementData,
+                [device]: position
+            }
+        }
     }
 
     if (resizeDirection.includes("W")) {
@@ -82,7 +96,12 @@ export function getBoundedPosition({
 
         position.x = Math.min(minX, maxX);
         position.width = Math.min(minWidth, maxWidth);
-        if (resizeDirection === "W") return position;
+        if (resizeDirection === "W") {
+            return {
+                ...elementData,
+                [device]: position
+            }
+        }
     }
 
     return {
