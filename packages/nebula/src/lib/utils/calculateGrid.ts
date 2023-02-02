@@ -27,7 +27,7 @@ export function calculateGrid({
             return acc;
         }, {
             rows: new Set([0]),
-            columns: new Set([0, elementData[device] ?? DEVICE_DEFAULTS[device]]),
+            columns: new Set([0, elementData[device]?.width ?? DEVICE_DEFAULTS[device].width]),
             positions: [],
         });
 
@@ -41,8 +41,8 @@ export function calculateGrid({
         const rowStartIndex = gridRows.indexOf(y) + 2;
         const rowEndIndex = gridRows.indexOf(y + height) + 2;
         const columnCount = gridColumns.length;
-        const columnStartIndex = snapLeft ? 1 : gridColumns.indexOf(x) + 1;
-        const columnEndIndex = snapRight ? columnCount + 2 : gridColumns.indexOf(x + width) + 1;
+        const columnStartIndex = snapLeft ? 1 : gridColumns.indexOf(x) + 2;
+        const columnEndIndex = snapRight ? columnCount + 2 : gridColumns.indexOf(x + width) + 2;
         return [rowStartIndex, columnStartIndex, rowEndIndex, columnEndIndex].join("/");
     });
 
