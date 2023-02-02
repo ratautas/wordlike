@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import { refs } from "@wordlike/nebula";
 import type { ElementType } from '@wordlike/nebula';
+import { refStore } from "$lib/actions/ref";
 
 import {
   dragMousePosition,
@@ -15,9 +15,10 @@ import {
   resizeDirection,
 } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
-import { getPosition } from "$lib/utils/position";
+import { getBoundedPosition } from "$lib/utils/getBoundedPosition";
 import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
+import { getGridElementsPositions } from "$lib/utils/getGridElementsPositions";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
 
@@ -99,10 +100,10 @@ export async function insertElement(closestParentId: string) {
   const elementData = get(insertingElement);
   const pageData = get(currentPageData);
   const pageIndex = get(currentPageIndex);
-  const $refs = get(refs);
+  const $refStore = get(refStore);
   const parentIndex = pageData.children.findIndex((el) => el.id === closestParentId);
-  const closestParentRef = $refs[closestParentId];
-  const elementRef = $refs[elementData.id];
+  const closestParentRef = $refStore[closestParentId];
+  const elementRef = $refStore[elementData.id];
   const activeElement = elementRef?.querySelector("[contenteditable]");
   const parentRect = closestParentRef.getBoundingClientRect();
   // This is a hack, we should not rely on the first child
@@ -162,35 +163,39 @@ export async function deleteSelectedElements() {
 };
 
 export async function updateElementsPosition(diffX: number | null, diffY: number | null) {
-  function mapChildren(children: ElementType[]) {
-    return children?.map((element) => {
-      if (elementIds.includes(element.id)) {
-        const position = getPosition({
-          elementData: element,
-          diffX,
-          diffY,
-          resizeDirection: get(resizeDirection),
-          blockWidth: element.desktop.width,
-        });
+  const elementIds = get(selectedElementIds);
+  const device = get(deviceKey);
 
-        return {
-          ...element,
-          [get(deviceKey)]: position,
-        };
-      }
+  function boundElementChild(parent, element) {
+    if (elementIds.includes(element.id)) {
+      return getBoundedPosition({
+        elementData: element,
+        gridElementData: parent,
+        diffX,
+        diffY,
+        device,
+      });
+    }
+
+    if (element.children) {
       return {
         ...element,
-        children: mapChildren(element.children),
-      };
-    });
+        children: element.children.map((child) => boundElementChild(element, child)),
+      }
+    }
+
+    return element;
   };
 
-  const elementIds = get(selectedElementIds);
   const pageIndex = get(currentPageIndex);
 
   doc.update(($doc) => {
-    $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
-
+    $doc.pages[pageIndex].children = $doc.pages[pageIndex].children.map((element) => {
+      return {
+        ...element,
+        children: element.children.map((child) => boundElementChild(element, child)),
+      }
+    });
     return $doc;
   });
 
@@ -262,17 +267,17 @@ export function recalculatePositions() {
   function mapChildren(el) {
     if (el.type !== ELEMENT_TYPES.GRID) return el;
 
-    const $refs = get(refs);
+    const $refStore = get(refStore);
 
-    if (!Object.keys($refs).length) return el;
+    if (!Object.keys($refStore).length) return el;
 
     console.log('recalc');
 
     return {
       ...el,
       children: el.children?.map((element: ElementType) => {
-        const elementRef = $refs[element.id];
-        const gridRef = $refs[`${el.id}::GRID`];
+        const elementRef = $refStore[element.id];
+        const gridRef = $refStore[`${el.id}::GRID`];
         const $deviceKey = get(deviceKey);
         const position = element[$deviceKey];
         const { x, width, snapLeft, snapRight } = position;

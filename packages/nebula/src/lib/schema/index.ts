@@ -259,6 +259,8 @@ export const DeviceSchema = z.object({
   height: z.number(),
   snapLeft: z.boolean().optional(),
   snapRight: z.boolean().optional(),
+  paddingX: z.number().optional(),
+  paddingY: z.number().optional(),
 });
 
 export const DeviceKeyType = z.enum(['desktop', 'tablet', 'mobile'])

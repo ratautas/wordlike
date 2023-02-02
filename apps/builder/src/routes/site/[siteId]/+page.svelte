@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
-  import { Grid, Text, ref, refs, ELEMENT_TYPES } from "@wordlike/nebula";
-  // import Text from "$lib/elements/Text.svelte";
+  import { refStore } from "$lib/actions/ref";
 
   import ElementControls from "$lib/components/ElementControls.svelte";
   import Header from "../components/Header.svelte";
@@ -38,8 +37,8 @@
       elementsOnPath.reverse();
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
-        return Object.keys($refs).find((key) => {
-          return $refs[key] === el && key !== $insertingElement?.id;
+        return Object.keys($refStore).find((key) => {
+          return $refStore[key] === el && key !== $insertingElement?.id;
         });
       }, null);
 
@@ -50,7 +49,7 @@
 
     const refId = elementsOnPath.reduce((acc, elOnPath) => {
       if (!!acc) return acc;
-      return Object.keys($refs).find((key) => $refs[key] === elOnPath);
+      return Object.keys($refStore).find((key) => $refStore[key] === elOnPath);
     }, null);
 
     const [targetElementId, direction] = refId?.split("::") ?? [];
@@ -61,9 +60,9 @@
       resizeDirection.set(direction);
     }
 
-    const targetElementRef = $refs[targetElementId];
+    const targetElementRef = $refStore[targetElementId];
     const selectedSiblingsRefs = [
-      ...($refs[$selectedElementIds[0]]?.parentElement?.children ?? []),
+      ...($refStore[$selectedElementIds[0]]?.parentElement?.children ?? []),
     ];
     const isTargetSelected = $selectedElementIds.includes(targetElementId);
     const isOneOfSiblings = selectedSiblingsRefs.includes(targetElementRef);
@@ -108,8 +107,8 @@
       elementsOnPath.reverse();
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
-        return Object.keys($refs).find((key) => {
-          return $refs[key] === el && key !== $insertingElement?.id;
+        return Object.keys($refStore).find((key) => {
+          return $refStore[key] === el && key !== $insertingElement?.id;
         });
       }, null);
       insertElement(closestParentId);
@@ -121,7 +120,7 @@
       const snap = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
 
-        return Object.entries($refs).reduce((dir, [key, $ref]) => {
+        return Object.entries($refStore).reduce((dir, [key, $ref]) => {
           if (!!dir) return dir;
           const [id, control, direction] = key.split("::");
           if (control !== "OVERSHOOT") return dir;

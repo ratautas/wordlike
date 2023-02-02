@@ -1,16 +1,23 @@
-import {
-  setElementRef,
-  deleteElementRef,
-} from "$lib/stores/refs";
+import { writable } from 'svelte/store';
 
-type ElementRef = HTMLElement | null;
+type ElementRef = HTMLElement;
+type Refs = Record<string, ElementRef>;
 
-export function ref(elementRef: ElementRef, id: string) {
-  setElementRef(id, elementRef);
+export const refStore = writable<Refs>({});
+
+export function refAction(elementRef: ElementRef, id: string) {
+  refStore.update(($refStore) => {
+    $refStore[id] = elementRef;
+
+    return $refStore;
+  });
 
   return {
     destroy() {
-      deleteElementRef(id);
+      refStore.update(($refStore) => {
+        delete $refStore[id];
+        return $refStore;
+      });
     },
   };
 };

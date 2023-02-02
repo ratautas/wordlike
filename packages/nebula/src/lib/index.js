@@ -3,4 +3,4 @@ export { default as Text } from './elements/Text.svelte';
 export { default as Grid } from './elements/Grid.svelte';
 // export * from './schema';
 export * from './constants';
-export { ref, refs } from './stores/ref';
+export { getGridVars } from './utils/getGridVars';

@@ -1,13 +1,12 @@
-import { getBoundedPosition } from "$lib/utils/getBoundedPosition";
 import { DEVICE_DEFAULTS } from "$lib/constants";
-import type { ElementType, GridElementType } from "$lib/schema";
+import type { DeviceKeyType, ElementType, GridElementType } from "$lib/schema";
 
 export const MIN_WIDTH = 24;
 export const MIN_HEIGHT = 24;
 
 export type GridCalculationParams = {
     elementData: GridElementType;
-    device: string; // TODO: enum
+    device: DeviceKeyType;
 };
 
 export function calculateGrid({
@@ -30,8 +29,7 @@ export function calculateGrid({
             rows: new Set([0]),
             columns: new Set([0, elementData[device] ?? DEVICE_DEFAULTS[device]]),
             positions: [],
-        }
-        );
+        });
 
     const gridRows = [...rows].sort((a, b) => a - b);
     const gridColumns = [...columns].sort((a, b) => a - b);
@@ -43,42 +41,36 @@ export function calculateGrid({
         const rowStartIndex = gridRows.indexOf(y) + 2;
         const rowEndIndex = gridRows.indexOf(y + height) + 2;
         const columnCount = gridColumns.length;
-        const columnStartIndex = snapLeft ? 1 : gridColumns.indexOf(x) + 2;
-        const columnEndIndex = snapRight ? columnCount + 2 : gridColumns.indexOf(x + width) + 2;
+        const columnStartIndex = snapLeft ? 1 : gridColumns.indexOf(x) + 1;
+        const columnEndIndex = snapRight ? columnCount + 2 : gridColumns.indexOf(x + width) + 1;
         return [rowStartIndex, columnStartIndex, rowEndIndex, columnEndIndex].join("/");
     });
 
     const { gridTemplateRows } = gridRows
         .filter((i) => i > 0)
-        .reduce(
-            (acc, row) => {
-                const currentRow = row - acc.previousRow;
-                return {
-                    gridTemplateRows: [...acc.gridTemplateRows, currentRow],
-                    previousRow: acc.previousRow + currentRow,
-                };
-            },
-            {
-                gridTemplateRows: [],
-                previousRow: 0,
-            }
-        );
+        .reduce((acc, row) => {
+            const currentRow = row - acc.previousRow;
+            return {
+                gridTemplateRows: [...acc.gridTemplateRows, currentRow],
+                previousRow: acc.previousRow + currentRow,
+            };
+        }, {
+            gridTemplateRows: [],
+            previousRow: 0,
+        });
 
     const { gridTemplateColumns } = gridColumns
         .filter((i) => i > 0)
-        .reduce(
-            (acc, column) => {
-                const currentColumn = column - acc.previousColumn;
-                return {
-                    gridTemplateColumns: [...acc.gridTemplateColumns, currentColumn],
-                    previousColumn: acc.previousColumn + currentColumn,
-                };
-            },
-            {
-                gridTemplateColumns: [],
-                previousColumn: 0,
-            }
-        );
+        .reduce((acc, column) => {
+            const currentColumn = column - acc.previousColumn;
+            return {
+                gridTemplateColumns: [...acc.gridTemplateColumns, currentColumn],
+                previousColumn: acc.previousColumn + currentColumn,
+            };
+        }, {
+            gridTemplateColumns: [],
+            previousColumn: 0,
+        });
 
     return { gridAreas, gridHeight, gridTemplateRows, gridTemplateColumns };
 };

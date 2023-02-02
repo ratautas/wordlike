@@ -1,5 +1,5 @@
 ---
-import AstroGrid from "../components/AstroGrid.astro";
+import type { ElementType, PageType } from "@wordlike/nebula/package/schema";
 import AstroElement from "../components/AstroElement.astro";
 import Layout from "../layouts/Layout.astro";
 
@@ -10,13 +10,16 @@ const { siteId } = Object.fromEntries(url.searchParams);
 const response = await fetch(`http://localhost:5173/public/${siteId}`);
 const { pages } = await response.json();
 // const { pages } = mockData;
-const page = pages.find((page) => page.isHome || page.slug === slug);
+const page = pages.find((page: PageType) => page.isHome || page.slug === slug);
 if (!page) return redirect("/404");
 ---
 
 <Layout title="Welcome to Astro.">
   <main>
-    <!-- {page.children.map((elementData) => <AstroGrid {elementData} />)} -->
-    {page.children.map((elementData) => <AstroElement {elementData} />)}
+    {
+      page.children.map((elementData: ElementType) => (
+        <AstroElement {elementData} />
+      ))
+    }
   </main>
 </Layout>

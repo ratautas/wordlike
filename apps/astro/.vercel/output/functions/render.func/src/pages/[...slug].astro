@@ -1,7 +1,7 @@
 ---
 import AstroGrid from "../components/AstroGrid.astro";
+import AstroElement from "../components/AstroElement.astro";
 import Layout from "../layouts/Layout.astro";
-import mockData from "../mockData.json";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
@@ -16,6 +16,7 @@ if (!page) return redirect("/404");
 
 <Layout title="Welcome to Astro.">
   <main>
-    {page.children.map((elementData) => <AstroGrid {elementData} />)}
+    <!-- {page.children.map((elementData) => <AstroGrid {elementData} />)} -->
+    {page.children.map((elementData) => <AstroElement {elementData} />)}
   </main>
 </Layout>

@@ -1,45 +1,22 @@
 ---
-import { Grid } from "@wordlike/nebula";
+import { getGridVars } from "@wordlike/nebula";
 import AstroElement from "../components/AstroElement.astro";
 
 const { elementData } = Astro.props;
 const { children } = elementData ?? {};
-
-/**
- * This is quite embarassing, but currently it's the only way to proceed to have nested islands.
- * We need to know what data to pass to each elemenet.
- *
- * 1. Astro does not allow dynamic prop names
- * https://github.com/withastro/astro/issues/5066
- *
- * 2. We cannot use Svelte's slot props in Astro
- *
- * 3. Svelte does not allow dynamic prop names as well:/
- * https://github.com/sveltejs/svelte/issues/3480
- *
- * So the only current workaround is manually putting down indexes
- */
+const { gridCssVars, elementCssVars } = getGridVars(elementData);
 ---
 
-<Grid {elementData}>
-    {children[0] && <AstroElement slot="el00" elementData={children[0]} />}
-    {children[1] && <AstroElement slot="el01" elementData={children[1]} />}
-    {children[2] && <AstroElement slot="el02" elementData={children[2]} />}
-    {children[3] && <AstroElement slot="el03" elementData={children[3]} />}
-    {children[4] && <AstroElement slot="el04" elementData={children[4]} />}
-    {children[5] && <AstroElement slot="el05" elementData={children[5]} />}
-    {children[6] && <AstroElement slot="el06" elementData={children[6]} />}
-    {children[7] && <AstroElement slot="el07" elementData={children[7]} />}
-    {children[8] && <AstroElement slot="el08" elementData={children[8]} />}
-    {children[9] && <AstroElement slot="el09" elementData={children[9]} />}
-    {children[10] && <AstroElement slot="el10" elementData={children[10]} />}
-    {children[11] && <AstroElement slot="el11" elementData={children[11]} />}
-    {children[12] && <AstroElement slot="el12" elementData={children[12]} />}
-    {children[13] && <AstroElement slot="el13" elementData={children[13]} />}
-    {children[14] && <AstroElement slot="el14" elementData={children[14]} />}
-    {children[15] && <AstroElement slot="el15" elementData={children[15]} />}
-    {children[16] && <AstroElement slot="el16" elementData={children[16]} />}
-    {children[17] && <AstroElement slot="el17" elementData={children[17]} />}
-    {children[18] && <AstroElement slot="el18" elementData={children[18]} />}
-    {children[19] && <AstroElement slot="el19" elementData={children[19]} />}
-</Grid>
+<div class="grid" style={gridCssVars}>
+    {
+        children.map((child, i) => (
+            <div class="element" style={elementCssVars[i]}>
+                <AstroElement elementData={child} />
+            </div>
+        ))
+    }
+</div>
+
+<style lang="scss">
+    @import "@wordlike/nebula/package/style/grid.css";
+</style>

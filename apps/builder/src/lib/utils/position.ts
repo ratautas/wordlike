@@ -4,15 +4,23 @@ import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
 export const MIN_WIDTH = 24;
 export const MIN_HEIGHT = 24;
 
+export type GetPositionParams = {
+  elementData: ElementType;
+  diffX?: number;
+  diffY?: number;
+  resizeDirection?: string;
+  blockWidth?: number;
+};
+
 // This function is used to limit position bounds to the grid
 // TODO: prevent resizing to be smaller than inner content
-export function getPosition({
+export function getBoundedPosition({
   elementData,
   diffX,
   diffY,
   resizeDirection,
   blockWidth = DEFAULT_GRID_MAX_WIDTH
-}) {
+}: GetPositionParams) {
   const { desktop } = elementData;
 
   const position = { ...desktop };
@@ -73,18 +81,7 @@ export function getPosition({
   return position;
 };
 
-export type GridData = {
-  rows: Set<number>;
-  columns: Set<number>;
-  positions: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  }[];
-};
-
-export function calculateGrid<GridData>(
+export function calculateGrid(
   gridElementData,
   dragDiffX,
   dragDiffY,
@@ -95,7 +92,7 @@ export function calculateGrid<GridData>(
     if (!element) return acc;
     const isElementDragged = selectedElementIds.includes(element?.id);
     const { x, y, width, height } = isElementDragged
-      ? getPosition({
+      ? getBoundedPosition({
         elementData: element,
         diffX: dragDiffX,
         diffY: dragDiffY,

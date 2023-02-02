@@ -1,25 +1,24 @@
 ---
-import { Text } from "@wordlike/nebula";
-import AstroGrid from "./AstroGrid.astro";
+import { Text, getGridVars } from "@wordlike/nebula";
+import type { ElementType } from "@wordlike/nebula/package/schema";
+import "@wordlike/nebula/package/style/grid.css";
 
 const { elementData } = Astro.props;
-const { type } = elementData ?? {};
-
-/**
- * This is quite embarassing, but currently it's the only way to proceed to have nested islands.
- * We need to know what data to pass to each elemenet.
- *
- * 1. Astro does not allow dynamic prop names
- * https://github.com/withastro/astro/issues/5066
- *
- * 2. We cannot use Svelte's slot props in Astro
- *
- * 3. Svelte does not allow dynamic prop names as well:/
- * https://github.com/sveltejs/svelte/issues/3480
- *
- * So the only current workaround is manually putting down indexes
- */
+const { children, type } = elementData ?? {};
+const { gridCssVars, elementCssVars } =
+    type === "GRID" && getGridVars(elementData);
 ---
 
-{type === "GRID" && <AstroGrid {elementData} />}
+{
+    type === "GRID" && (
+        <div class="grid" style={gridCssVars}>
+            {children.map((child: ElementType, i: number) => (
+                <div class="element" style={elementCssVars[i]}>
+                    <Astro.self elementData={child} />
+                </div>
+            ))}
+        </div>
+    )
+}
+
 {type === "TEXT" && <Text {elementData} client:load />}
