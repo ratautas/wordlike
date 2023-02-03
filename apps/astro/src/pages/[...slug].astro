@@ -6,7 +6,12 @@ import mockData from "../mockData.json";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
-const { siteId } = Object.fromEntries(url.searchParams);
+// try to get id via query params
+let { siteId } = Object.fromEntries(url.searchParams);
+if (!siteId) {
+  // try to get id via subdomain:
+  [siteId] = url.hostname.split(".");
+}
 
 const response = await fetch(
   `https://wordlike-builder.vercel.app/public/${siteId}`
