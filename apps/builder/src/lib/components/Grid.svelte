@@ -17,7 +17,7 @@
     mouseMoveComposedPath,
   } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
-  import { deviceKey } from "$lib/stores/resolution";
+  import { deviceKey } from "$lib/stores/device";
   import { calculateGrid } from "$lib/utils/position";
 
   // props:

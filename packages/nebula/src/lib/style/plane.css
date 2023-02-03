@@ -13,6 +13,7 @@
     grid-area: var(--desktop-area);
 }
 
+/* 
 @media screen and (max-width: 1024px) {
     .plane {
         grid-template-rows: var(--tablet-rows);
@@ -23,6 +24,7 @@
         grid-area: var(--tablet-area);
     }
 }
+*/
 
 @media screen and (max-width: 768px) {
     .plane {

@@ -16,7 +16,7 @@ import {
 } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
 import { getBoundedElement } from "$lib/utils/getBoundedElement";
-import { deviceKey } from '$lib/stores/resolution';
+import { deviceKey } from '$lib/stores/device';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';

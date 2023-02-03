@@ -16,6 +16,7 @@
 [ ] block resize handles
 [ ] store grid width to json
 [ ] snap to grid
+[ ] figure out select text vs drag
 [ ] drop on click insertion is not working correctly
 [x] fix selecting multiple elements
 [ ] move schmeas to separate package

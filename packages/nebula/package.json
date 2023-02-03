@@ -37,6 +37,9 @@
     ".": "./package/index.js",
     "./style/plane.css": {
       "import": "./package/style/plane.css"
+    },
+    "./style/preflight.css": {
+      "import": "./package/style/preflight.css"
     }
   },
   "peerDependencies": {

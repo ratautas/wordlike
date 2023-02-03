@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "@wordlike/nebula/style/preflight.css";
     import "@wordlike/nebula/style/plane.css";
     import type { ElementType } from "@wordlike/nebula/package/schema";
     import { getGridVars, ELEMENT_TYPES } from "@wordlike/nebula";
@@ -9,7 +10,7 @@
     import SideOvershoots from "$lib/components/SideOvershoots.svelte";
     import TextEditor from "$lib/components/TextEditor.svelte";
     import { selectedElementIds, insertingElement } from "$lib/stores/element";
-    import { deviceKey } from "$lib/stores/resolution";
+    import { deviceKey } from "$lib/stores/device";
     import {
         dragDiffX,
         dragDiffY,

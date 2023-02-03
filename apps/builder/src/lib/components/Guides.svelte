@@ -77,11 +77,8 @@
     isDragging,
     isInserting,
   } from "$lib/stores/drag";
-  import {
-    selectedElementIds,
-    selectedElementsDataMap,
-  } from "$lib/stores/element";
-  import { deviceKey } from "$lib/stores/resolution";
+  import { selectedElementsDataMap } from "$lib/stores/element";
+  import { deviceKey } from "$lib/stores/device";
   import { getBoundedElement } from "$lib/utils/getBoundedElement";
 
   // props:

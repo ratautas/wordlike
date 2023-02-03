@@ -2,7 +2,7 @@
 import { calculateGrid } from '$lib/utils/calculateGrid';
 import { getTemplateRows } from '$lib/utils/getTemplateRows';
 import { getTemplateColumns } from '$lib/utils/getTemplateColumns';
-import { BREAKPOINTS } from '$lib/constants';
+import { DEVICE_KEYS } from '$lib/constants';
 import type { DeviceKeyType, GridElementType } from '$lib/schema';
 
 interface GridVars {
@@ -11,30 +11,29 @@ interface GridVars {
 }
 
 export function getGridVars(elementData: GridElementType): GridVars {
-    return Object.values(BREAKPOINTS).reduce((acc, breakpoint,) => {
-        const device = breakpoint.key as DeviceKeyType;
+    return Object.values(DEVICE_KEYS).reduce((acc, deviceKey) => {
         const { gridTemplateRows, gridTemplateColumns, gridAreas } = calculateGrid({
             elementData,
-            device
+            device: deviceKey
         });
 
         const templateRows = getTemplateRows({
             elementData,
             gridTemplateRows,
-            device
+            device: deviceKey
         });
 
         const templateColumns = getTemplateColumns({
             elementData,
             gridTemplateColumns,
-            device
+            device: deviceKey
         });
 
-        acc.gridCssVars += `--${device}-rows: ${templateRows}; --${device}-columns: ${templateColumns};`;
+        acc.gridCssVars += `--${deviceKey}-rows: ${templateRows}; --${deviceKey}-columns: ${templateColumns};`;
 
         gridAreas?.forEach((area, index) => {
             acc.elementCssVars[index] ??= '';
-            acc.elementCssVars[index] += `--${device}-area: ${area};`;
+            acc.elementCssVars[index] += `--${deviceKey}-area: ${area};`;
         });
 
         return acc;

@@ -263,7 +263,11 @@ export const DeviceSchema = z.object({
   paddingY: z.number().optional(),
 });
 
-export const DeviceKeyType = z.enum(['desktop', 'tablet', 'mobile'])
+export const DeviceKeyType = z.enum([
+  'desktop',
+  // 'tablet',
+  'mobile'
+])
 export const DeviceRecordType = z.record(DeviceKeyType, DeviceSchema);
 
 export const ElementType = z.object({

@@ -1,5 +1,4 @@
 ---
-import "@wordlike/nebula/style/plane.css";
 import { Text, getGridVars } from "@wordlike/nebula";
 import type { ElementType } from "@wordlike/nebula/package/schema";
 
@@ -21,4 +20,4 @@ const { gridCssVars, elementCssVars } =
     )
 }
 
-{type === "TEXT" && <Text {elementData} client:load />}
+{type === "TEXT" && <Text {elementData} />}
