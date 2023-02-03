@@ -12,6 +12,7 @@
     diffY: number | null;
     resizeDirection: string | null;
     elementData: ElementType;
+    device: DeviceKeyType;
   };
 
   export function getGuideMap({
@@ -27,28 +28,21 @@
     diffY,
     resizeDirection,
     elementData,
+    device,
   }: GuideMapParams) {
     return rowArray.map((_: boolean, row: number) => {
       return columnArray.map((_: boolean, col: number) => {
         if (!isDragging && !isInserting) return false;
-
         return Object.entries(selectedElementsDataMap).some(
           ([_, selectedElementData]) => {
-            const { x, y, width, height, type } = selectedElementData
-              ? getPosition({
-                  elementData: selectedElementData,
-                  diffX,
-                  diffY,
-                  resizeDirection,
-                  blockWidth: elementData?.desktop?.width,
-                })
-              : {
-                  x: 0,
-                  y: 0,
-                  width: 0,
-                  height: 0,
-                  type: ELEMENT_TYPES.GRID,
-                };
+            const { x, y, width, height, type } = getBoundedElement({
+              elementData: selectedElementData,
+              gridElementData: elementData,
+              device,
+              diffX,
+              diffY,
+              resizeDirection,
+            })[device];
 
             if (type === ELEMENT_TYPES.GRID) return false;
 
@@ -68,7 +62,12 @@
 </script>
 
 <script lang="ts">
-  import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
+  import type {
+    ElementType,
+    GridElementType,
+    DeviceKeyType,
+  } from "@wordlike/nebula/package/schema";
+  import { calculateGrid } from "@wordlike/nebula";
 
   import { ELEMENT_TYPES } from "$lib/constants";
   import {
@@ -82,11 +81,11 @@
     selectedElementIds,
     selectedElementsDataMap,
   } from "$lib/stores/element";
-  import { calculateGrid, getPosition } from "$lib/utils/position";
+  import { deviceKey } from "$lib/stores/resolution";
+  import { getBoundedElement } from "$lib/utils/getBoundedElement";
 
   // props:
   export let elementData: GridElementType;
-  export let gridWidth: number;
 
   // state:
   let columnCount = 12;
@@ -94,17 +93,15 @@
   let rowHeight = 36;
 
   // derived data:
-  $: ({ gridHeight } = calculateGrid(
+  $: ({ gridHeight } = calculateGrid({
     elementData,
-    $dragDiffX,
-    $dragDiffY,
-    $resizeDirection,
-    $selectedElementIds
-  ));
+    device: $deviceKey,
+  }));
+  $: ({ width } = elementData?.[$deviceKey] ?? DEVICE_DEFAULTS[$deviceKey]);
   $: gapPx = `${gap}px`;
   $: columnArray = Array.from(Array(columnCount)) as boolean[];
-  $: columnWidth = (gridWidth + gap) / columnCount - gap;
-  $: columnWidthPercent = `${(columnWidth / gridWidth) * 100}%`;
+  $: columnWidth = (width + gap) / columnCount - gap;
+  $: columnWidthPercent = `${(columnWidth / width) * 100}%`;
   $: rowCount = Math.floor(gridHeight / rowHeight) ?? 0;
   $: rowArray = Array.from(Array(rowCount)) as boolean[];
   $: rowHeightPx = `${rowHeight}px`;
@@ -122,6 +119,7 @@
     diffY: $dragDiffY,
     resizeDirection: $resizeDirection,
     elementData,
+    device: $deviceKey,
   });
 </script>
 

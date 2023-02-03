@@ -127,6 +127,7 @@
           if ($ref === el) return direction;
         }, null);
       }, null);
+      console.log({ snap });
       if (snap) updateElementsSnap(snap);
     }
 

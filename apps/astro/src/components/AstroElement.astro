@@ -11,7 +11,7 @@ const { gridCssVars, elementCssVars } =
 
 {
     type === "GRID" && (
-        <div class="grid" style={gridCssVars}>
+        <div class="ggrid" style={gridCssVars}>
             {children.map((child: ElementType, i: number) => (
                 <div class="element" style={elementCssVars[i]}>
                     <Astro.self elementData={child} />

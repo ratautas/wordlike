@@ -1,4 +1,4 @@
-.grid {
+.ggrid {
     display: grid;
     position: relative;
     grid-template-rows: var(--desktop-rows);
@@ -13,7 +13,7 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .grid {
+    .ggrid {
         grid-template-rows: var(--tablet-rows);
         grid-template-columns: var(--tablet-columns);
     }
@@ -24,7 +24,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .grid {
+    .ggrid {
         grid-template-rows: var(--mobile-rows);
         grid-template-columns: var(--mobile-columns);
     }

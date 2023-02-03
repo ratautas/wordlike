@@ -16,7 +16,7 @@ export function calculateGrid(
     if (!element) return acc;
     const isElementDragged = selectedElementIds.includes(element?.id);
     const { x, y, width, height } = isElementDragged
-      ? elagetBoundedElement({
+      ? getBoundedElement({
         elementData: element,
         diffX: dragDiffX,
         diffY: dragDiffY,

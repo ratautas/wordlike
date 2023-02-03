@@ -15,7 +15,7 @@ import {
   resizeDirection,
 } from '$lib/stores/drag';
 import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
-import { elagetBoundedElement } from "$lib/utils/elagetBoundedElement";
+import { getBoundedElement } from "$lib/utils/getBoundedElement";
 import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
 import { getGridElementsPositions } from "$lib/utils/getGridElementsPositions";
@@ -78,7 +78,6 @@ export const selectedElementsDataMap = derived(
   });
 
 export function createInsertedElement(type) {
-  console.log("createInsertedElement", type);
   const element = {
     id: uuidv4(),
     type,
@@ -168,7 +167,7 @@ export async function updateElementsPosition(diffX: number | null, diffY: number
 
   function boundElementChild(parent, element) {
     if (elementIds.includes(element.id)) {
-      return elagetBoundedElement({
+      return getBoundedElement({
         elementData: element,
         gridElementData: parent,
         diffX,
@@ -222,6 +221,8 @@ export async function updateElementsSnap(snap) {
   const elementIds = get(selectedElementIds);
   const pageIndex = get(currentPageIndex);
 
+  console.log('updateElementsSnap');
+
   function mapChildren(children) {
     return children?.map((element) => {
       if (elementIds.includes(element.id)) {
@@ -231,7 +232,8 @@ export async function updateElementsSnap(snap) {
             ...element[get(deviceKey)],
             ...(snap === "LEFT" ? { snapLeft: true } : {}),
             ...(snap === "RIGHT" ? { snapRight: true } : {}),
-          }
+          },
+          children: mapChildren(element.children),
         };
       }
       return {
@@ -271,8 +273,6 @@ export function recalculatePositions() {
     const $refStore = get(refStore);
 
     if (!Object.keys($refStore).length) return el;
-
-    console.log('recalc');
 
     return {
       ...el,

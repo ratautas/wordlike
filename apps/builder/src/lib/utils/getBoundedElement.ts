@@ -1,7 +1,7 @@
 import { DEVICE_DEFAULTS } from "@wordlike/nebula";
 import type { DeviceKeyType, ElementType, GridElementType } from "@wordlike/nebula/package/schema";
 
-export const MIN_WIDTH = 24;
+export const MIN_WIDTH = 96;
 export const MIN_HEIGHT = 24;
 
 export type GetBoundedPositionParams = {
@@ -15,7 +15,7 @@ export type GetBoundedPositionParams = {
 
 // This function is used to limit position bounds to the grid
 // TODO: prevent resizing to be smaller than inner content
-export function elagetBoundedElement({
+export function getBoundedElement({
     elementData,
     gridElementData,
     diffX,

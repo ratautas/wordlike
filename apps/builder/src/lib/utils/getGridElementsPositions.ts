@@ -1,6 +1,6 @@
 import { ELEMENT_TYPES } from "@wordlike/nebula";
 import type { DeviceKeyType, GridElementType, ElementType } from "@wordlike/nebula/package/schema";
-import { elagetBoundedElement } from "$lib/utils/elagetBoundedElement";
+import { getBoundedElement } from "$lib/utils/getBoundedElement";
 
 export type GetGridElementsPositionsParams = {
     elementData: GridElementType;
@@ -21,7 +21,6 @@ export function getGridElementsPositions({
     device,
     resizeDirection,
 }: GetGridElementsPositionsParams) {
-    console.log({ resizeDirection })
     if (elementData.type !== ELEMENT_TYPES.GRID) return elementData;
     if (!isDragging) return elementData;
 
@@ -30,7 +29,7 @@ export function getGridElementsPositions({
         children: elementData.children.map((child: ElementType) => {
             if (!selectedElementIds.includes(child.id)) return child;
 
-            return elagetBoundedElement({
+            return getBoundedElement({
                 elementData: child,
                 gridElementData: elementData,
                 device,

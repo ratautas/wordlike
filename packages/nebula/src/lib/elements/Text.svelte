@@ -17,6 +17,8 @@
 
 <style lang="scss">
 	.text {
+		overflow-wrap: break-word;
+
 		:global(h1) {
 			font-size: 2rem;
 			font-weight: 700;
