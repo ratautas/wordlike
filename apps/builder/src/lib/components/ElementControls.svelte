@@ -8,6 +8,40 @@
   $: ({ id, type } = elementData ?? {});
   $: canResizeHeight = VERTICAL_RESIZE_TYPES.includes(type);
   $: canResizeTop = type !== ELEMENT_TYPES.GRID;
+
+  // PRIMARY:
+  // - preset + edit global + save selected as preset
+  // - bold
+  // - italic
+  // - align
+  // - font size
+  // - color
+  // - lists
+  // - link
+  // SECONDARY:
+  // - font family
+  // - underline
+  // - strikethrough
+
+  // ELEMENT:
+  // - cut / copy / duplicate
+  // - delete
+  // - settings
+  // - move to front / back
+  // SETTINGS
+  // - background color
+  // - background image
+  // - border
+  // - border radius
+  // - padding
+  // - shadow
+  // - opacity
+  // - transform
+  // - blur
+  // - reveal
+  // - parallax
+  // - links/CTA
+  // - desktop/mobiile
 </script>
 
 <div
