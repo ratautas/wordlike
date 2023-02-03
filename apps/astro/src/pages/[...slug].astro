@@ -2,6 +2,7 @@
 import type { ElementType, PageType } from "@wordlike/nebula/package/schema";
 import AstroElement from "../components/AstroElement.astro";
 import Layout from "../layouts/Layout.astro";
+import { supabaseClient } from "../supabase";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
@@ -16,13 +17,14 @@ if (import.meta.env.DEV) {
 // Query DB directly:
 // https://astro-supabase-vercel.vercel.app/
 
-const pages = await fetch(
-  `https://builder-wordlike.vercel.app/public/${siteId}`
-)
-  .then((res) => res.json())
-  .then(({ pages }) => pages)
-  .catch((err) => console.log(err));
-// const { pages } = mockData;
+const { data, error } = await supabaseClient
+  .from("sites")
+  .select()
+  .single()
+  .eq("id", siteId);
+
+const { pages } = data.doc;
+
 const page = pages?.find((page: PageType) => page.isHome || page.slug === slug);
 if (!page) return redirect("/404");
 ---
