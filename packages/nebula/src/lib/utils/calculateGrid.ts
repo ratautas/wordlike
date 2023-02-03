@@ -6,17 +6,17 @@ export const MIN_HEIGHT = 24;
 
 export type GridCalculationParams = {
     elementData: GridElementType;
-    device: DeviceKeyType;
+    deviceKey: DeviceKeyType;
 };
 
 export function calculateGrid({
     elementData,
-    device
+    deviceKey
 }: GridCalculationParams) {
     if (!elementData) return {};
     const { rows, columns, positions } = elementData
         .children?.reduce((acc, element: ElementType) => {
-            const { x, y, width, height, snapLeft, snapRight } = element[device] ?? DEVICE_DEFAULTS[device];
+            const { x, y, width, height, snapLeft, snapRight } = element[deviceKey] ?? DEVICE_DEFAULTS[deviceKey];
 
             acc.columns.add(x);
             acc.columns.add(x + width);
@@ -27,7 +27,7 @@ export function calculateGrid({
             return acc;
         }, {
             rows: new Set([0]),
-            columns: new Set([0, elementData[device]?.width ?? DEVICE_DEFAULTS[device].width]),
+            columns: new Set([0, elementData[deviceKey]?.width ?? DEVICE_DEFAULTS[deviceKey].width]),
             positions: [],
         });
 

@@ -14,19 +14,19 @@ export function getGridVars(elementData: GridElementType): GridVars {
     return Object.values(DEVICE_KEYS).reduce((acc, deviceKey) => {
         const { gridTemplateRows, gridTemplateColumns, gridAreas } = calculateGrid({
             elementData,
-            device: deviceKey
+            deviceKey,
         });
 
         const templateRows = getTemplateRows({
             elementData,
             gridTemplateRows,
-            device: deviceKey
+            deviceKey,
         });
 
         const templateColumns = getTemplateColumns({
             elementData,
             gridTemplateColumns,
-            device: deviceKey
+            deviceKey,
         });
 
         acc.gridCssVars += `--${deviceKey}-rows: ${templateRows}; --${deviceKey}-columns: ${templateColumns};`;

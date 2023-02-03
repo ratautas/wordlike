@@ -92,7 +92,7 @@
   // derived data:
   $: ({ gridHeight } = calculateGrid({
     elementData,
-    device: $deviceKey,
+    deviceKey: $deviceKey,
   }));
   $: ({ width } = elementData?.[$deviceKey] ?? DEVICE_DEFAULTS[$deviceKey]);
   $: gapPx = `${gap}px`;

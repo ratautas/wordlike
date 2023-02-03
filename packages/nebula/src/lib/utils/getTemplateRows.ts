@@ -4,14 +4,14 @@ import type { GridElementType, DeviceKeyType } from '$lib/schema';
 export type GetTemplateRowsParams = {
     elementData: GridElementType
     gridTemplateRows: number[]
-    device: DeviceKeyType
+    deviceKey: DeviceKeyType
 };
 
-export function getTemplateRows({ elementData, gridTemplateRows, device }: GetTemplateRowsParams) {
+export function getTemplateRows({ elementData, gridTemplateRows, deviceKey }: GetTemplateRowsParams) {
     return [
-        elementData[device]?.paddingY ?? DEVICE_DEFAULTS[device].paddingY,
+        elementData[deviceKey]?.paddingY ?? DEVICE_DEFAULTS[deviceKey].paddingY,
         ...gridTemplateRows,
-        elementData[device]?.paddingY ?? DEVICE_DEFAULTS[device].paddingY
+        elementData[deviceKey]?.paddingY ?? DEVICE_DEFAULTS[deviceKey].paddingY
     ]
         .map((row) => `minmax(${row}px, 0fr)`)
         .join(' ');
