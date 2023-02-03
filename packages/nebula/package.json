@@ -34,7 +34,10 @@
   "type": "module",
   "exports": {
     "./package.json": "./package/package.json",
-    ".": "./package/index.js"
+    ".": "./package/index.js",
+    "./style/grid.css": {
+      "import": "./package/style/grid.css"
+    }
   },
   "peerDependencies": {
     "svelte": "^3.55.1"

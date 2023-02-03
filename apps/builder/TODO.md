@@ -17,7 +17,6 @@
 - shared UI (is it needed tho?)
 
 [ ] move tailwind resets to Astro
-
 [ ] add more text types
 [ ] block resize handles
 [ ] store grid width to json

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "@wordlike/nebula/package/style/grid.css";
+    import "@wordlike/nebula/style/grid.css";
     import type { ElementType } from "@wordlike/nebula/package/schema";
     import {
         getGridVars,
