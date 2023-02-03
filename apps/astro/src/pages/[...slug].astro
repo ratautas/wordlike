@@ -6,19 +6,23 @@ import mockData from "../mockData.json";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
-// try to get id via query params
+// try to get id via query params (locally)
 let { siteId } = Object.fromEntries(url.searchParams);
 if (!siteId) {
   // try to get id via subdomain:
   [siteId] = url.hostname.split(".");
 }
+// Query DB directly:
+// https://astro-supabase-vercel.vercel.app/
 
-const response = await fetch(
+const pages = await fetch(
   `https://wordlike-builder.vercel.app/public/${siteId}`
-);
-const { pages } = await response.json();
+)
+  .then((res) => res.json())
+  .then(({ pages }) => pages)
+  .catch((err) => console.log(err));
 // const { pages } = mockData;
-const page = pages.find((page: PageType) => page.isHome || page.slug === slug);
+const page = pages?.find((page: PageType) => page.isHome || page.slug === slug);
 if (!page) return redirect("/404");
 ---
 
