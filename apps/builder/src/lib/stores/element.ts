@@ -163,6 +163,9 @@ export async function deleteSelectedElements() {
 export async function updateElementsPosition(diffX: number | null, diffY: number | null) {
   const elementIds = get(selectedElementIds);
   const device = get(deviceKey);
+  const pageIndex = get(currentPageIndex);
+  const $doc = get(doc);
+  const { siteId } = get(page).params;
 
   function boundElementChild(parent, element) {
     if (elementIds.includes(element.id)) {
@@ -186,36 +189,29 @@ export async function updateElementsPosition(diffX: number | null, diffY: number
     return element;
   };
 
-  const pageIndex = get(currentPageIndex);
-
-  doc.update(($doc) => {
-    $doc.pages[pageIndex].children = $doc.pages[pageIndex].children.map((element) => {
-      return {
-        ...element,
-        children: element.children.map((child) => boundElementChild(element, child)),
-      }
-    });
-
-    // TODO: this is kinda optimistic, we should wait for the response from the server
-    // we can do this, but on failure we need to revert the doc to the initial state
-    const { siteId } = get(page).params;
-    // const { data, error } = await supabaseClient
-    supabaseClient
-      .from('sites')
-      .update({ doc: get(doc) })
-      .eq('id', siteId)
-      .select();
-
-    return $doc;
+  $doc.pages[pageIndex].children = $doc.pages[pageIndex].children.map((element) => {
+    return {
+      ...element,
+      children: element.children.map((child) => boundElementChild(element, child)),
+    }
   });
+
+  doc.set($doc);
+
+  const { data, error } = await supabaseClient
+    .from('sites')
+    .update({ doc: $doc })
+    .eq('id', siteId)
+    .select()
+    .single();
 };
 
 
 export async function updateElementsSnap(snap) {
   const elementIds = get(selectedElementIds);
   const pageIndex = get(currentPageIndex);
-
-  console.log('updateElementsSnap');
+  const $doc = get(doc);
+  const { siteId } = get(page).params;
 
   function mapChildren(children) {
     return children?.map((element) => {
@@ -237,24 +233,17 @@ export async function updateElementsSnap(snap) {
     });
   };
 
-  doc.update(($doc) => {
-    $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
+  $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
 
+  doc.set($doc);
 
-    // TODO: this is kinda optimistic, we should wait for the response from the server
-    // we can do this, but on failure we need to revert the doc to the initial state
+  const { data, error } = await supabaseClient
+    .from('sites')
+    .update({ doc: $doc })
+    .eq('id', siteId)
+    .select()
+    .single();
 
-    const { siteId } = get(page).params;
-
-    // const { data, error } = await supabaseClient
-    supabaseClient
-      .from('sites')
-      .update({ doc: get(doc) })
-      .eq('id', siteId)
-      .select();
-
-    return $doc;
-  });
 };
 
 export function recalculatePositions() {
