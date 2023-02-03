@@ -12,5 +12,5 @@ export const GET: RequestHandler = async (e) => {
         .eq('id', siteId);
     const [site] = data ?? [];
 
-    return json(site?.doc, { status: 200 });
+    return json(site?.doc, { status: 200, headers: { 'Access-Control-Allow-Origin': '*' } });
 }
