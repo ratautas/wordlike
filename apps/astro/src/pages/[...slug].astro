@@ -2,14 +2,15 @@
 import type { ElementType, PageType } from "@wordlike/nebula/package/schema";
 import AstroElement from "../components/AstroElement.astro";
 import Layout from "../layouts/Layout.astro";
-import mockData from "../mockData.json";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
-// try to get id via query params (locally)
-let { siteId } = Object.fromEntries(url.searchParams);
-if (!siteId) {
-  // try to get id via subdomain:
+let siteId;
+if (import.meta.env.DEV) {
+  // get id via query params (locally)
+  ({ siteId } = Object.fromEntries(url.searchParams));
+} else {
+  // get id via subdomain:
   [siteId] = url.hostname.split(".");
 }
 // Query DB directly:
