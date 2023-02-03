@@ -196,17 +196,18 @@ export async function updateElementsPosition(diffX: number | null, diffY: number
       }
     });
 
+    // TODO: this is kinda optimistic, we should wait for the response from the server
+    // we can do this, but on failure we need to revert the doc to the initial state
+    const { siteId } = get(page).params;
+    // const { data, error } = await supabaseClient
+    supabaseClient
+      .from('sites')
+      .update({ doc: get(doc) })
+      .eq('id', siteId)
+      .select();
+
     return $doc;
   });
-
-  // TODO: this is kinda optimistic, we should wait for the response from the server
-  // we can do this, but on failure we need to revert the doc to the initial state
-  const { siteId } = get(page).params;
-  const { data, error } = await supabaseClient
-    .from('sites')
-    .update({ doc: get(doc) })
-    .eq('id', siteId)
-    .select();
 };
 
 
@@ -236,21 +237,24 @@ export async function updateElementsSnap(snap) {
     });
   };
 
-  doc.update(async ($doc) => {
+  doc.update(($doc) => {
     $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
+
+
+    // TODO: this is kinda optimistic, we should wait for the response from the server
+    // we can do this, but on failure we need to revert the doc to the initial state
+
+    const { siteId } = get(page).params;
+
+    // const { data, error } = await supabaseClient
+    supabaseClient
+      .from('sites')
+      .update({ doc: get(doc) })
+      .eq('id', siteId)
+      .select();
 
     return $doc;
   });
-
-  // TODO: this is kinda optimistic, we should wait for the response from the server
-  // we can do this, but on failure we need to revert the doc to the initial state
-
-  const { siteId } = get(page).params;
-  const { data, error } = await supabaseClient
-    .from('sites')
-    .update({ doc: get(doc) })
-    .eq('id', siteId)
-    .select();
 };
 
 export function recalculatePositions() {
