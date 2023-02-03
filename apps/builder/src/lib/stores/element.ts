@@ -157,7 +157,6 @@ export async function deleteSelectedElements() {
     return $doc;
   });
 
-
   selectedElementIds.set([]);
 };
 
@@ -203,12 +202,11 @@ export async function updateElementsPosition(diffX: number | null, diffY: number
   // TODO: this is kinda optimistic, we should wait for the response from the server
   // we can do this, but on failure we need to revert the doc to the initial state
   const { siteId } = get(page).params;
-  const { data, error } = supabaseClient
+  const { data, error } = await supabaseClient
     .from('sites')
-    .update({ doc: $doc })
+    .update({ doc: get(doc) })
     .eq('id', siteId)
     .select();
-
 };
 
 
@@ -250,7 +248,7 @@ export async function updateElementsSnap(snap) {
   const { siteId } = get(page).params;
   const { data, error } = await supabaseClient
     .from('sites')
-    .update({ doc: $doc })
+    .update({ doc: get(doc) })
     .eq('id', siteId)
     .select();
 };
