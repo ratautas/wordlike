@@ -6,16 +6,10 @@ import { supabaseClient } from "../supabase";
 
 const { params, url, redirect } = Astro;
 const { slug } = params;
-let siteId;
-if (import.meta.env.DEV) {
-  // get id via query params (locally)
-  ({ siteId } = Object.fromEntries(url.searchParams));
-} else {
-  // get id via subdomain:
-  [siteId] = url.hostname.split(".");
-}
-// Query DB directly:
-// https://astro-supabase-vercel.vercel.app/
+
+const siteId = import.meta.env.DEV
+  ? Object.fromEntries(url.searchParams).siteId // get id via query params (locally)
+  : url.hostname.split(".")[0]; // get id via subdomain:
 
 const { data, error } = await supabaseClient
   .from("sites")
