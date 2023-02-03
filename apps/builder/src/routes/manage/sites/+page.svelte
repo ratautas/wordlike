@@ -21,7 +21,6 @@
     if (error) {
       cancel();
     }
-    console.log(sites);
 
     if (data) {
       sites = [data[0], ...sites];
@@ -79,11 +78,12 @@
         </div>
         <div>
           <a
-            href="siteid.previewdomain.com"
+            href={`https://${site.id}.stebink.vercel.app`}
             target="_blank"
+            rel="noopener noreferrer"
             class="text-gray-500 text-sm"
           >
-            siteid.previewdomain.com
+            {`${site.id}.stebink.vercel.app`}
           </a>
         </div>
         <div>

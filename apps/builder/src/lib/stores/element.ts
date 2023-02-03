@@ -189,31 +189,26 @@ export async function updateElementsPosition(diffX: number | null, diffY: number
 
   const pageIndex = get(currentPageIndex);
 
-  doc.update(($doc) => {
+  doc.update(async ($doc) => {
     $doc.pages[pageIndex].children = $doc.pages[pageIndex].children.map((element) => {
       return {
         ...element,
         children: element.children.map((child) => boundElementChild(element, child)),
       }
     });
+
+    // TODO: this is kinda optimistic, we should wait for the response from the server
+    // we can do this, but on failure we need to revert the doc to the initial state
+    const { siteId } = get(page).params;
+    const { data, error } = await supabaseClient
+      .from('sites')
+      .update({ doc: $doc })
+      .eq('id', siteId)
+      .select();
+
     return $doc;
   });
 
-  // TODO: this is kinda optimistic, we should wait for the response from the server
-  // we can do this, but on failure we need to revert the doc to the initial state
-
-  const { siteId } = get(page).params;
-  // const { data, error } = await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
-
-  // await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
 };
 
 
@@ -243,27 +238,21 @@ export async function updateElementsSnap(snap) {
     });
   };
 
-  doc.update(($doc) => {
+  doc.update(async ($doc) => {
     $doc.pages[pageIndex].children = mapChildren($doc.pages[pageIndex].children);
+
+    // TODO: this is kinda optimistic, we should wait for the response from the server
+    // we can do this, but on failure we need to revert the doc to the initial state
+
+    const { siteId } = get(page).params;
+    const { data, error } = await supabaseClient
+      .from('sites')
+      .update({ doc: $doc })
+      .eq('id', siteId)
+      .select();
 
     return $doc;
   });
-
-  // TODO: this is kinda optimistic, we should wait for the response from the server
-  // we can do this, but on failure we need to revert the doc to the initial state
-
-  const { siteId } = get(page).params;
-  // const { data, error } = await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
-
-  // await supabaseClient
-  //   .from('sites')
-  //   .update({ doc: $doc })
-  //   .eq('id', siteId)
-  //   .select();
 };
 
 export function recalculatePositions() {
