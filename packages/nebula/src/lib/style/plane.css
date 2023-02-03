@@ -8,7 +8,7 @@
 .element {
     z-index: 3;
     position: relative;
-    /* display: grid; */
+    display: grid;
     align-self: start;
     grid-area: var(--desktop-area);
 }

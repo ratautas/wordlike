@@ -79,14 +79,14 @@
 
 {#if type === ELEMENT_TYPES.GRID}
     <div
-        class="plane"
+        class="plane group/plane"
         style={gridCssVars}
         bind:this={gridRef}
         use:refAction={gridElementData.id}
     >
         {#each gridElementData.children as childElementData, i}
             <div
-                class="element"
+                class="element group/element"
                 style={elementCssVars[i]}
                 use:refAction={childElementData.id}
             >
@@ -112,6 +112,7 @@
 {:else}
     <!-- else content here -->
 {/if}
+
 {#if isSelected && type !== ELEMENT_TYPES.GRID}
     <ElementControls {elementData} />
 {/if}

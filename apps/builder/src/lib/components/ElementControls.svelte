@@ -4,38 +4,40 @@
   // props:
   export let elementData;
 
-  // See +page.svelte for implementation of :: syntax
-
   // derived data:
   $: ({ id, type } = elementData ?? {});
   $: canResizeHeight = VERTICAL_RESIZE_TYPES.includes(type);
   $: canResizeTop = type !== ELEMENT_TYPES.GRID;
 </script>
 
-<div class={`side side--e side--${type}`} use:refAction={`${id}::E`} />
-<div class={`side side--w side--${type}`} use:refAction={`${id}::W`} />
-{#if canResizeHeight}
-  {#if canResizeTop}
-    <div class={`side side--n side--${type}`} use:refAction={`${id}::N`} />
+<div
+  class="absolute inset-0 z-[-1] opacity-30  ring-dark-50 ring-opacity-5 ring-[1px] group-hover/element:opacity-100"
+>
+  <div class={`side side--e side--${type}`} use:refAction={`${id}::E`} />
+  <div class={`side side--w side--${type}`} use:refAction={`${id}::W`} />
+  {#if canResizeHeight}
+    {#if canResizeTop}
+      <div class={`side side--n side--${type}`} use:refAction={`${id}::N`} />
+    {/if}
+    <div class={`side side--s side--${type}`} use:refAction={`${id}::S`} />
+    <div
+      class={`corner corner--ne corner--${type}`}
+      use:refAction={`${id}::NE`}
+    />
+    <div
+      class={`corner corner--nw corner--${type}`}
+      use:refAction={`${id}::NW`}
+    />
+    <div
+      class={`corner corner--se corner--${type}`}
+      use:refAction={`${id}::SE`}
+    />
+    <div
+      class={`corner corner--sw corner--${type}`}
+      use:refAction={`${id}::SW`}
+    />
   {/if}
-  <div class={`side side--s side--${type}`} use:refAction={`${id}::S`} />
-  <div
-    class={`corner corner--ne corner--${type}`}
-    use:refAction={`${id}::NE`}
-  />
-  <div
-    class={`corner corner--nw corner--${type}`}
-    use:refAction={`${id}::NW`}
-  />
-  <div
-    class={`corner corner--se corner--${type}`}
-    use:refAction={`${id}::SE`}
-  />
-  <div
-    class={`corner corner--sw corner--${type}`}
-    use:refAction={`${id}::SW`}
-  />
-{/if}
+</div>
 
 <style lang="scss">
   @use "sass:math";
