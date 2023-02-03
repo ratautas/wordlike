@@ -19,8 +19,8 @@ const siteId = import.meta.env.DEV
 const { data, error } = await supabaseClient
   .from("sites")
   .select()
-  .single()
-  .eq("id", siteId);
+  .eq("id", siteId)
+  .single();
 
 const { pages } = data.doc;
 
