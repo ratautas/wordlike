@@ -11,10 +11,12 @@
 [x] improve snap to sides UX
 [x] astro
 [ ] cleanup components
-[ ] move only tailwind resets to Astro
+[x] move only tailwind resets to Astro
 [ ] add more text types
 [ ] block resize handles
 [ ] store grid width to json
+[ ] make elementMap to store references to the doc elemements
+[ ] added elements should have predefined types
 [ ] snap to grid
 [ ] figure out select text vs drag
 [ ] drop on click insertion is not working correctly
@@ -38,7 +40,6 @@
 [ ] add alignment between elements guides
 [ ] tiptap
 [ ] partytown
-
 [ ] mobile
 [ ] preview
 [ ] add grid guides config

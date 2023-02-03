@@ -45,21 +45,26 @@
   {elementData}
 />
 
-<div class="controls" bind:this={controlsRef}>
+<div
+  class="controls whitespace-nowrap bg-white text-sm"
+  bind:this={controlsRef}
+>
   {#if editor}
-    <input
-      list="ice-cream-flavors"
-      id="ice-cream-choice"
-      name="ice-cream-choice"
-      placeholder="Choose a flavor"
-    />
-    <datalist id="ice-cream-flavors">
-      <option value="Chocolate">hi</option>
-      <option value="Coconut">hi</option>
-      <option value="Mint">ho</option>
-      <option value="Strawberry">ii</option>
-      <option value="Vanilla">asd</option>
-    </datalist>
+    <div class="select">
+      <input
+        list="ice-cream-flavors"
+        id="ice-cream-choice"
+        name="ice-cream-choice"
+        placeholder="Choose a flavor"
+      />
+      <datalist id="ice-cream-flavors">
+        <option value="Chocolate">hi</option>
+        <option value="Coconut">hi</option>
+        <option value="Mint">ho</option>
+        <option value="Strawberry">ii</option>
+        <option value="Vanilla">asd</option>
+      </datalist>
+    </div>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
       class:active={editor.isActive("heading", { level: 1 })}
@@ -80,10 +85,3 @@
     </button>
   {/if}
 </div>
-
-<style lang="scss">
-  button.active {
-    background: black;
-    color: white;
-  }
-</style>

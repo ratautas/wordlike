@@ -1,6 +1,4 @@
 <script lang="ts">
-    import "@wordlike/nebula/style/preflight.css";
-    import "@wordlike/nebula/style/plane.css";
     import type { ElementType } from "@wordlike/nebula/package/schema";
     import { getGridVars, ELEMENT_TYPES } from "@wordlike/nebula";
 
@@ -30,7 +28,6 @@
     let guidesRef: HTMLElement;
 
     $: ({ type, id } = elementData);
-    $: isGrid = type === ELEMENT_TYPES.GRID;
     $: isSelected = $selectedElementIds.includes(id);
     $: gridElementData = getGridElementsPositions({
         elementData,
@@ -42,7 +39,7 @@
         resizeDirection: $resizeDirection,
     });
     $: ({ gridCssVars, elementCssVars } =
-        isGrid && getGridVars(gridElementData));
+        type === ELEMENT_TYPES.GRID && getGridVars(gridElementData));
 
     $: {
         const isInPath = $mouseMoveComposedPath.includes(gridRef);

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { ElementType, GridElementType } from "@wordlike/nebula/schema";
+  import "@wordlike/nebula/style/preflight.css";
+  import "@wordlike/nebula/style/plane.css";
   import { refStore } from "$lib/actions/ref";
 
-  import ElementControls from "$lib/components/ElementControls.svelte";
   import Header from "../components/Header.svelte";
   import {
     dragMousePosition,

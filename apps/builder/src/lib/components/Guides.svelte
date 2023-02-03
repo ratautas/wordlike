@@ -133,7 +133,7 @@
     >
       {#each row as column}
         <div
-          class="column w-[var(--column-width)] text-xs border-[1px] border-solid border-dark-600 rounded-sm transition-all"
+          class="column w-[var(--column-width)] text-xs border-[1px] border-solid border-gray-300 rounded-sm transition-all"
           class:shadow-[1px_1px_4px_0px_rgba(0,0,0,.1)]={column}
           class:scale-105={column}
           class:border-transparent={column}

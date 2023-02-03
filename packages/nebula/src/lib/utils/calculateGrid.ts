@@ -16,7 +16,14 @@ export function calculateGrid({
     if (!elementData) return {};
     const { rows, columns, positions } = elementData
         .children?.reduce((acc, element: ElementType) => {
-            const { x, y, width, height, snapLeft, snapRight } = element[deviceKey] ?? DEVICE_DEFAULTS[deviceKey];
+            const {
+                x,
+                y,
+                width,
+                height,
+                snapLeft,
+                snapRight
+            } = element[deviceKey] ?? DEVICE_DEFAULTS[deviceKey];
 
             acc.columns.add(x);
             acc.columns.add(x + width);
