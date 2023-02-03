@@ -1,4 +1,4 @@
-.ggrid {
+.plane {
     display: grid;
     position: relative;
     grid-template-rows: var(--desktop-rows);
@@ -13,7 +13,7 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .ggrid {
+    .plane {
         grid-template-rows: var(--tablet-rows);
         grid-template-columns: var(--tablet-columns);
     }
@@ -24,7 +24,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .ggrid {
+    .plane {
         grid-template-rows: var(--mobile-rows);
         grid-template-columns: var(--mobile-columns);
     }

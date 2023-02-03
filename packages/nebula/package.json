@@ -35,8 +35,8 @@
   "exports": {
     "./package.json": "./package/package.json",
     ".": "./package/index.js",
-    "./style/grid.css": {
-      "import": "./package/style/grid.css"
+    "./style/plane.css": {
+      "import": "./package/style/plane.css"
     }
   },
   "peerDependencies": {

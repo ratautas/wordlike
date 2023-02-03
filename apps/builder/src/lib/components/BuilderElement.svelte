@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "@wordlike/nebula/style/grid.css";
+    import "@wordlike/nebula/style/plane.css";
     import type { ElementType } from "@wordlike/nebula/package/schema";
     import {
         getGridVars,
@@ -83,7 +83,7 @@
 </script>
 
 {#if type === ELEMENT_TYPES.GRID}
-    <div class="ggrid" style={gridCssVars} bind:this={gridRef}>
+    <div class="plane" style={gridCssVars} bind:this={gridRef}>
         {#each gridElementData.children as childElementData, i}
             <div
                 class="element"

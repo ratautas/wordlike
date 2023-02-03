@@ -9,14 +9,13 @@
 [x] move with keyboard arrows
 [x] disable tailwind reset
 [x] improve snap to sides UX
-[ ] astro
-[ ] split nebula to:
-- elements
-- utils
-- schema
-- shared UI (is it needed tho?)
+[x] astro
+[ ] cleanup components
 
-[ ] move tailwind resets to Astro
+
+
+
+[ ] move only tailwind resets to Astro
 [ ] add more text types
 [ ] block resize handles
 [ ] store grid width to json
@@ -24,6 +23,11 @@
 [ ] drop on click insertion is not working correctly
 [x] fix selecting multiple elements
 [ ] move schmeas to separate package
+[ ] split nebula to:
+- elements
+- utils
+- schema
+- shared UI (is it needed tho?)
 [ ] round position before saving to json
 [ ] tweak inserting new element
 [ ] add popup

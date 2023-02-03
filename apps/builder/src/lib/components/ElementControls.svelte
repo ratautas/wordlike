@@ -76,7 +76,7 @@
     &--n {
       cursor: row-resize;
       height: $size;
-      top: math.div($size, -2);
+      top: $size * -2;
       left: 0;
       right: 0;
       &::before {
@@ -89,7 +89,7 @@
     &--e {
       cursor: col-resize;
       width: $size;
-      right: math.div($size, -2);
+      right: $size * -2;
       top: 0;
       bottom: 0;
       &::before {
@@ -101,7 +101,7 @@
     }
     &--s {
       height: $size;
-      bottom: math.div($size, -2);
+      bottom: $size * -2;
       left: 0;
       right: 0;
       cursor: row-resize;
@@ -114,7 +114,7 @@
     }
     &--w {
       width: $size;
-      left: math.div($size, -2);
+      left: $size * -2;
       top: 0;
       bottom: 0;
       cursor: col-resize;

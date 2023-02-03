@@ -1,5 +1,5 @@
 ---
-import "@wordlike/nebula/style/grid.css";
+import "@wordlike/nebula/style/plane.css";
 import { Text, getGridVars } from "@wordlike/nebula";
 import type { ElementType } from "@wordlike/nebula/package/schema";
 
@@ -11,7 +11,7 @@ const { gridCssVars, elementCssVars } =
 
 {
     type === "GRID" && (
-        <div class="ggrid" style={gridCssVars}>
+        <div class="plane" style={gridCssVars}>
             {children.map((child: ElementType, i: number) => (
                 <div class="element" style={elementCssVars[i]}>
                     <Astro.self elementData={child} />
