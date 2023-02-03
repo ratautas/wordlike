@@ -11,10 +11,6 @@
 [x] improve snap to sides UX
 [x] astro
 [ ] cleanup components
-
-
-
-
 [ ] move only tailwind resets to Astro
 [ ] add more text types
 [ ] block resize handles
@@ -29,6 +25,7 @@
 - schema
 - shared UI (is it needed tho?)
 [ ] round position before saving to json
+[ ] fix most of the TypeScript issiues
 [ ] tweak inserting new element
 [ ] add popup
 [ ] background color + overlay

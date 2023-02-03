@@ -50,19 +50,21 @@
     })();
 </script>
 
-<div
-    class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2]"
-    bind:this={guidesRef}
-/>
-<div
-    class="absolute left-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-left)] transition-opacity"
-    class:opacity-10={isHovered && overShoot === "LEFT"}
-    style:--grow-left={`${growLeft}px`}
-    use:refAction={`${elementData.id}::OVERSHOOT::LEFT`}
-/>
-<div
-    class="absolute right-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-right)] transition-opacity"
-    class:opacity-10={isHovered && overShoot === "RIGHT"}
-    style:--grow-right={`${growRight}px`}
-    use:refAction={`${elementData.id}::OVERSHOOT::RIGHT`}
-/>
+{#if $resizeDirection}
+    <div
+        class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2]"
+        bind:this={guidesRef}
+    />
+    <div
+        class="absolute left-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-left)] transition-opacity"
+        class:opacity-10={isHovered && overShoot === "LEFT"}
+        style:--grow-left={`${growLeft}px`}
+        use:refAction={`${elementData.id}::OVERSHOOT::LEFT`}
+    />
+    <div
+        class="absolute right-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-right)] transition-opacity"
+        class:opacity-10={isHovered && overShoot === "RIGHT"}
+        style:--grow-right={`${growRight}px`}
+        use:refAction={`${elementData.id}::OVERSHOOT::RIGHT`}
+    />
+{/if}

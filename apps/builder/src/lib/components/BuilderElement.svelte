@@ -1,11 +1,7 @@
 <script lang="ts">
     import "@wordlike/nebula/style/plane.css";
     import type { ElementType } from "@wordlike/nebula/package/schema";
-    import {
-        getGridVars,
-        DEVICE_DEFAULTS,
-        ELEMENT_TYPES,
-    } from "@wordlike/nebula";
+    import { getGridVars, ELEMENT_TYPES } from "@wordlike/nebula";
 
     import { refAction } from "$lib/actions/ref";
     import ElementControls from "$lib/components/ElementControls.svelte";
@@ -55,8 +51,7 @@
             isHovered = true;
             if ($isInserting) {
                 const { clientX, clientY } = $mouseMoveEvent;
-                const { left = 0, top = 0 } =
-                    guidesRef?.getBoundingClientRect() ?? {};
+                const { left, top } = guidesRef?.getBoundingClientRect();
 
                 initialMousePosition.set({
                     x: clientX,
@@ -83,7 +78,12 @@
 </script>
 
 {#if type === ELEMENT_TYPES.GRID}
-    <div class="plane" style={gridCssVars} bind:this={gridRef}>
+    <div
+        class="plane"
+        style={gridCssVars}
+        bind:this={gridRef}
+        use:refAction={gridElementData.id}
+    >
         {#each gridElementData.children as childElementData, i}
             <div
                 class="element"
@@ -95,11 +95,12 @@
         {/each}
 
         <div
-            class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2]"
-            bind:this={guidesRef}
+            class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2] overflow-hidden"
             class:opacity-100={isHovered}
+            bind:this={guidesRef}
             use:refAction={`${elementData.id}::GRID`}
         >
+            <ElementControls {elementData} />
             <Guides elementData={gridElementData} />
         </div>
         <SideOvershoots elementData={gridElementData} {isHovered} />
@@ -111,6 +112,6 @@
 {:else}
     <!-- else content here -->
 {/if}
-{#if isSelected}
+{#if isSelected && type !== ELEMENT_TYPES.GRID}
     <ElementControls {elementData} />
 {/if}

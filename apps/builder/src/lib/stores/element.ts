@@ -18,7 +18,6 @@ import { doc, currentPageData, currentPageIndex } from '$lib/stores/doc';
 import { getBoundedElement } from "$lib/utils/getBoundedElement";
 import { deviceKey } from '$lib/stores/resolution';
 import { selectAll } from "$lib/utils/selectAll";
-import { getGridElementsPositions } from "$lib/utils/getGridElementsPositions";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
 
@@ -51,13 +50,13 @@ export function findElementById(id: string) {
   });
 }
 
-export function findSelectedIds(array, ids) {
-  return array?.reduce((acc, el) => {
+export function findElementsByIds(elements, ids) {
+  return elements?.reduce((acc, el) => {
     if (ids.includes(el.id)) {
       return { ...acc, [el.id]: el };
     }
     if (el.children) {
-      const childrenIds = findSelectedIds(el.children, ids);
+      const childrenIds = findElementsByIds(el.children, ids);
       if (childrenIds) {
         return { ...acc, ...childrenIds };
       }
@@ -71,7 +70,7 @@ export const selectedElementsDataMap = derived(
   ([$doc, $selectedElementIds]) => {
     if ($selectedElementIds.length === 0) return {};
 
-    return findSelectedIds(
+    return findElementsByIds(
       $doc.pages[get(currentPageIndex)].children,
       $selectedElementIds
     );
