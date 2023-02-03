@@ -16,6 +16,6 @@ ${i==="TEXT"&&g`${x(t,"Text",J,{elementData:r,"client:load":!0,"client:component
 	${V(t)}</head>
 	<body>
 		${X(t,e.default)}
-	</body></html>`},"/Users/algirdastamasauskas/wordlike/apps/astro/src/layouts/Layout.astro"),rt=E(),z=C(async(t,s,e)=>{const n=t.createAstro(rt,s,e);n.self=z;const{params:r,url:o,redirect:i}=n,{slug:c}=r,{siteId:u}=Object.fromEntries(o.searchParams),m=await fetch(`https://wordlike-builder.vercel.app/public/${u}`),{pages:p}=await m.json(),a=p.find(l=>l.isHome||l.slug===c);return a?g`${x(t,"Layout",S,{title:"Welcome to Astro."},{default:()=>g`${R(t)}<main>
+	</body></html>`},"/Users/algirdastamasauskas/wordlike/apps/astro/src/layouts/Layout.astro"),rt=E(),z=C(async(t,s,e)=>{const n=t.createAstro(rt,s,e);n.self=z;const{params:r,url:o,redirect:i}=n,{slug:c}=r;let{siteId:u}=Object.fromEntries(o.searchParams);u||([u]=o.hostname.split("."));const m=await fetch(`https://wordlike-builder.vercel.app/public/${u}`),{pages:p}=await m.json(),a=p.find(l=>l.isHome||l.slug===c);return a?g`${x(t,"Layout",S,{title:"Welcome to Astro."},{default:()=>g`${R(t)}<main>
     ${a.children.map(l=>g`${x(t,"AstroElement",O,{elementData:l})}`)}
   </main>`})}`:i("/404")},"/Users/algirdastamasauskas/wordlike/apps/astro/src/pages/[...slug].astro"),at="/Users/algirdastamasauskas/wordlike/apps/astro/src/pages/[...slug].astro",it="/[...slug]",dt=Object.freeze(Object.defineProperty({__proto__:null,default:z,file:at,url:it},Symbol.toStringTag,{value:"Module"}));export{dt as _};
