@@ -16,7 +16,7 @@ if (!siteId) {
 // https://astro-supabase-vercel.vercel.app/
 
 const pages = await fetch(
-  `https://wordlike-builder.vercel.app/public/${siteId}`
+  `https://builder-wordlike.vercel.app/public/${siteId}`
 )
   .then((res) => res.json())
   .then(({ pages }) => pages)
