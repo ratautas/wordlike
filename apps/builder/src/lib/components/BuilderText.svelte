@@ -48,13 +48,12 @@
     let editorRef: HTMLElement;
     let isExpanded = false;
     let isEditorFocused = false;
-    let isClickedOnControls = false;
 
     let top = "0px";
     let left = "0px";
     let transform = "translate3d(0, 0, 0)";
 
-    $: showControls = isEditorFocused || isClickedOnControls || true;
+    $: showControls = isEditorFocused || true;
     $: isBold = editor?.isActive("bold");
     $: isItalic = editor?.isActive("italic");
     $: isUnderline = editor?.isActive("underline");
@@ -133,68 +132,12 @@
         event.stopPropagation();
         // refocus back to the editor and select previous text
         isEditorFocused = true;
-        editor.chain().focus().setTextSelection(editor.state.selection);
-        isClickedOnControls = false;
+        editor.commands.focus();
     }
 
-    function handleBoldClick() {
-        editor.chain().focus().toggleBold().run();
-    }
-
-    function handleItalicClick() {
-        editor.chain().focus().toggleItalic().run();
-    }
-
-    function handleUnderlineClick() {
-        editor.chain().focus().toggleUnderline().run();
-    }
-
-    function handleStrikethroughClick() {
-        editor.chain().focus().toggleStrike().run();
-    }
-
-    function handleAlignLeftClick() {
-        editor.chain().focus().setTextAlign("left").run();
-    }
-
-    function handleAlignCenterClick() {
-        editor.chain().focus().setTextAlign("center").run();
-    }
-
-    function handleAlignRightClick() {
-        editor.chain().focus().setTextAlign("right").run();
-    }
-
-    function handleAlignJustifyClick() {
-        editor.chain().focus().setTextAlign("justify").run();
-    }
-
-    function handleOrderedListClick() {
-        editor.chain().focus().toggleOrderedList().run();
-    }
-
-    function handleUnorderedListClick() {
-        editor.chain().focus().toggleBulletList().run();
-    }
-
-    function handleLinkClick() {
-        editor.chain().focus().toggleLink({ href: "https://google.com" }).run();
-    }
-
-    function handleHeading1Click() {
-        editor.chain().focus().toggleHeading({ level: 1 }).run();
-    }
-
-    function handleHeading2Click() {
-        editor.chain().focus().toggleHeading({ level: 2 }).run();
-    }
-
-    function handleHeading3Click() {
-        editor.chain().focus().toggleHeading({ level: 3 }).run();
-    }
-
-    function handleParagraphClick() {
-        editor.chain().focus().setParagraph().run();
+    function run(command: any, params?: any) {
+        editor.commands.focus();
+        editor.commands[command](params);
     }
 </script>
 
@@ -213,7 +156,6 @@
     style:left
     bind:this={controlsRef}
     on:click={handleControlsClick}
-    on:mousedown={() => (isClickedOnControls = true)}
 >
     <TextControl>
         <TextControlTooltip slot="tooltip">
@@ -238,28 +180,28 @@
         >
             <div class="text-sm bg-white text-left rounded">
                 <button
-                    on:click={handleHeading1Click}
+                    on:click={() => run("toggleHeading", { level: 1 })}
                     type="button"
                     class="whitespace-nowrap text-left p-1 text-ellipsis overflow-hidden w-full"
                 >
                     Title (h1)
                 </button>
                 <button
-                    on:click={handleHeading2Click}
+                    on:click={() => run("toggleHeading", { level: 2 })}
                     type="button"
                     class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
                 >
                     Subtitle (h2)
                 </button>
                 <button
-                    on:click={handleHeading3Click}
+                    on:click={() => run("toggleHeading", { level: 3 })}
                     type="button"
                     class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
                 >
                     Small Subtitle (h3)
                 </button>
                 <button
-                    on:click={handleParagraphClick}
+                    on:click={() => run("setParagraph")}
                     type="button"
                     class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
                 >
@@ -271,8 +213,8 @@
 
     {#if isExpanded}
         <TextControl>
-            <TextControlTooltip slot="tooltip">Font</TextControlTooltip>
-            <div class="px-2 py-1">Font Family</div>
+            <TextControlTooltip slot="tooltip">Font Family</TextControlTooltip>
+            <div class="px-2 py-1">Font</div>
             <div
                 slot="dropdown"
                 class="absolute left-0 right-0 top-full whitespace-normal opacity-0 pointer-events-none pt-2 group-hover/btn:opacity-100 group-hover/btn:pointer-events-auto"
@@ -300,11 +242,11 @@
             Bold <Kbd key="⌘" /> + <Kbd key="B" />
         </TextControlTooltip>
         <button
-            class="px-2 h-7 flex items-center cursor-pointer"
+            class="w-7 h-7 flex justify-center items-center cursor-pointer"
             class:text-green-700={isBold}
             class:bg-green-50={isBold}
             type="button"
-            on:click={handleBoldClick}
+            on:click={() => run("toggleBold")}
         >
             <BiTypeBold />
         </button>
@@ -315,11 +257,11 @@
             Italic <Kbd key="⌘" /> + <Kbd key="I" />
         </TextControlTooltip>
         <button
-            class="px-2 h-7 flex items-center cursor-pointer"
+            class="w-7 h-7 flex justify-center items-center cursor-pointer"
             type="button"
             class:text-green-700={isItalic}
             class:bg-green-50={isItalic}
-            on:click={handleItalicClick}
+            on:click={() => run("toggleItalic")}
         >
             <BiTypeItalic />
         </button>
@@ -331,11 +273,11 @@
                 Underline <Kbd key="⌘" /> + <Kbd key="U" />
             </TextControlTooltip>
             <button
-                class="px-2 h-7 flex items-center cursor-pointer"
+                class="w-7 h-7 flex justify-center items-center cursor-pointer"
                 type="button"
                 class:text-green-700={isUnderline}
                 class:bg-green-50={isUnderline}
-                on:click={handleUnderlineClick}
+                on:click={() => run("toggleUnderline")}
             >
                 <BiTypeUnderline />
             </button>
@@ -347,11 +289,11 @@
             <TextControlTooltip slot="tooltip">Strikethrough</TextControlTooltip
             >
             <button
-                class="px-2 h-7 flex items-center cursor-pointer"
+                class="w-7 h-7 flex justify-center items-center cursor-pointer"
                 type="button"
                 class:text-green-700={isStrikethrough}
                 class:bg-green-50={isStrikethrough}
-                on:click={handleStrikethroughClick}
+                on:click={() => run("toggleStrike")}
             >
                 <BiTypeStrikethrough />
             </button>
@@ -361,41 +303,41 @@
     <TextControl>
         <TextControlTooltip slot="tooltip">Align Text</TextControlTooltip>
         <button
-            class="px-2 h-7 flex items-center cursor-pointer group-btn"
+            class="w-7 h-7 flex items-center justify-center cursor-pointer group-btn"
             type="button"
         >
             <BiTextLeft />
         </button>
         <div
             slot="dropdown"
-            class="absolute left-0 right-0 top-full whitespace-normal opacity-0 pointer-events-none pt-2 group-hover/btn:opacity-100 group-hover/btn:pointer-events-auto"
+            class="absolute left-1/2 top-full opacity-0 pointer-events-none pt-2 group-hover/btn:opacity-100 group-hover/btn:pointer-events-auto"
         >
-            <div class="text-sm bg-white text-left rounded">
+            <div class="bg-white flex -translate-x-1/2">
                 <button
-                    on:click={handleAlignLeftClick}
+                    on:click={() => run("setTextAlign", "left")}
                     type="button"
-                    class="whitespace-nowrap text-left p-1 text-ellipsis overflow-hidden w-full"
+                    class="p-1 flex justify-center"
                 >
                     <BiTextLeft />
                 </button>
                 <button
-                    on:click={handleAlignCenterClick}
+                    on:click={() => run("setTextAlign", "center")}
                     type="button"
-                    class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
+                    class="p-1 flex justify-center"
                 >
                     <BiTextCenter />
                 </button>
                 <button
-                    on:click={handleAlignRightClick}
+                    on:click={() => run("setTextAlign", "right")}
                     type="button"
-                    class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
+                    class="p-1 flex justify-center"
                 >
                     <BiTextRight />
                 </button>
                 <button
-                    on:click={handleAlignJustifyClick}
+                    on:click={() => run("setTextAlign", "justify")}
                     type="button"
-                    class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
+                    class="p-1 flex justify-center"
                 >
                     <BiTextJustify />
                 </button>
@@ -407,9 +349,9 @@
         <TextControl>
             <TextControlTooltip slot="tooltip">Add List</TextControlTooltip>
             <button
-                class="px-2 h-7 flex items-center cursor-pointer group-btn"
+                class="w-7 h-7 flex items-center justify-center cursor-pointer group-btn"
                 type="button"
-                on:click={handleUnorderedListClick}
+                on:click={() => run("toggleUnorderedList")}
             >
                 <BiListUl />
             </button>
@@ -419,14 +361,14 @@
             >
                 <div class="text-sm bg-white text-left rounded">
                     <button
-                        on:click={handleUnorderedListClick}
+                        on:click={() => run("toggleUnorderedList")}
                         type="button"
                         class="whitespace-nowrap text-left p-1 text-ellipsis overflow-hidden w-full"
                     >
                         <BiListUl />
                     </button>
                     <button
-                        on:click={handleOrderedListClick}
+                        on:click={() => run("toggleOrderedList")}
                         type="button"
                         class="whitespace-nowrap p-1 text-left text-ellipsis overflow-hidden w-full"
                     >
@@ -440,9 +382,9 @@
     <TextControl>
         <TextControlTooltip slot="tooltip">Insert Link</TextControlTooltip>
         <button
-            class="px-2 h-7 flex items-center cursor-pointer"
+            class="w-7 h-7 flex justify-center items-center cursor-pointer"
             type="button"
-            on:click={handleLinkClick}
+            on:click={() => run("toggleLink", { href: "/" })}
         >
             <BiLink45deg />
         </button>
@@ -450,7 +392,10 @@
 
     <TextControl>
         <TextControlTooltip slot="tooltip">Pick a Color</TextControlTooltip>
-        <button class="px-2 h-7 flex items-center cursor-pointer" type="button">
+        <button
+            class="w-7 h-7 flex justify-center items-center cursor-pointer"
+            type="button"
+        >
             <div class="w-4 h-4 rounded-full bg-purple-400 border-[1px]" />
         </button>
     </TextControl>
