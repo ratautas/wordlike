@@ -167,13 +167,9 @@
     if (event.key === "Shift") isShiftPressed.set(false);
   }
 
-  function handleFocusIn(e: FocusEvent) {
-    console.log("handleFocusIn");
-    // isShiftPressed.set(false);
-  }
+  function handleFocusIn(e: FocusEvent) {}
 
   function handleFocusOut(e: FocusEvent) {
-    console.log("handleFocusOut");
     recalculatePositions();
   }
 

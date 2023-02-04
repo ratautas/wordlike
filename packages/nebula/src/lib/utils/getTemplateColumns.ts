@@ -18,7 +18,8 @@ export function getTemplateColumns({ elementData, gridTemplateColumns, deviceKey
     ]
         .map((col) => {
             if (isNaN(Number(col))) return col;
-            return `${Math.round(col as number / width * 1000)}fr`;
+            // return `${Math.round(col as number / width * 1000)}fr`;
+            return `${col as number / width * 1000}fr`;
         })
         .join(' ');
 };
