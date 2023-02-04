@@ -19,6 +19,7 @@
   // - lists
   // - link
   // SECONDARY:
+  // - element type
   // - font family
   // - underline
   // - strikethrough

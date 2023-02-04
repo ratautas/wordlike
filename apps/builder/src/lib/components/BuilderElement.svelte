@@ -6,7 +6,7 @@
     import ElementControls from "$lib/components/ElementControls.svelte";
     import Guides from "$lib/components/Guides.svelte";
     import SideOvershoots from "$lib/components/SideOvershoots.svelte";
-    import TextEditor from "$lib/components/TextEditor.svelte";
+    import BuilderText from "$lib/components/BuilderText.svelte";
     import { selectedElementIds, insertingElement } from "$lib/stores/element";
     import { deviceKey } from "$lib/stores/device";
     import {
@@ -104,7 +104,7 @@
         <SideOvershoots elementData={gridElementData} {isHovered} />
     </div>
 {:else if type === ELEMENT_TYPES.TEXT}
-    <TextEditor {elementData} />
+    <BuilderText {elementData} />
 {:else if type === ELEMENT_TYPES.IMAGE}
     <!-- else if content here -->
 {:else}

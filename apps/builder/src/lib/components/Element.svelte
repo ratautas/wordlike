@@ -4,7 +4,7 @@
 
   import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
   import Grid from "$lib/components/Grid.svelte";
-  import TextEditor from "$lib/components/TextEditor.svelte";
+  import BuilderText from "$lib/components/BuilderText.svelte";
   import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
 
@@ -51,7 +51,7 @@
   {#if type === ELEMENT_TYPES.GRID}
     <Grid {elementData} />
   {:else if type === ELEMENT_TYPES.TEXT}
-    <TextEditor {elementData} />
+    <BuilderText {elementData} />
   {:else if type === ELEMENT_TYPES.IMAGE}
     <!-- else if content here -->
   {:else}
