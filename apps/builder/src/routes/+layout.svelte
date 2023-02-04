@@ -1,4 +1,6 @@
 <script lang="ts">
+  import "@wordlike/nebula/style/preflight.css";
+  import "@wordlike/nebula/style/plane.css";
   import "../app.css";
   import { onMount } from "svelte";
   import { supabaseClient } from "$lib/supabase";

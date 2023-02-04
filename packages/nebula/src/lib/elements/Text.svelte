@@ -35,5 +35,19 @@
 			font-size: 1rem;
 			font-weight: 700;
 		}
+
+		:global(ul) {
+			list-style: disc;
+			padding-left: 1.5rem;
+		}
+
+		:global(ol) {
+			list-style: decimal;
+			padding-left: 1.5rem;
+		}
+
+		:global(li) {
+			margin-bottom: 0.5rem;
+		}
 	}
 </style>

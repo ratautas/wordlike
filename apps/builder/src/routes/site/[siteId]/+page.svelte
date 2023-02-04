@@ -1,6 +1,4 @@
 <script lang="ts">
-  import "@wordlike/nebula/style/preflight.css";
-  import "@wordlike/nebula/style/plane.css";
   import { refStore } from "$lib/actions/ref";
 
   import Header from "../components/Header.svelte";

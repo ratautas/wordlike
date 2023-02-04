@@ -16,7 +16,7 @@
 [ ] block resize handles
 [ ] store grid width to json
 [ ] make elementMap to store references to the doc elemements
-[ ] added elements should have predefined types
+[ ] added elements should have predefined device data
 [ ] snap to grid
 [ ] figure out select text vs drag
 [ ] drop on click insertion is not working correctly
@@ -72,3 +72,14 @@ All elements can have a shadow;
 - Grid yra Astro arba Builder failas - kaip sharinami stiliai ir struktūra?
 - Grid'e paskaičiuojamos grid'o pozicijos IR parenkami elementai
 - Parenkami elementai gali būti tie patys su slot'ais arba tiesiog skirtingi pagal kontekstą
+
+
+THEME VARIABLES:
+- colors
+- font sizes
+- font families
+- font weights
+- font slants
+- line heights?..
+- letter spacing?..
+- border radius
