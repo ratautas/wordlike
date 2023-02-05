@@ -58,6 +58,13 @@
     $: isItalic = editor?.isActive("italic");
     $: isUnderline = editor?.isActive("underline");
     $: isStrikethrough = editor?.isActive("strike");
+    $: isLeftAligned = editor?.isActive({ textAlign: "left" });
+    $: isCenterAligned = editor?.isActive({ textAlign: "center" });
+    $: isRightAligned = editor?.isActive({ textAlign: "right" });
+    $: isJustified = editor?.isActive({ textAlign: "justify" });
+    $: isNumberedList = editor?.isActive("orderedList");
+    $: isBulletedList = editor?.isActive("bulletList");
+    $: isLink = editor?.isActive("link");
 
     // handlers:
     function handleElementMount(event: CustomEvent) {
@@ -306,17 +313,29 @@
             class="w-7 h-7 flex items-center justify-center cursor-pointer group-btn"
             type="button"
         >
-            <BiTextLeft />
+            {#if isLeftAligned}
+                <BiTextLeft />
+            {/if}
+            {#if isCenterAligned}
+                <BiTextCenter />
+            {/if}
+            {#if isRightAligned}
+                <BiTextRight />
+            {/if}
+            {#if isJustified}
+                <BiTextJustify />
+            {/if}
         </button>
         <div
             slot="dropdown"
-            class="absolute left-1/2 top-full opacity-0 pointer-events-none pt-2 group-hover/btn:opacity-100 group-hover/btn:pointer-events-auto"
+            class="absolute left-1/2 -translate-x-1/2 top-full opacity-0 pointer-events-none pt-2 group-hover/btn:opacity-100 group-hover/btn:pointer-events-auto"
         >
-            <div class="bg-white flex -translate-x-1/2">
+            <div class="bg-white flex">
                 <button
                     on:click={() => run("setTextAlign", "left")}
                     type="button"
                     class="p-1 flex justify-center"
+                    class:bg-green-50={isLeftAligned}
                 >
                     <BiTextLeft />
                 </button>
@@ -324,6 +343,7 @@
                     on:click={() => run("setTextAlign", "center")}
                     type="button"
                     class="p-1 flex justify-center"
+                    class:bg-green-50={isCenterAligned}
                 >
                     <BiTextCenter />
                 </button>
@@ -331,6 +351,7 @@
                     on:click={() => run("setTextAlign", "right")}
                     type="button"
                     class="p-1 flex justify-center"
+                    class:bg-green-50={isRightAligned}
                 >
                     <BiTextRight />
                 </button>
@@ -338,6 +359,7 @@
                     on:click={() => run("setTextAlign", "justify")}
                     type="button"
                     class="p-1 flex justify-center"
+                    class:bg-green-50={isJustified}
                 >
                     <BiTextJustify />
                 </button>
