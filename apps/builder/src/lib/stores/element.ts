@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import type { ElementType } from '@wordlike/nebula';
+import type { ElementType, GridElementType } from '@wordlike/nebula/package/schema';
 import { refStore } from "$lib/actions/ref";
 
 import {
@@ -40,14 +40,13 @@ export const INSERTED_TYPES = {
 export const selectedElementIds = writable([] as string[]);
 export const insertingElement = writable<ElementType | undefined | null>();
 
-export function findById(element: ElementType, id: string): ElementType | undefined {
-  return element?.id === id || findById(element?.children, id);
-}
-
+export const findById = (element: GridElementType, id: string) => {
+  return element?.id === id && element || findById(element?.children, id);
+};
 
 export function findElementById(id: string) {
   return derived(doc, ($doc) => {
-    return findById($doc?.pages[get(currentPageIndex)], id);
+    return findById($doc?.pages[get(currentPageIndex)].children, id);
   });
 }
 

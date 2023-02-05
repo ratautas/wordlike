@@ -263,14 +263,14 @@ export const DeviceSchema = z.object({
   paddingY: z.number().optional(),
 });
 
-export const DeviceKeyType = z.enum([
+export const DeviceKeySchema = z.enum([
   'desktop',
   // 'tablet',
   'mobile'
 ])
-export const DeviceRecordType = z.record(DeviceKeyType, DeviceSchema);
+export const DeviceRecordSchema = z.record(DeviceKeySchema, DeviceSchema);
 
-export const ElementType = z.object({
+export const ElementSchema = z.object({
   id: z.string(),
   type: z.enum(['TEXT', 'IMAGE', 'GRID']),
   desktop: DeviceSchema,
@@ -278,34 +278,34 @@ export const ElementType = z.object({
   mobile: DeviceSchema.optional(),
 });
 
-export const TextElementType = ElementType.extend({
+export const TextElementSchema = ElementSchema.extend({
   type: z.literal('TEXT'),
   html: z.string(),
 });
 
-export const GridElementType = ElementType.extend({
+export const GridElementSchema = ElementSchema.extend({
   type: z.literal('GRID'),
-  children: z.array(ElementType),
+  children: z.array(ElementSchema),
 });
 
-export const PageType = z.object({
+export const PageSchema = z.object({
   id: z.string(),
   slug: z.string(),
   isHome: z.boolean().optional(),
-  children: z.array(GridElementType),
+  children: z.array(GridElementSchema),
 });
 
-export const DocType = z.object({
-  pages: z.array(PageType),
+export const DocSchema = z.object({
+  pages: z.array(PageSchema),
 });
 
 export type DeviceSchema = z.infer<typeof DeviceSchema>;
-export type DeviceKeyType = z.infer<typeof DeviceKeyType>;
-export type DeviceRecordType = z.infer<typeof DeviceRecordType>;
-export type ElementType = z.infer<typeof ElementType>;
-export type TextElementType = z.infer<typeof TextElementType>;
-export type GridElementType = z.infer<typeof GridElementType>;
-export type PageType = z.infer<typeof PageType>;
-export type DocType = z.infer<typeof DocType>;
+export type DeviceKeySchema = z.infer<typeof DeviceKeySchema>;
+export type DeviceRecordSchema = z.infer<typeof DeviceRecordSchema>;
+export type ElementSchema = z.infer<typeof ElementSchema>;
+export type TextElementSchema = z.infer<typeof TextElementSchema>;
+export type GridElementSchema = z.infer<typeof GridElementSchema>;
+export type PageSchema = z.infer<typeof PageSchema>;
+export type DocSchema = z.infer<typeof DocSchema>;
 
 export default doc;
