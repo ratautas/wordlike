@@ -1,0 +1,1 @@
+import{s as a}from"./supabase-4de9858b.js";import{d as r}from"./doc-4183494a.js";const c=async e=>{const{siteId:t}=e.params,{data:s,error:d}=await a.from("sites").select().eq("id",t),[o]=s??[];return r.set(o==null?void 0:o.doc),{doc:o.doc}},i=Object.freeze(Object.defineProperty({__proto__:null,load:c},Symbol.toStringTag,{value:"Module"}));export{i as _,c as l};
