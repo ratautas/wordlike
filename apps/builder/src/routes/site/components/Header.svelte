@@ -11,7 +11,7 @@
   } from "$lib/stores/drag";
   import { INSERTED_TYPES, createInsertedElement } from "$lib/stores/element";
 
-  const { PARAGRAPH, HEADING, BUTTON, CUSTOM_1, CUSTOM_2 } = INSERTED_TYPES;
+  const { PARAGRAPH, HEADING, BUTTON } = INSERTED_TYPES;
 
   function startDragInsert(event: MouseEvent, type: string) {
     dragMousePosition.set({ x: event.clientX, y: event.clientY });

@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { DeviceSchema, DeviceKeySchema, DeviceRecordSchema, ElementSchema, TextElementSchema, GridElementSchema, PageSchema, DocSchema } from '../lib';
 
-export type DeviceSchema = z.infer<typeof DeviceSchema>;
-export type DeviceKeySchema = z.infer<typeof DeviceKeySchema>;
-export type DeviceRecordSchema = z.infer<typeof DeviceRecordSchema>;
-export type ElementSchema = z.infer<typeof ElementSchema>;
-export type TextElementSchema = z.infer<typeof TextElementSchema>;
-export type GridElementSchema = z.infer<typeof GridElementSchema>;
-export type PageSchema = z.infer<typeof PageSchema>;
-export type DocSchema = z.infer<typeof DocSchema>;
+export type DeviceType = z.infer<typeof DeviceSchema>;
+export type DeviceKeyType = z.infer<typeof DeviceKeySchema>;
+export type DeviceRecordType = z.infer<typeof DeviceRecordSchema>;
+export type ElementType = z.infer<typeof ElementSchema>;
+export type TextElementType = z.infer<typeof TextElementSchema>;
+export type GridElementType = z.infer<typeof GridElementSchema>;
+export type PageType = z.infer<typeof PageSchema>;
+export type DocType = z.infer<typeof DocSchema>;

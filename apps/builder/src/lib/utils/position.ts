@@ -1,5 +1,5 @@
 import { DEFAULT_GRID_MAX_WIDTH } from "$lib/constants";
-import type { ElementType, GridElementType } from "@wordlike/schema";
+import type { ElementType, GridElementType } from "@wordlike/schema/types";
 
 export const MIN_WIDTH = 24;
 export const MIN_HEIGHT = 24;

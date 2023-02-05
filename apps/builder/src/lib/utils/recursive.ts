@@ -1,4 +1,4 @@
-import type { ElementType, GridElementType } from '@wordlike/schema';
+import type { ElementType, GridElementType } from '@wordlike/schema/types';
 
 type ElType = ElementType & GridElementType | undefined;
 

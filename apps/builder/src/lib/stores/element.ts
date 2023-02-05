@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import type { ElementType, GridElementType } from '@wordlike/schema';
+import type { ElementType, GridElementType } from '@wordlike/schema/types';
 import { refStore } from "$lib/actions/ref";
 
 import {
@@ -34,7 +34,7 @@ export const INITIAL_INSERTED_PARAGRAPHS = [
 export const INSERTED_TYPES = {
   PARAGRAPH: "PARAGRAPH",
   HEADING: "HEADING",
-  BUTOTN: "BUTTON",
+  BUTTON: "BUTTON",
 };
 
 export const selectedElementIds = writable([] as string[]);
@@ -290,4 +290,11 @@ export function recalculatePositions() {
 
     return $doc;
   });
-}
+};
+
+function elementMapper(elementData: ElementType, elementIds: string[], callback: Function) {
+  return {
+    ...(elementIds.includes(elementData.id) ? callback(elementData) : elementData),
+    children: elementData.children?.map((child: ElementType) => elementMapper(child, elementIds, callback)),
+  };
+};

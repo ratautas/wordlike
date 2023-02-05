@@ -66,7 +66,7 @@
     ElementType,
     GridElementType,
     DeviceKeyType,
-  } from "@wordlike/schema";
+  } from "@wordlike/schema/types";
   import { calculateGrid } from "@wordlike/nebula";
 
   import { ELEMENT_TYPES } from "$lib/constants";

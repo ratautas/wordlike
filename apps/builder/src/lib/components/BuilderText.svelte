@@ -32,7 +32,7 @@
     import BiTextJustify from "~icons/bi/justify";
     import BiListUl from "~icons/bi/list-ul";
 
-    import type { TextElementType } from "@wordlike/schema";
+    import type { TextElementType } from "@wordlike/schema/types";
     import { Text } from "@wordlike/nebula";
 
     import TextControl from "./TextControl.svelte";
