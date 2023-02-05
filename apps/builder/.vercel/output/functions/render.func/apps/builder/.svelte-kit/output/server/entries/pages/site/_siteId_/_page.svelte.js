@@ -738,7 +738,6 @@ const Kbd = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `<kbd class="${"px-1 rounded border-white bg-white bg-opacity-20 border-[1px] border-opacity-70 leading-none"}">${escape(key)}</kbd>`;
 });
 const BuilderText = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let showControls;
   let isBold;
   let isItalic;
   let isLeftAligned;
@@ -752,7 +751,6 @@ const BuilderText = create_ssr_component(($$result, $$props, $$bindings, slots) 
   let left = "0px";
   if ($$props.elementData === void 0 && $$bindings.elementData && elementData !== void 0)
     $$bindings.elementData(elementData);
-  showControls = true;
   isBold = editor?.isActive("bold");
   isItalic = editor?.isActive("italic");
   isLeftAligned = editor?.isActive({ textAlign: "left" });
@@ -764,7 +762,7 @@ const BuilderText = create_ssr_component(($$result, $$props, $$bindings, slots) 
 
 <div class="${[
     "opacity-0 z-10 absolute controls whitespace-nowrap bg-white text-sm text-left flex items-center rounded-full",
-    (showControls ? "opacity-100" : "") + " " + (showControls ? "pointer-events-auto" : "")
+    " "
   ].join(" ").trim()}"${add_styles({ top, left })}${add_attribute("this", controlsRef, 0)}>${validate_component(TextControl, "TextControl").$$render($$result, {}, {}, {
     tooltip: () => {
       return `${validate_component(TextControlTooltip, "TextControlTooltip").$$render($$result, { slot: "tooltip" }, {}, {

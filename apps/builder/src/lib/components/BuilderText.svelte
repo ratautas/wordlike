@@ -53,7 +53,6 @@
     let left = "0px";
     let transform = "translate3d(0, 0, 0)";
 
-    $: showControls = isEditorFocused || true;
     $: isBold = editor?.isActive("bold");
     $: isItalic = editor?.isActive("italic");
     $: isUnderline = editor?.isActive("underline");
@@ -157,8 +156,8 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="opacity-0 z-10 absolute controls whitespace-nowrap bg-white text-sm text-left flex items-center rounded-full"
-    class:opacity-100={showControls}
-    class:pointer-events-auto={showControls}
+    class:opacity-100={isEditorFocused}
+    class:pointer-events-auto={isEditorFocused}
     style:top
     style:left
     bind:this={controlsRef}

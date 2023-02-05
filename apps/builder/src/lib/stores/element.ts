@@ -291,10 +291,3 @@ export function recalculatePositions() {
     return $doc;
   });
 };
-
-function elementMapper(elementData: ElementType, elementIds: string[], callback: Function) {
-  return {
-    ...(elementIds.includes(elementData.id) ? callback(elementData) : elementData),
-    children: elementData.children?.map((child: ElementType) => elementMapper(child, elementIds, callback)),
-  };
-};
