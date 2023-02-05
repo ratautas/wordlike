@@ -44,8 +44,5 @@
   },
   "peerDependencies": {
     "svelte": "^3.55.1"
-  },
-  "dependencies": {
-    "zod": "^3.20.2"
   }
 }

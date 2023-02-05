@@ -21,12 +21,11 @@
 [ ] figure out select text vs drag
 [ ] drop on click insertion is not working correctly
 [x] fix selecting multiple elements
-[ ] move schmeas to separate package
+[x] move schmeas to separate package
 [ ] split nebula to:
 - elements
 - utils
 - schema
-- shared UI (is it needed tho?)
 [ ] round position before saving to json
 [ ] fix most of the TypeScript issiues
 [ ] tweak inserting new element
