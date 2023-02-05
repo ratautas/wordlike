@@ -1,4 +1,4 @@
-import type { ElementType, GridElementType } from '@wordlike/nebula/package/schema';
+import type { ElementType, GridElementType } from '@wordlike/schema';
 
 type ElType = ElementType & GridElementType | undefined;
 

@@ -12,12 +12,12 @@
     });
   }
 
-  doc.set(data.doc);
+  // doc.set(data.doc);
 </script>
 
 <a href="/">Home</a>
 
-<div>{JSON.stringify($doc)}</div>
+<!-- <div>{JSON.stringify($doc)}</div> -->
 
 <button on:click={() => broadcast("click", { payload: "payy" })}>
   klik klik

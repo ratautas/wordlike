@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { page } from "$app/stores";
 
-import type { ElementType, GridElementType } from '@wordlike/nebula/package/schema';
+import type { ElementType, GridElementType } from '@wordlike/schema';
 import { refStore } from "$lib/actions/ref";
 
 import {

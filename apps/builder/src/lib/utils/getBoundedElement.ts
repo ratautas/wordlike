@@ -1,5 +1,5 @@
 import { DEVICE_DEFAULTS } from "@wordlike/nebula";
-import type { DeviceKeyType, ElementType, GridElementType } from "@wordlike/nebula/package/schema";
+import type { DeviceKeyType, ElementType, GridElementType } from "@wordlike/schema";
 
 export const MIN_WIDTH = 96;
 export const MIN_HEIGHT = 24;

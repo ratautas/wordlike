@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { ElementType } from "@wordlike/nebula/package/schema";
+    import type { ElementType } from "@wordlike/schema";
     import { getGridVars, ELEMENT_TYPES } from "@wordlike/nebula";
 
     import { refAction } from "$lib/actions/ref";

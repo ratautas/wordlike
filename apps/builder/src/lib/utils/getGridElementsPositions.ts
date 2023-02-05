@@ -1,5 +1,5 @@
 import { ELEMENT_TYPES } from "@wordlike/nebula";
-import type { DeviceKeyType, GridElementType, ElementType } from "@wordlike/nebula/package/schema";
+import type { DeviceKeyType, GridElementType, ElementType } from "@wordlike/schema";
 import { getBoundedElement } from "$lib/utils/getBoundedElement";
 
 export type GetGridElementsPositionsParams = {

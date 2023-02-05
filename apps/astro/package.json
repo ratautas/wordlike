@@ -13,8 +13,9 @@
   "dependencies": {
     "@astrojs/svelte": "^2.0.1",
     "@astrojs/vercel": "^3.0.1",
-    "@supabase/supabase-js": "^2.7.0",
+    "@supabase/supabase-js": "^2.7.1",
     "@wordlike/nebula": "workspace:*",
+    "@wordlike/schema": "workspace:*",
     "astro": "^2.0.6",
     "svelte": "^3.54.0"
   },
