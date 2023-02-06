@@ -38,6 +38,7 @@ export const INSERTED_TYPES = {
 };
 
 export const selectedElementIds = writable([] as string[]);
+export const hoveredElementIds = writable([] as string[]);
 export const insertingElement = writable<ElementType | undefined | null>();
 
 export const findById = (element: GridElementType, id: string) => {
@@ -316,3 +317,16 @@ export const elementMap = derived(
       .children
       .reduce((acc, el) => reducer(acc, el), {});
   });
+
+export function addHoveredElement(elementId) {
+  hoveredElementIds.update((ids) => {
+    if (ids.includes(elementId)) return ids;
+    return [...ids, elementId];
+  });
+};
+
+export function removeHoveredElement(elementId) {
+  hoveredElementIds.update((ids) => {
+    return ids.filter((id) => id !== elementId);
+  });
+} 

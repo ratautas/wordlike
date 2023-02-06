@@ -12,14 +12,14 @@
 [x] astro
 [ ] cleanup components
 [x] move only tailwind resets to Astro
+[ ] drop on click insertion is not working correctly
 [ ] add more text types
 [ ] block resize handles
 [ ] store grid width to json
-[ ] make elementMap to store references to the doc elemements
+[x] make elementMap to store references to the doc elemements
 [ ] added elements should have predefined device data
 [ ] snap to grid
 [ ] figure out select text vs drag
-[ ] drop on click insertion is not working correctly
 [x] fix selecting multiple elements
 [x] move schmeas to separate package
 [ ] split nebula to:
@@ -35,6 +35,7 @@
 [ ] padding
 [ ] border + radius
 [ ] re-enable saving
+[ ] push hover elements not only for block
 [ ] local backend
 [ ] add functionalty to de-snap from side
 [ ] add alignment between elements guides

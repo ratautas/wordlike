@@ -11,17 +11,15 @@
 
     // props:
     export let elementData: GridElementType;
+    export let planeRef: HTMLElement;
     export let isHovered = false;
-
-    // state:
-    let guidesRef: HTMLElement | undefined;
 
     $: overShoot = (() => {
         if (!$isDragging) return;
         if (elementData.type !== ELEMENT_TYPES.GRID) return;
         if (!$resizeDirection) return;
 
-        const { x, width } = guidesRef?.getBoundingClientRect() ?? {};
+        const { x, width } = planeRef?.getBoundingClientRect() ?? {};
         const { clientX } = $mouseMoveEvent;
         if (!x || !width) return;
 
@@ -35,7 +33,7 @@
         if (!isHovered && overShoot !== "LEFT") return 0;
 
         const { clientX } = $mouseMoveEvent ?? {};
-        const { x } = guidesRef?.getBoundingClientRect() ?? {};
+        const { x } = planeRef?.getBoundingClientRect() ?? {};
         if (!x) return 8;
         return 8 + (x - clientX) / 16;
     })();
@@ -44,17 +42,13 @@
         if (!isHovered && overShoot !== "RIGHT") return 0;
 
         const { clientX } = $mouseMoveEvent ?? {};
-        const { x, width } = guidesRef?.getBoundingClientRect() ?? {};
+        const { x, width } = planeRef?.getBoundingClientRect() ?? {};
         if (!x || !width) return 8;
         return 8 + (clientX - x - width) / 16;
     })();
 </script>
 
 {#if $resizeDirection}
-    <div
-        class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2]"
-        bind:this={guidesRef}
-    />
     <div
         class="absolute left-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-left)] transition-opacity"
         class:opacity-10={isHovered && overShoot === "LEFT"}

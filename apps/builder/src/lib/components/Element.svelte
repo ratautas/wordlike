@@ -7,7 +7,13 @@
   import Guides from "$lib/components/Guides.svelte";
   import SideOvershoots from "$lib/components/SideOvershoots.svelte";
   import BuilderText from "$lib/components/BuilderText.svelte";
-  import { selectedElementIds, insertingElement } from "$lib/stores/element";
+  import {
+    selectedElementIds,
+    insertingElement,
+    hoveredElementIds,
+    addHoveredElement,
+    removeHoveredElement,
+  } from "$lib/stores/element";
   import { deviceKey } from "$lib/stores/device";
   import {
     dragDiffX,
@@ -23,9 +29,8 @@
 
   export let elementData: ElementType;
 
-  let isHovered = false;
   let gridRef: HTMLElement;
-  let guidesRef: HTMLElement;
+  let planeRef: HTMLElement;
 
   $: ({ type, id } = elementData);
   $: isSelected = $selectedElementIds.includes(id);
@@ -40,38 +45,43 @@
   });
   $: ({ gridCssVars, elementCssVars } =
     type === ELEMENT_TYPES.GRID && getGridVars(gridElementData));
+  $: isHovered = $hoveredElementIds.includes(id);
 
   $: {
     const isInPath = $mouseMoveComposedPath.includes(gridRef);
-    if (!isInPath && isHovered) {
-      isHovered = false;
-    } else if (isInPath && !isHovered) {
-      isHovered = true;
-      if ($isInserting) {
-        const { clientX, clientY } = $mouseMoveEvent;
-        const { left, top } = guidesRef?.getBoundingClientRect();
+    if (isInPath && !isHovered && $isInserting) {
+      const { clientX, clientY } = $mouseMoveEvent;
+      const { left, top } = planeRef?.getBoundingClientRect();
 
-        initialMousePosition.set({
-          x: clientX,
-          y: clientY,
-        });
+      initialMousePosition.set({
+        x: clientX,
+        y: clientY,
+      });
 
-        const x = clientX - left - 150;
-        const y = clientY - top - 24;
-        insertingElement.update((elementData) => {
-          return {
-            ...elementData,
-            [$deviceKey]: {
-              ...elementData[$deviceKey],
-              x,
-              y,
-            },
-          };
-        });
-        selectedElementIds.set([$insertingElement?.id]);
-        isDragging.set(true);
-      }
+      const x = clientX - left - 150;
+      const y = clientY - top - 24;
+      insertingElement.update((elementData) => {
+        return {
+          ...elementData,
+          [$deviceKey]: {
+            ...elementData[$deviceKey],
+            x,
+            y,
+          },
+        };
+      });
+      selectedElementIds.set([$insertingElement?.id]);
+      isDragging.set(true);
     }
+  }
+
+  function handlePlaneMouseEnter(event: MouseEvent) {
+    addHoveredElement(id);
+    console.log($hoveredElementIds);
+  }
+
+  function handlePlaneMouseLeave(event: MouseEvent) {
+    removeHoveredElement(id);
   }
 </script>
 
@@ -80,6 +90,8 @@
     class="plane group/plane"
     style={gridCssVars}
     bind:this={gridRef}
+    on:mouseenter={handlePlaneMouseEnter}
+    on:mouseleave={handlePlaneMouseLeave}
     use:refAction={{ id: gridElementData.id, type: "elementRef" }}
   >
     {#each gridElementData.children as childElementData, i}
@@ -95,13 +107,13 @@
     <div
       class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2] overflow-hidden"
       class:opacity-100={isHovered}
-      bind:this={guidesRef}
-      use:refAction={{ id: elementData.id, type: "planeRef" }}
+      bind:this={planeRef}
+      use:refAction={{ id, type: "planeRef" }}
     >
       <ElementControls {elementData} />
       <Guides elementData={gridElementData} />
     </div>
-    <SideOvershoots elementData={gridElementData} {isHovered} />
+    <SideOvershoots elementData={gridElementData} {isHovered} {planeRef} />
   </div>
 {:else if type === ELEMENT_TYPES.TEXT}
   <BuilderText {elementData} />
