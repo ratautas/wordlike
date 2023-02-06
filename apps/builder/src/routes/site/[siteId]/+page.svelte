@@ -6,7 +6,7 @@
     selectedElementIds,
     recalculatePositions,
   } from "$lib/stores/element";
-  import BuilderElement from "$lib/components/BuilderElement.svelte";
+  import Element from "$lib/components/Element.svelte";
   import { handleMouseDown } from "./handleMouseDown";
   import { handleMouseUp } from "./handleMouseUp";
   import { handleMouseMove } from "./handleMouseMove";
@@ -35,6 +35,6 @@
 <main class="min-h-screen bg-gray-100">
   <Header />
   {#each $currentPageData.children as elementData}
-    <BuilderElement {elementData} />
+    <Element {elementData} />
   {/each}
 </main>

@@ -1,6 +1,6 @@
 ---
 import type { ElementType, PageType } from "@wordlike/schema/types";
-import AstroElement from "../components/AstroElement.astro";
+import Element from "../components/Element.astro";
 import Layout from "../layouts/Layout.astro";
 import { createClient } from "@supabase/supabase-js";
 
@@ -30,10 +30,6 @@ if (!page) return redirect("/404");
 
 <Layout title="Welcome to Astro.">
   <main>
-    {
-      page.children.map((elementData: ElementType) => (
-        <AstroElement {elementData} />
-      ))
-    }
+    {page.children.map((elementData: ElementType) => <Element {elementData} />)}
   </main>
 </Layout>

@@ -1,105 +1,116 @@
 <script lang="ts">
   import type { ElementType } from "@wordlike/schema/types";
-  import { ref } from "@wordlike/nebula";
+  import { getGridVars, ELEMENT_TYPES } from "@wordlike/nebula";
 
-  import { DEFAULT_GRID_MAX_WIDTH, ELEMENT_TYPES } from "$lib/constants";
-  import Grid from "$lib/components/Grid.svelte";
+  import { refAction } from "$lib/actions/ref";
+  import ElementControls from "$lib/components/ElementControls.svelte";
+  import Guides from "$lib/components/Guides.svelte";
+  import SideOvershoots from "$lib/components/SideOvershoots.svelte";
   import BuilderText from "$lib/components/BuilderText.svelte";
-  import { dragDiffX, dragDiffY } from "$lib/stores/drag";
   import { selectedElementIds, insertingElement } from "$lib/stores/element";
+  import { deviceKey } from "$lib/stores/device";
+  import {
+    dragDiffX,
+    dragDiffY,
+    isDragging,
+    resizeDirection,
+    isInserting,
+    initialMousePosition,
+    mouseMoveEvent,
+    mouseMoveComposedPath,
+  } from "$lib/stores/drag";
+  import { getGridElementsPositions } from "$lib/utils/getGridElementsPositions";
 
-  // props:
   export let elementData: ElementType;
-  export let gridData;
-  export let index: number;
 
-  // derived data:
-  $: ({
-    rowStartIndex,
-    columnStartIndex,
-    rowEndIndex,
-    columnEndIndex,
-    columnCount,
-  } = gridData ?? {});
-  $: rowStart = rowStartIndex + 1;
-  $: columnStart = snapLeft ? 1 : columnStartIndex + 1;
-  $: rowEnd = rowEndIndex + 1;
-  $: columnEnd = snapRight ? columnCount + 2 : columnEndIndex + 1;
-  $: gridArea = gridData
-    ? [rowStart, columnStart, rowEnd, columnEnd].join("/")
-    : null;
+  let isHovered = false;
+  let gridRef: HTMLElement;
+  let guidesRef: HTMLElement;
 
+  $: ({ type, id } = elementData);
   $: isSelected = $selectedElementIds.includes(id);
-  $: hasMoved = isSelected && ($dragDiffX || $dragDiffY);
-  $: ({ desktop, id, type } = elementData ?? {});
-  $: ({ snapLeft, snapRight, paddingY } = desktop ?? {});
-  $: desktopWidth = `${desktop?.width ?? DEFAULT_GRID_MAX_WIDTH}px`;
-</script>
+  $: gridElementData = getGridElementsPositions({
+    elementData,
+    isDragging: $isDragging,
+    selectedElementIds: $selectedElementIds,
+    diffX: $dragDiffX,
+    diffY: $dragDiffY,
+    device: $deviceKey,
+    resizeDirection: $resizeDirection,
+  });
+  $: ({ gridCssVars, elementCssVars } =
+    type === ELEMENT_TYPES.GRID && getGridVars(gridElementData));
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-  class={`element element--${type}`}
-  class:is-selected={isSelected}
-  class:cursor-grabbing={$insertingElement?.id === id}
-  class:has-moved={hasMoved}
-  style:grid-area={gridArea}
-  style:--desktop-width={desktopWidth}
-  style:--desktop-padding-y={`${paddingY ?? 0}px`}
-  use:ref={id}
->
-  <!-- <pre style="font-size:10px;">{JSON.stringify(gridData, null, 1)}</pre> -->
-  {#if type === ELEMENT_TYPES.GRID}
-    <Grid {elementData} />
-  {:else if type === ELEMENT_TYPES.TEXT}
-    <BuilderText {elementData} />
-  {:else if type === ELEMENT_TYPES.IMAGE}
-    <!-- else if content here -->
-  {:else}
-    <!-- else content here -->
-  {/if}
-  {#if isSelected}
-    <slot name="controls" />
-  {/if}
-</div>
+  $: {
+    const isInPath = $mouseMoveComposedPath.includes(gridRef);
+    if (!isInPath && isHovered) {
+      isHovered = false;
+    } else if (isInPath && !isHovered) {
+      isHovered = true;
+      if ($isInserting) {
+        const { clientX, clientY } = $mouseMoveEvent;
+        const { left, top } = guidesRef?.getBoundingClientRect();
 
-<style lang="scss">
-  @use "sass:math";
-  $size: 8px;
+        initialMousePosition.set({
+          x: clientX,
+          y: clientY,
+        });
 
-  .element {
-    z-index: 2;
-    position: relative;
-    align-self: start;
-    &::before {
-      content: "";
-      display: block;
-      position: absolute;
-      inset: -0.5px;
-      border: 1px solid cadetblue;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 2;
-      border-radius: 0.125rem;
-    }
-
-    &--GRID {
-      &::before {
-        top: var(--desktop-padding-y);
-        right: calc((100% - var(--desktop-width)) / 2);
-        left: calc((100% - var(--desktop-width)) / 2);
-      }
-    }
-
-    &:hover {
-      &::before {
-        opacity: 0.3;
-      }
-    }
-    &.is-selected {
-      z-index: 3;
-      &::before {
-        opacity: 0.5;
+        const x = clientX - left - 150;
+        const y = clientY - top - 24;
+        insertingElement.update((elementData) => {
+          return {
+            ...elementData,
+            [$deviceKey]: {
+              ...elementData[$deviceKey],
+              x,
+              y,
+            },
+          };
+        });
+        selectedElementIds.set([$insertingElement?.id]);
+        isDragging.set(true);
       }
     }
   }
-</style>
+</script>
+
+{#if type === ELEMENT_TYPES.GRID}
+  <div
+    class="plane group/plane"
+    style={gridCssVars}
+    bind:this={gridRef}
+    use:refAction={{ id: gridElementData.id, type: "elementRef" }}
+  >
+    {#each gridElementData.children as childElementData, i}
+      <div
+        class="element group/element"
+        style={elementCssVars[i]}
+        use:refAction={{ id: childElementData.id, type: "elementRef" }}
+      >
+        <svelte:self elementData={childElementData} />
+      </div>
+    {/each}
+
+    <div
+      class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2] overflow-hidden"
+      class:opacity-100={isHovered}
+      bind:this={guidesRef}
+      use:refAction={{ id: elementData.id, type: "planeRef" }}
+    >
+      <ElementControls {elementData} />
+      <Guides elementData={gridElementData} />
+    </div>
+    <SideOvershoots elementData={gridElementData} {isHovered} />
+  </div>
+{:else if type === ELEMENT_TYPES.TEXT}
+  <BuilderText {elementData} />
+{:else if type === ELEMENT_TYPES.IMAGE}
+  <!-- else if content here -->
+{:else}
+  <!-- else content here -->
+{/if}
+
+{#if isSelected && type !== ELEMENT_TYPES.GRID}
+  <ElementControls {elementData} />
+{/if}
