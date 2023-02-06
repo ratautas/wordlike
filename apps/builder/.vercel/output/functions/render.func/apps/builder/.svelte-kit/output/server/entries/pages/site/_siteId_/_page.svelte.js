@@ -1,5 +1,5 @@
 import { c as create_ssr_component, h as spread, j as escape_object, k as createEventDispatcher, o as onDestroy, f as add_attribute, l as get_store_value, a as subscribe, v as validate_component, e as escape, p as null_to_empty, q as add_styles, d as each } from "../../../../chunks/index3.js";
-import { w as writable, d as derived } from "../../../../chunks/index2.js";
+import { d as derived, w as writable } from "../../../../chunks/index2.js";
 import { d as doc, c as currentPageIndex, a as currentPageData } from "../../../../chunks/doc.js";
 import "../../../../chunks/supabase.js";
 import "@tiptap/extension-text";
@@ -15,7 +15,6 @@ import "@tiptap/extension-text-align";
 import "@tiptap/extension-list-item";
 import "@tiptap/extension-bullet-list";
 import "@tiptap/extension-ordered-list";
-const refStore = writable({});
 const Textarea_t = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `<svg${spread(
     [
@@ -78,7 +77,7 @@ const dragDiffY = derived(
     return $dragMousePosition.y - $initialMousePosition.y;
   }
 );
-const hasDragged = derived(
+derived(
   [dragDiffX, dragDiffY],
   ([$x, $y]) => {
     return $x !== null && $x !== 0 && $y !== null && $y !== 0;
@@ -96,6 +95,7 @@ const mouseMoveComposedPath = derived(
     return $mouseMoveEvent?.composedPath() ?? [];
   }
 );
+const refStore = writable({});
 const Text_svelte_svelte_type_style_lang = "";
 const css$1 = {
   code: ".text.svelte-1tgc0nl{overflow-wrap:break-word}.text.svelte-1tgc0nl h1{font-size:2rem;font-weight:700}.text.svelte-1tgc0nl h2{font-size:1.5rem;font-weight:700}.text.svelte-1tgc0nl h3{font-size:1.3rem;font-weight:700}.text.svelte-1tgc0nl h4{font-size:1rem;font-weight:700}.text.svelte-1tgc0nl ul{list-style:disc;padding-left:1.5rem}.text.svelte-1tgc0nl ol{list-style:decimal;padding-left:1.5rem}.text.svelte-1tgc0nl li{margin-bottom:0.5rem}",
@@ -407,6 +407,24 @@ function recalculatePositions() {
     return $doc;
   });
 }
+derived(
+  [doc, refStore, currentPageIndex],
+  ([$doc, $refStore, $currentPageIndex]) => {
+    function reducer(acc, el, parent) {
+      acc[el.id] = {
+        ...el,
+        parent,
+        siblings: parent?.children,
+        refs: $refStore[el.id]
+      };
+      if (el.children) {
+        el.children.reduce((acc2, child) => reducer(acc2, child, el), acc);
+      }
+      return acc;
+    }
+    return $doc.pages[$currentPageIndex].children.reduce((acc, el) => reducer(acc, el), {});
+  }
+);
 const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $isInserting, $$unsubscribe_isInserting;
   $$unsubscribe_isInserting = subscribe(isInserting, (value) => $isInserting = value);
@@ -436,7 +454,6 @@ const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
           <div class="${"flex"}">Draw [d]</div></div></button></div>` : `<div class="${"h-16 animate-bounce flex justify-center items-center"}">drag and release
     </div>`}</header>`;
 });
-const isShiftPressed = writable(false);
 const ElementControls_svelte_svelte_type_style_lang = "";
 const css = {
   code: '.side.svelte-1w0240t{position:absolute;z-index:4}.side.svelte-1w0240t::before{content:"";display:block;position:absolute;background-color:#fff;min-width:8px;min-height:8px;transform:translate3d(-50%, -50%, 0);top:50%;left:50%;border-radius:4px;border:solid 1px cadetblue;max-width:calc(100% - 16px)}.side.svelte-1w0240t::after{content:"";display:block;position:absolute;border:dotted 1px cadetblue;width:2px;height:2px;transform:translate3d(-50%, -50%, 0);top:50%;left:50%;max-width:calc(100% - 32px);opacity:0.5}.side--n.svelte-1w0240t{cursor:row-resize;height:8px;top:-16px;left:0;right:0}.side--n.svelte-1w0240t::before{width:24px}.side--n.svelte-1w0240t::after{width:12px}.side--e.svelte-1w0240t{cursor:col-resize;width:8px;right:-16px;top:0;bottom:0}.side--e.svelte-1w0240t::before{height:24px}.side--e.svelte-1w0240t::after{height:12px}.side--s.svelte-1w0240t{height:8px;bottom:-16px;left:0;right:0;cursor:row-resize}.side--s.svelte-1w0240t::before{width:24px}.side--s.svelte-1w0240t::after{width:12px}.side--w.svelte-1w0240t{width:8px;left:-16px;top:0;bottom:0;cursor:col-resize}.side--w.svelte-1w0240t::before{height:24px}.side--w.svelte-1w0240t::after{height:12px}.side--GRID.side--e.svelte-1w0240t{right:calc((100% - var(--desktop-width) - 4px) / 2)}.side--GRID.side--w.svelte-1w0240t{left:calc((100% - var(--desktop-width) - 4px) / 2)}.corner.svelte-1w0240t{position:absolute;width:8px;height:8px;border:solid 1px cadetblue;background-color:#fff;border-radius:4px;z-index:3}.corner--ne.svelte-1w0240t{right:-4px;top:-4px;cursor:nesw-resize}.corner--nw.svelte-1w0240t{left:-4px;top:-4px;cursor:nwse-resize}.corner--se.svelte-1w0240t{right:-4px;bottom:-4px;cursor:nwse-resize}.corner--sw.svelte-1w0240t{left:-4px;bottom:-4px;cursor:nesw-resize}',
@@ -1014,32 +1031,15 @@ const BuilderElement = create_ssr_component(($$result, $$props, $$bindings, slot
 
 ${isSelected && type !== ELEMENT_TYPES$1.GRID ? `${validate_component(ElementControls, "ElementControls").$$render($$result, { elementData }, {}, {})}` : ``}`;
 });
+isDragging.subscribe((value) => !value);
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $isDragging, $$unsubscribe_isDragging;
   let $isInserting, $$unsubscribe_isInserting;
   let $selectedElementIds, $$unsubscribe_selectedElementIds;
-  let $$unsubscribe_isShiftPressed;
-  let $$unsubscribe_refStore;
-  let $$unsubscribe_resizeDirection;
-  let $$unsubscribe_dragDiffY;
-  let $$unsubscribe_dragDiffX;
-  let $$unsubscribe_insertingElement;
-  let $$unsubscribe_hasDragged;
-  let $$unsubscribe_isDragInserting;
-  let $$unsubscribe_isClickInserting;
   let $currentPageData, $$unsubscribe_currentPageData;
   $$unsubscribe_isDragging = subscribe(isDragging, (value) => $isDragging = value);
   $$unsubscribe_isInserting = subscribe(isInserting, (value) => $isInserting = value);
   $$unsubscribe_selectedElementIds = subscribe(selectedElementIds, (value) => $selectedElementIds = value);
-  $$unsubscribe_isShiftPressed = subscribe(isShiftPressed, (value) => value);
-  $$unsubscribe_refStore = subscribe(refStore, (value) => value);
-  $$unsubscribe_resizeDirection = subscribe(resizeDirection, (value) => value);
-  $$unsubscribe_dragDiffY = subscribe(dragDiffY, (value) => value);
-  $$unsubscribe_dragDiffX = subscribe(dragDiffX, (value) => value);
-  $$unsubscribe_insertingElement = subscribe(insertingElement, (value) => value);
-  $$unsubscribe_hasDragged = subscribe(hasDragged, (value) => value);
-  $$unsubscribe_isDragInserting = subscribe(isDragInserting, (value) => value);
-  $$unsubscribe_isClickInserting = subscribe(isClickInserting, (value) => value);
   $$unsubscribe_currentPageData = subscribe(currentPageData, (value) => $currentPageData = value);
   {
     {
@@ -1049,18 +1049,8 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_isDragging();
   $$unsubscribe_isInserting();
   $$unsubscribe_selectedElementIds();
-  $$unsubscribe_isShiftPressed();
-  $$unsubscribe_refStore();
-  $$unsubscribe_resizeDirection();
-  $$unsubscribe_dragDiffY();
-  $$unsubscribe_dragDiffX();
-  $$unsubscribe_insertingElement();
-  $$unsubscribe_hasDragged();
-  $$unsubscribe_isDragInserting();
-  $$unsubscribe_isClickInserting();
   $$unsubscribe_currentPageData();
   return `
-
 <main class="${"min-h-screen bg-gray-100"}">${validate_component(Header, "Header").$$render($$result, {}, {}, {})}
   ${each($currentPageData.children, (elementData) => {
     return `${validate_component(BuilderElement, "BuilderElement").$$render($$result, { elementData }, {}, {})}`;
