@@ -1,32 +1,18 @@
+import { get } from "svelte/store";
+
 import { refStore } from "$lib/actions/ref";
 
-import Header from "../components/Header.svelte";
 import {
-    dragMousePosition,
-    hasDragged,
     initialMousePosition,
     isDragging,
-    isDragInserting,
     isClickInserting,
-    isInserting,
-    mouseMoveEvent,
-    resizeDirection,
-    dragDiffX,
-    dragDiffY,
 } from "$lib/stores/drag";
-import { currentPageData } from "$lib/stores/doc";
 import {
     insertingElement,
     insertElement,
-    deleteSelectedElements,
     selectedElementIds,
-    updateElementsPosition,
-    recalculatePositions,
-    updateElementsSnap,
-    elementMap,
 } from "$lib/stores/element";
 import { isShiftPressed } from "$lib/stores/keys";
-import { get } from "svelte/store";
 
 export function handleMouseDown(event: MouseEvent) {
     const $refStore = get(refStore);

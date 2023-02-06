@@ -1,3 +1,5 @@
+import { get } from "svelte/store";
+
 import { refStore } from "$lib/actions/ref";
 
 import {
@@ -18,7 +20,6 @@ import {
     updateElementsPosition,
     updateElementsSnap,
 } from "$lib/stores/element";
-import { get } from "svelte/store";
 
 export function handleMouseUp(event: MouseEvent) {
     const elementsOnPath = event.composedPath().slice(0, -4);
