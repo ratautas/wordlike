@@ -291,3 +291,28 @@ export function recalculatePositions() {
     return $doc;
   });
 };
+
+export const elementMap = derived(
+  [doc, refStore, currentPageIndex],
+  ([$doc, $refStore, $currentPageIndex]) => {
+    function reducer(acc, el, parent) {
+
+      acc[el.id] = {
+        ...el,
+        parent,
+        siblings: parent?.children,
+        ref: $refStore[el.id],
+      }
+
+      if (el.children) {
+        el.children
+          .reduce((acc, child) => reducer(acc, child, el), acc);
+      }
+
+      return acc;
+    }
+    return $doc
+      .pages[$currentPageIndex]
+      .children
+      .reduce((acc, el) => reducer(acc, el), {});
+  });

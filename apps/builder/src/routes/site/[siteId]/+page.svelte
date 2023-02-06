@@ -24,6 +24,7 @@
     updateElementsPosition,
     recalculatePositions,
     updateElementsSnap,
+    elementMap,
   } from "$lib/stores/element";
   import { isShiftPressed } from "$lib/stores/keys";
   import BuilderElement from "$lib/components/BuilderElement.svelte";
@@ -188,7 +189,11 @@
   on:focusin={handleFocusIn}
   on:focusout={handleFocusOut}
 />
-
+<details open>
+  <pre style="font-size:9px">
+    {JSON.stringify($elementMap, null, 2)}
+  </pre>
+</details>
 <main class="min-h-screen bg-gray-100">
   <Header />
   {#each $currentPageData.children as elementData}
