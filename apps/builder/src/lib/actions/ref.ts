@@ -1,14 +1,28 @@
 import { writable } from 'svelte/store';
 
-type ElementRef = HTMLElement;
-type Refs = Record<string, ElementRef>;
+enum RefTypesEnum {
+  elementRef = "elementRef",
+  planeRef = "planeRef",
+  overshootLeftRef = "overshootLeftRef",
+  overshootRightRef = "overshootRightRef",
+};
 
-export const refStore = writable<Refs>({});
+type RefKeyType = keyof typeof RefTypesEnum;
+type RefActionParams = { id: string; type: RefKeyType };
+type RefsRefType = Record<RefTypesEnum, HTMLElement>;
+type RefsRecordType = Record<string, RefsRefType>;
 
-export function refAction(elementRef: ElementRef, id: string) {
+export const refStore = writable<RefsRecordType>({});
+
+export function refAction(ref: HTMLElement, { id, type }: RefActionParams) {
   refStore.update(($refStore) => {
-    $refStore[id] = elementRef;
+    if (!$refStore[id]) {
+      $refStore[id] = {
+        [type]: ref,
+      };
+    }
 
+    $refStore[id][type] = ref;
     return $refStore;
   });
 

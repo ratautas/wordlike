@@ -30,14 +30,17 @@
   import BuilderElement from "$lib/components/BuilderElement.svelte";
 
   function handleMouseDown(event: MouseEvent) {
-    const elementsOnPath = event.composedPath().slice(0, -4);
+    const elementsOnPath = event.composedPath().slice(0, -4) as HTMLElement[];
 
     if ($isClickInserting) {
       elementsOnPath.reverse();
-      const closestParentId = elementsOnPath.reduce((acc, el) => {
-        if (!!acc) return acc;
+
+      const closestParentId = elementsOnPath.reduce((prev, el) => {
+        if (!!prev) return prev;
         return Object.keys($refStore).find((key) => {
-          return $refStore[key] === el && key !== $insertingElement?.id;
+          return (
+            $refStore[key].elementRef === el && key !== $insertingElement?.id
+          );
         });
       }, null);
 
@@ -48,22 +51,19 @@
 
     const refId = elementsOnPath.reduce((acc, elOnPath) => {
       if (!!acc) return acc;
-      return Object.keys($refStore).find((key) => $refStore[key] === elOnPath);
+      return Object.keys($refStore).find((key) => {
+        return $refStore[key].elementRef === elOnPath;
+      });
     }, null);
 
-    const [targetElementId, direction] = refId?.split("::") ?? [];
+    if (!refId) return;
 
-    if (!targetElementId) return;
-
-    if (direction) {
-      resizeDirection.set(direction);
-    }
-
-    const targetElementRef = $refStore[targetElementId];
+    const targetElementRef = $refStore[refId].elementRef;
     const selectedSiblingsRefs = [
-      ...($refStore[$selectedElementIds[0]]?.parentElement?.children ?? []),
+      ...($refStore[$selectedElementIds[0]]?.elementRef?.parentElement
+        ?.children ?? []),
     ];
-    const isTargetSelected = $selectedElementIds.includes(targetElementId);
+    const isTargetSelected = $selectedElementIds.includes(refId);
     const isOneOfSiblings = selectedSiblingsRefs.includes(targetElementRef);
 
     isDragging.set(true);
@@ -74,21 +74,21 @@
         if ($isShiftPressed) {
           if (isTargetSelected) {
             selectedElementIds.set(
-              $selectedElementIds.filter((id) => id !== targetElementId)
+              $selectedElementIds.filter((id) => id !== refId)
             );
           } else {
-            selectedElementIds.set([...$selectedElementIds, targetElementId]);
+            selectedElementIds.set([...$selectedElementIds, refId]);
           }
         } else if ($selectedElementIds.length === 1) {
-          if ($selectedElementIds[0] !== targetElementId) {
-            selectedElementIds.set([targetElementId]);
+          if ($selectedElementIds[0] !== refId) {
+            selectedElementIds.set([refId]);
           }
         }
       } else {
-        selectedElementIds.set([targetElementId]);
+        selectedElementIds.set([refId]);
       }
     } else {
-      selectedElementIds.set([targetElementId]);
+      selectedElementIds.set([refId]);
     }
   }
 
@@ -106,8 +106,10 @@
       elementsOnPath.reverse();
       const closestParentId = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
-        return Object.keys($refStore).find((key) => {
-          return $refStore[key] === el && key !== $insertingElement?.id;
+        return Object.keys($refStore).find((id) => {
+          return (
+            $refStore[id].elementRef === el && id !== $insertingElement?.id
+          );
         });
       }, null);
       insertElement(closestParentId);
@@ -119,14 +121,12 @@
       const snap = elementsOnPath.reduce((acc, el) => {
         if (!!acc) return acc;
 
-        return Object.entries($refStore).reduce((dir, [key, $ref]) => {
+        return Object.entries($refStore).reduce((dir, [key, refEntry]) => {
           if (!!dir) return dir;
-          const [id, control, direction] = key.split("::");
-          if (control !== "OVERSHOOT") return dir;
-          if ($ref === el) return direction;
+          if (refEntry.overshootLeftRef === el) return "LEFT";
+          if (refEntry.overshootRightRef === el) return "RIGHT";
         }, null);
       }, null);
-      console.log({ snap });
       if (snap) updateElementsSnap(snap);
     }
 
@@ -189,11 +189,9 @@
   on:focusin={handleFocusIn}
   on:focusout={handleFocusOut}
 />
-<details open>
-  <pre style="font-size:9px">
-    {JSON.stringify($elementMap, null, 2)}
-  </pre>
-</details>
+<!-- <details open>
+  <pre style="font-size:9px">{JSON.stringify($elementMap, null, 2)}</pre>
+</details> -->
 <main class="min-h-screen bg-gray-100">
   <Header />
   {#each $currentPageData.children as elementData}

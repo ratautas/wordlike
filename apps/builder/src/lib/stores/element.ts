@@ -301,7 +301,7 @@ export const elementMap = derived(
         ...el,
         parent,
         siblings: parent?.children,
-        ref: $refStore[el.id],
+        refs: $refStore[el.id],
       }
 
       if (el.children) {

@@ -80,13 +80,13 @@
         class="plane group/plane"
         style={gridCssVars}
         bind:this={gridRef}
-        use:refAction={gridElementData.id}
+        use:refAction={{ id: gridElementData.id, type: "elementRef" }}
     >
         {#each gridElementData.children as childElementData, i}
             <div
                 class="element group/element"
                 style={elementCssVars[i]}
-                use:refAction={childElementData.id}
+                use:refAction={{ id: childElementData.id, type: "elementRef" }}
             >
                 <svelte:self elementData={childElementData} />
             </div>
@@ -96,7 +96,7 @@
             class="opacity-0 pointer-events-none grid [grid-area:2/2/-2/-2] overflow-hidden"
             class:opacity-100={isHovered}
             bind:this={guidesRef}
-            use:refAction={`${elementData.id}::GRID`}
+            use:refAction={{ id: elementData.id, type: "planeRef" }}
         >
             <ElementControls {elementData} />
             <Guides elementData={gridElementData} />

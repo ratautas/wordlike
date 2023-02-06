@@ -59,12 +59,12 @@
         class="absolute left-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-left)] transition-opacity"
         class:opacity-10={isHovered && overShoot === "LEFT"}
         style:--grow-left={`${growLeft}px`}
-        use:refAction={`${elementData.id}::OVERSHOOT::LEFT`}
+        use:refAction={{ id: elementData.id, type: "overshootLeftRef" }}
     />
     <div
         class="absolute right-0 bg-black inset-y-0 hover:opacity-30 opacity-0 w-[var(--grow-right)] transition-opacity"
         class:opacity-10={isHovered && overShoot === "RIGHT"}
         style:--grow-right={`${growRight}px`}
-        use:refAction={`${elementData.id}::OVERSHOOT::RIGHT`}
+        use:refAction={{ id: elementData.id, type: "overshootRightRef" }}
     />
 {/if}

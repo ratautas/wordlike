@@ -29,6 +29,7 @@
 [ ] round position before saving to json
 [ ] fix most of the TypeScript issiues
 [ ] tweak inserting new element
+[ ] TipTap is blinking when clicked
 [ ] add popup
 [ ] background color + overlay
 [ ] padding
@@ -82,3 +83,38 @@ THEME VARIABLES:
 - line heights?..
 - letter spacing?..
 - border radius
+
+PRIMARY:
+- preset + edit global + save selected as preset
+- bold
+- italic
+- align
+- font size
+- color
+- lists
+- link
+SECONDARY:
+- element type
+- font family
+- underline
+- strikethrough
+
+ELEMENT:
+- cut / copy / duplicate
+- delete
+- settings
+- move to front / back
+SETTINGS
+- background color
+- background image
+- border
+- border radius
+- padding
+- shadow
+- opacity
+- transform
+- blur
+- reveal
+- parallax
+- links/CTA
+- desktop/mobiile

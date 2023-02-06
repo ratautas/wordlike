@@ -1,75 +1,53 @@
 <script lang="ts">
-  import { refAction } from "$lib/actions/ref";
   import { VERTICAL_RESIZE_TYPES, ELEMENT_TYPES } from "$lib/constants";
+  import { resizeDirection } from "$lib/stores/drag";
+  import type { ElementType } from "@wordlike/schema/types";
   // props:
-  export let elementData;
+  export let elementData: ElementType;
 
   // derived data:
   $: ({ id, type } = elementData ?? {});
   $: canResizeHeight = VERTICAL_RESIZE_TYPES.includes(type);
   $: canResizeTop = type !== ELEMENT_TYPES.GRID;
-
-  // PRIMARY:
-  // - preset + edit global + save selected as preset
-  // - bold
-  // - italic
-  // - align
-  // - font size
-  // - color
-  // - lists
-  // - link
-  // SECONDARY:
-  // - element type
-  // - font family
-  // - underline
-  // - strikethrough
-
-  // ELEMENT:
-  // - cut / copy / duplicate
-  // - delete
-  // - settings
-  // - move to front / back
-  // SETTINGS
-  // - background color
-  // - background image
-  // - border
-  // - border radius
-  // - padding
-  // - shadow
-  // - opacity
-  // - transform
-  // - blur
-  // - reveal
-  // - parallax
-  // - links/CTA
-  // - desktop/mobiile
 </script>
 
 <div
   class="absolute inset-0 z-[-1] opacity-30  ring-dark-50 ring-opacity-5 ring-[1px] group-hover/element:opacity-100"
 >
-  <div class={`side side--e side--${type}`} use:refAction={`${id}::E`} />
-  <div class={`side side--w side--${type}`} use:refAction={`${id}::W`} />
+  <div
+    class={`side side--e side--${type}`}
+    on:mousedown={() => resizeDirection.set("E")}
+  />
+  <div
+    class={`side side--w side--${type}`}
+    on:mousedown={() => resizeDirection.set("W")}
+  />
   {#if canResizeHeight}
     {#if canResizeTop}
-      <div class={`side side--n side--${type}`} use:refAction={`${id}::N`} />
+      <div
+        class={`side side--n side--${type}`}
+        on:mousedown={() => resizeDirection.set("N")}
+      />
     {/if}
-    <div class={`side side--s side--${type}`} use:refAction={`${id}::S`} />
+    <div
+      class={`side side--s side--${type}`}
+      on:mousedown={() => resizeDirection.set("S")}
+    />
     <div
       class={`corner corner--ne corner--${type}`}
-      use:refAction={`${id}::NE`}
+      on:mousedown={() => resizeDirection.set("NE")}
     />
     <div
       class={`corner corner--nw corner--${type}`}
-      use:refAction={`${id}::NW`}
+      on:mousedown={() => resizeDirection.set("NW")}
     />
     <div
       class={`corner corner--se corner--${type}`}
-      use:refAction={`${id}::SE`}
+      on:mousedown={() => resizeDirection.set("SE")}
     />
     <div
       class={`corner corner--sw corner--${type}`}
-      use:refAction={`${id}::SW`}
+      on:mousedown={() => resizeDirection.set("SW")}
     />
   {/if}
 </div>
