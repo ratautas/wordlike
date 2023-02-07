@@ -33,13 +33,6 @@ export function handleMouseUp(event: MouseEvent) {
     const $hasDragged = get(hasDragged);
 
     if ($isDragInserting) {
-        // if the element hasn't been dragged, then it's a click
-        if (!$hasDragged) {
-            isClickInserting.set(true);
-            isDragInserting.set(false);
-            return;
-        }
-
         elementsOnPath.reverse();
         const closestParentId = elementsOnPath.reduce((acc, el) => {
             if (!!acc) return acc;
@@ -50,7 +43,9 @@ export function handleMouseUp(event: MouseEvent) {
             });
         }, null);
         insertElement(closestParentId);
-    } else if ($selectedElementIds.length > 0) {
+    }
+
+    if ($selectedElementIds.length > 0) {
         updateElementsPosition($dragDiffX, $dragDiffY);
     }
 

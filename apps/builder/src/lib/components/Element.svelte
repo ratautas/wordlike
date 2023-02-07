@@ -35,7 +35,7 @@
   $: ({ type, id } = elementData);
   $: isSelected = $selectedElementIds.includes(id);
   $: gridElementData = getGridElementsPositions({
-    elementData,
+    elementData: enhancedElementData,
     isDragging: $isDragging,
     selectedElementIds: $selectedElementIds,
     diffX: $dragDiffX,
@@ -47,9 +47,65 @@
     type === ELEMENT_TYPES.GRID && getGridVars(gridElementData));
   $: isHovered = $hoveredElementIds.includes(id);
 
+  function getEnhancedElementData({
+    elementData,
+    isInserting,
+    insertingElement,
+    isHovered,
+    mouseMoveEvent,
+    planeRef,
+    deviceKey,
+  }) {
+    if (elementData.type !== ELEMENT_TYPES.GRID) return elementData;
+    if (!isInserting) return elementData;
+    if (!isHovered) return elementData;
+
+    const { clientX, clientY } = mouseMoveEvent;
+    const { left, top } = planeRef?.getBoundingClientRect();
+
+    initialMousePosition.set({
+      x: clientX,
+      y: clientY,
+    });
+
+    const x = clientX - left - 150;
+    const y = clientY - top - 24;
+
+    insertingElement[deviceKey].x = x;
+    insertingElement[deviceKey].y = y;
+
+    // insertingElement.update((elementData) => {
+    //   return {
+    //     ...elementData,
+    //     [deviceKey]: {
+    //       ...elementData[deviceKey],
+    //       x,
+    //       y,
+    //     },
+    //   };
+    // });
+    // selectedElementIds.set([insertingElement?.id]);
+    // isDragging.set(true);
+
+    return {
+      ...elementData,
+      children: [insertingElement, ...elementData.children],
+    };
+  }
+
+  $: enhancedElementData = getEnhancedElementData({
+    elementData,
+    isInserting: $isInserting,
+    insertingElement: $insertingElement,
+    isHovered,
+    mouseMoveEvent: $mouseMoveEvent,
+    planeRef,
+    deviceKey: $deviceKey,
+  });
+
   $: {
     const isInPath = $mouseMoveComposedPath.includes(gridRef);
-    if (isInPath && !isHovered && $isInserting) {
+    if (isInPath && !isHovered && $isInserting && false) {
       const { clientX, clientY } = $mouseMoveEvent;
       const { left, top } = planeRef?.getBoundingClientRect();
 
@@ -75,12 +131,12 @@
     }
   }
 
-  function handlePlaneMouseEnter(event: MouseEvent) {
+  function handleElementMouseEnter(event: MouseEvent) {
     addHoveredElement(id);
     console.log($hoveredElementIds);
   }
 
-  function handlePlaneMouseLeave(event: MouseEvent) {
+  function handleElementMouseLeave(event: MouseEvent) {
     removeHoveredElement(id);
   }
 </script>
@@ -90,14 +146,14 @@
     class="plane group/plane"
     style={gridCssVars}
     bind:this={gridRef}
-    on:mouseenter={handlePlaneMouseEnter}
-    on:mouseleave={handlePlaneMouseLeave}
     use:refAction={{ id: gridElementData.id, type: "elementRef" }}
   >
     {#each gridElementData.children as childElementData, i}
       <div
         class="element group/element"
         style={elementCssVars[i]}
+        on:mouseenter={handleElementMouseEnter}
+        on:mouseleave={handleElementMouseLeave}
         use:refAction={{ id: childElementData.id, type: "elementRef" }}
       >
         <svelte:self elementData={childElementData} />

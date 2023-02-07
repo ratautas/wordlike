@@ -5,6 +5,7 @@
   import {
     selectedElementIds,
     recalculatePositions,
+    insertingElement,
   } from "$lib/stores/element";
   import Element from "$lib/components/Element.svelte";
   import { handleMouseDown } from "./handleMouseDown";
@@ -33,6 +34,9 @@
   on:focusout={handleFocusOut}
 />
 <main class="min-h-screen bg-gray-100">
+  <details>
+    <pre>{JSON.stringify($insertingElement, null, 2)}</pre>
+  </details>
   <Header />
   {#each $currentPageData.children as elementData}
     <Element {elementData} />

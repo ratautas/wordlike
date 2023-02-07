@@ -4,19 +4,32 @@
   import BiSuitDiamond from "~icons/bi/suit-diamond";
 
   import {
+    dragMousePosition,
+    hasDragged,
     isDragInserting,
     isClickInserting,
     isInserting,
-    dragMousePosition,
   } from "$lib/stores/drag";
-  import { INSERTED_TYPES, createInsertedElement } from "$lib/stores/element";
+  import {
+    INSERTED_TYPES,
+    createInsertedElement,
+    selectedElementIds,
+    insertingElement,
+  } from "$lib/stores/element";
 
   const { PARAGRAPH, HEADING, BUTTON } = INSERTED_TYPES;
 
-  function startDragInsert(event: MouseEvent, type: string) {
+  function startDragInsert(event: MouseEvent, set: string) {
     dragMousePosition.set({ x: event.clientX, y: event.clientY });
-    createInsertedElement(type);
+    createInsertedElement(set);
     isDragInserting.set(true);
+    selectedElementIds.set([$insertingElement.id]);
+  }
+
+  function setDragInsertToClick() {
+    if ($hasDragged) return;
+    isClickInserting.set(true);
+    isDragInserting.set(false);
   }
 </script>
 
@@ -30,6 +43,7 @@
         <div
           class="flex flex-col items-center"
           on:mousedown={(e) => startDragInsert(e, PARAGRAPH)}
+          on:mouseup={setDragInsertToClick}
         >
           <BiTextareaT />
           <div class="text-xs pointer-events-none">Text</div>
@@ -82,7 +96,7 @@
     </div>
   {:else}
     <div class="h-16 animate-bounce flex justify-center items-center">
-      drag and release
+      drag and release or hit ESC to cancel
     </div>
   {/if}
 </header>

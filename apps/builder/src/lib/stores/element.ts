@@ -20,6 +20,7 @@ import { deviceKey } from '$lib/stores/device';
 import { selectAll } from "$lib/utils/selectAll";
 import { supabaseClient } from "$lib/supabase";
 import { ELEMENT_TYPES } from '$lib/constants';
+import { INSERTED_SETS } from '$lib/constants/elements/text';
 
 export const DEFAULT_INSERTED_ELEMENT_WIDTH = 300;
 export const DEFAULT_INSERTED_ELEMENT_HEIGHT = 72;
@@ -77,22 +78,17 @@ export const selectedElementsDataMap = derived(
     );
   });
 
-export function createInsertedElement(type) {
+export function createInsertedElement(set) {
+  const setItems = INSERTED_SETS[set];
+  const randomSetItem = setItems[Math.floor(Math.random() * setItems.length)];
   const element = {
     id: uuidv4(),
-    type,
-    [get(deviceKey)]: {
-      width: DEFAULT_INSERTED_ELEMENT_WIDTH,
-      height: DEFAULT_INSERTED_ELEMENT_HEIGHT,
-    },
+    ...randomSetItem
   };
 
-  if (type === INSERTED_TYPES.PARAGRAPH) {
-    element.type = "TEXT";
-    element.html = `<p>${INITIAL_INSERTED_PARAGRAPHS[Math.floor(Math.random() * INITIAL_INSERTED_PARAGRAPHS.length)]}</p>`;
-  }
-
   insertingElement.set(element);
+
+  return element;
 };
 
 export async function insertElement(closestParentId: string) {

@@ -10,6 +10,8 @@ export const load: PageLoad = async (event): PageData => {
     .eq('id', siteId);
   const [site] = data ?? [];
 
+  console.log({ error });
+
   doc.set(site?.doc);
 
   return {
