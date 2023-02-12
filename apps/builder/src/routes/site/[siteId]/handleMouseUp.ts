@@ -8,7 +8,6 @@ import {
     initialMousePosition,
     isDragging,
     isDragInserting,
-    isClickInserting,
     resizeDirection,
     dragDiffX,
     dragDiffY,
@@ -42,6 +41,7 @@ export function handleMouseUp(event: MouseEvent) {
                 );
             });
         }, null);
+        console.log({ closestParentId })
         insertElement(closestParentId);
     }
 

@@ -5,6 +5,7 @@
   import { refAction } from "$lib/actions/ref";
   import ElementControls from "$lib/components/ElementControls.svelte";
   import Guides from "$lib/components/Guides.svelte";
+  import { isShiftPressed } from "$lib/stores/keys";
   import SideOvershoots from "$lib/components/SideOvershoots.svelte";
   import BuilderText from "$lib/components/BuilderText.svelte";
   import {
@@ -13,6 +14,7 @@
     hoveredElementIds,
     addHoveredElement,
     removeHoveredElement,
+    elementMap,
   } from "$lib/stores/element";
   import { deviceKey } from "$lib/stores/device";
   import {
@@ -103,37 +105,38 @@
     deviceKey: $deviceKey,
   });
 
-  $: {
-    const isInPath = $mouseMoveComposedPath.includes(gridRef);
-    if (isInPath && !isHovered && $isInserting && false) {
-      const { clientX, clientY } = $mouseMoveEvent;
-      const { left, top } = planeRef?.getBoundingClientRect();
+  function handleElementMouseDown(event: MouseEvent, elementData: ElementType) {
+    isDragging.set(true);
+    initialMousePosition.set({ x: event.clientX, y: event.clientY });
 
-      initialMousePosition.set({
-        x: clientX,
-        y: clientY,
-      });
+    // if no element is selected, just select the clicked element
+    if ($selectedElementIds.length === 0) {
+      return selectedElementIds.set([elementData.id]);
+    }
 
-      const x = clientX - left - 150;
-      const y = clientY - top - 24;
-      insertingElement.update((elementData) => {
-        return {
-          ...elementData,
-          [$deviceKey]: {
-            ...elementData[$deviceKey],
-            x,
-            y,
-          },
-        };
-      });
-      selectedElementIds.set([$insertingElement?.id]);
-      isDragging.set(true);
+    // if the clicked element is already selected
+    if ($selectedElementIds.includes(elementData.id)) {
+      // if shift is not pressed, do nothing
+      if (!$isShiftPressed) return;
+      // otherwise, deselect the clicked element
+      return selectedElementIds.set(
+        $selectedElementIds.filter((id) => id !== elementData.id)
+      );
+    }
+
+    const isSiblingSelected = $selectedElementIds.some((id) =>
+      $elementMap[elementData.id].siblings.some((sibling) => sibling.id === id)
+    );
+
+    // some of the clicked element's siblings are selected
+    if (isSiblingSelected) {
+      const ids = $isShiftPressed ? $selectedElementIds : [];
+      return selectedElementIds.set([...ids, elementData.id]);
     }
   }
 
   function handleElementMouseEnter(event: MouseEvent) {
     addHoveredElement(id);
-    console.log($hoveredElementIds);
   }
 
   function handleElementMouseLeave(event: MouseEvent) {
@@ -152,6 +155,7 @@
       <div
         class="element group/element"
         style={elementCssVars[i]}
+        on:mousedown={(e) => handleElementMouseDown(e, childElementData)}
         on:mouseenter={handleElementMouseEnter}
         on:mouseleave={handleElementMouseLeave}
         use:refAction={{ id: childElementData.id, type: "elementRef" }}
